@@ -182,52 +182,80 @@ body {
 </head>
 <body>
     
-  <div class="login-box">
-    <h2>Login</h2>
-    <?php
-include 'conn.php';
-session_start();
+<div class="login-box">
+    <h2>Create Account</h2>
+    <?php 
+    include 'conn.php';
+    session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['username'], $_POST['password'])) {
+    if(isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['gender']) && isset($_POST['contactnum']) && isset($_POST['address'])
+    && isset($_POST['username']) && isset($_POST['password'])) {
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $gender = $_POST['gender'];
+        $contactnum = $_POST['contactnum'];
+        $address = $_POST['address'];
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        $escaped_username = mysqli_real_escape_string($conn, $username);
-        $escaped_password = mysqli_real_escape_string($conn, $password);
+        $sql = "INSERT INTO user_info (firstname, lastname, gender, contact, address) VALUES ('$firstname', '$lastname', '$gender', '$contactnum', '$address')";
+    
+        if($conn->query($sql) === TRUE){
+            $info_id = $conn->insert_id;
+            $sql = "INSERT INTO user_level (level) VALUES (1)";
 
-        $sql = "SELECT * FROM user_account WHERE username = '$escaped_username' AND password = '$escaped_password'";
-        $result = mysqli_query($conn, $sql);
+            if($conn->query($sql) === TRUE){
+                $level_id = $conn->insert_id;
+                $sql = "INSERT INTO user_account (username, password, level_id, info_id, status) VALUES ('$username', '$password', '$level_id', '$info_id', 1)";
 
-        if ($result && mysqli_num_rows($result) == 1) {
-            $_SESSION['username'] = $username;
-            header("location: admin_dashboard.php");
-            exit(); 
-        } else {
-            $error = "Username or password is incorrect";
+                if($conn->query($sql) === TRUE){
+                    echo "success";
+                } else {
+                    echo "error";
+                }
+            }
         }
     }
-}
-?>
-
+    ?>
     <form action="" method="POST">
-      <div class="user-box">
-        <input type="text" name="username" required>
-        <label>Username</label>
-      </div>
-      <div class="user-box">
-        <input type="password" name="password" required>
-        <label>Password</label>
-      </div>
-      <button type="submit" name="submit">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        Login
-      </button>
+        <div class="user-box">
+            <input type="text" name="firstname" required>
+            <label>First Name</label>
+        </div>
+        <div class="user-box">
+            <input type="text" name="lastname" required>
+            <label>Last Name</label>
+        </div>
+        <div class="user-box">
+            <input type="text" name="gender" required>
+            <label>Gender</label>
+        </div>
+        <div class="user-box">
+            <input type="text" name="contactnum" required>
+            <label>Contact Number</label>
+        </div>
+        <div class="user-box">
+            <input type="text" name="address" required>
+            <label>Address</label>
+        </div>
+        <div class="user-box">
+            <input type="text" name="username" required>
+            <label>Username</label>
+        </div>
+        <div class="user-box">
+            <input type="password" name="password" required>
+            <label>Password</label>
+        </div>
+        <button type="submit" name="submit">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            Create Account
+        </button>
     </form>
-    <a href="signup.php"> <button> Create Account </button> </a>
-  </div>
+    <a href="login.php"> <button> Login </button> </a>
+</div>
+
 </body>
 </html>
