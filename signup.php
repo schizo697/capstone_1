@@ -217,7 +217,7 @@ body {
     
           if($conn->query($sql) === TRUE){
               $info_id = $conn->insert_id;
-              $sql = "INSERT INTO user_level (level) VALUES (1)";
+              $sql = "INSERT INTO user_level (level) VALUES (2)";
   
               if($conn->query($sql) === TRUE){
                   $level_id = $conn->insert_id;

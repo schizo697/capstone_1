@@ -5,7 +5,8 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  
+   <!-- baba kay sweetalert -->
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
       html {
   height: 100%;
@@ -213,10 +214,13 @@ body {
                         $level_row = mysqli_fetch_assoc($level_result);
                         $user_level = $level_row['level'];
                         
-                        if ($user_level == 1) {
-                            header("location: admin_dashboard.php");
+                        if ($user_level == 2) {
+                            header("location: customer.php");
                             exit();
-                        } 
+                        } elseif ($user_level == 3) {
+                            header("location: seller.php");
+                            exit();
+                        }
                     } else {
                         $error = "Error fetching user level";
                     }
@@ -235,7 +239,6 @@ body {
     }
     ?>
 
-
     <form action="" method="POST">
       <div class="user-box">
         <input type="text" name="username" required>
@@ -253,6 +256,7 @@ body {
         Login
       </button>
     </form>
+    <a href="signup.php"> <button> Create Account </button> </a>
   </div>
 </body>
 </html>

@@ -1,2 +1,2 @@
 # capstone_1
-Capstone nila bob
+user level. 1 = admin, 2 = customer, 3 = farmer
