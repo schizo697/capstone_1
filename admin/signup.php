@@ -5,7 +5,8 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  
+  <!-- baba kay sweetalert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
       html {
   height: 100%;
@@ -197,23 +198,50 @@ body {
         $address = $_POST['address'];
         $username = $_POST['username'];
         $password = $_POST['password'];
+        $encrypted = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO user_info (firstname, lastname, gender, contact, address) VALUES ('$firstname', '$lastname', '$gender', '$contactnum', '$address')";
+        $check_username = "SELECT username FROM user_account WHERE username = '$username'";
+        $check_result = mysqli_query($conn, $check_username);
+        
+        if($check_result && mysqli_num_rows($check_result) > 0) {
+          // sweetalert exist
+          echo "<script>
+                  Swal.fire({
+                      text: 'Username Already Exist',
+                      icon: 'warning',
+                      confirmButtonColor: '#3085d6',
+                  });
+                </script>";
+      } else {
+          $sql = "INSERT INTO user_info (firstname, lastname, gender, contact, address) VALUES ('$firstname', '$lastname', '$gender', '$contactnum', '$address')";
     
-        if($conn->query($sql) === TRUE){
-            $info_id = $conn->insert_id;
-            $sql = "INSERT INTO user_level (level) VALUES (1)";
-
-            if($conn->query($sql) === TRUE){
-                $level_id = $conn->insert_id;
-                $sql = "INSERT INTO user_account (username, password, level_id, info_id, status) VALUES ('$username', '$password', '$level_id', '$info_id', 1)";
-
-                if($conn->query($sql) === TRUE){
-                    echo "success";
-                } else {
-                    echo "error";
-                }
-            }
+          if($conn->query($sql) === TRUE){
+              $info_id = $conn->insert_id;
+              $sql = "INSERT INTO user_level (level) VALUES (1)";
+  
+              if($conn->query($sql) === TRUE){
+                  $level_id = $conn->insert_id;
+                  $sql = "INSERT INTO user_account (username, password, level_id, info_id, status) VALUES ('$username', '$encrypted', '$level_id', '$info_id', 1)";
+  
+                  if($conn->query($sql) === TRUE){
+                    // sweetalert success
+                    echo "<script>Swal.fire({
+                      position: 'center',
+                      icon: 'success',
+                      title: 'Account Created Successfully',
+                      showConfirmButton: false
+                  });</script>";
+                  } else {
+                    // sweetalert error
+                      echo "<script>
+                      Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong!',
+                      });
+                      </script>";
+                  }
+              }
+          }
         }
     }
     ?>

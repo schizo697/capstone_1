@@ -185,30 +185,37 @@ body {
   <div class="login-box">
     <h2>Login</h2>
     <?php
-include 'conn.php';
-session_start();
+    include 'conn.php';
+    session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['username'], $_POST['password'])) {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST['username'], $_POST['password'])) {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
 
-        $escaped_username = mysqli_real_escape_string($conn, $username);
-        $escaped_password = mysqli_real_escape_string($conn, $password);
+            $escaped_username = mysqli_real_escape_string($conn, $username);
 
-        $sql = "SELECT * FROM user_account WHERE username = '$escaped_username' AND password = '$escaped_password'";
-        $result = mysqli_query($conn, $sql);
+            $sql = "SELECT password FROM user_account WHERE username = '$escaped_username'";
+            $result = mysqli_query($conn, $sql);
 
-        if ($result && mysqli_num_rows($result) == 1) {
-            $_SESSION['username'] = $username;
-            header("location: admin_dashboard.php");
-            exit(); 
-        } else {
-            $error = "Username or password is incorrect";
+            if ($result && mysqli_num_rows($result) == 1) {
+                $row = mysqli_fetch_assoc($result);
+                $hashed_password = $row['password'];
+
+                if (password_verify($password, $hashed_password)) {
+                    $_SESSION['username'] = $username;
+                    header("location: admin_dashboard.php");
+                    exit(); 
+                } else {
+                    $error = "Username or password is incorrect";
+                }
+            } else {
+                $error = "Username or password is incorrect";
+            }
         }
     }
-}
-?>
+    ?>
+
 
     <form action="" method="POST">
       <div class="user-box">
