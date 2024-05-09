@@ -1,3 +1,7 @@
+<?php 
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -187,7 +191,6 @@ body {
     <h2>Login</h2>
     <?php
     include 'conn.php';
-    session_start();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['username'], $_POST['password'])) {
@@ -196,7 +199,7 @@ body {
 
             $escaped_username = mysqli_real_escape_string($conn, $username);
 
-            $sql = "SELECT password, level_id FROM user_account WHERE username = '$escaped_username'";
+            $sql = "SELECT password, level_id, user_id FROM user_account WHERE username = '$escaped_username'";
             $result = mysqli_query($conn, $sql);
 
             if ($result && mysqli_num_rows($result) == 1) {
@@ -205,6 +208,7 @@ body {
 
                 if (password_verify($password, $hashed_password)) {
                     $_SESSION['username'] = $username;
+                    $_SESSION['user_id'] = $row['user_id'];
                     
                     $level_id = $row['level_id'];
                     $sql = "SELECT level FROM user_level WHERE level_id = '$level_id'";
@@ -218,7 +222,7 @@ body {
                             header("location: customer.php");
                             exit();
                         } elseif ($user_level == 3) {
-                            header("location: seller.php");
+                            header("location: farmer/dashboard.php");
                             exit();
                         }
                     } else {
