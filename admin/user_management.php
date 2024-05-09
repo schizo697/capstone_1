@@ -9,7 +9,9 @@ include('includes/sidebar.php');
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 </head>
 
@@ -109,7 +111,7 @@ include('includes/sidebar.php');
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </form>
     </div>
@@ -121,39 +123,133 @@ include('includes/sidebar.php');
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="editmodal">Edit User</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit User</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-      <div class="form-group">
-            <label for="userID">User ID:</label>
-            <input type="text" class="form-control" id="userID" name="userid" placeholder="" required>
+      <?php
+      if(isset($_POST['btnSave'])){
+        $user_id = $_POST['userid'];
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $gender = $_POST['gender'];
+        $contact = $_POST['contact'];
+        $address = $_POST['address'];
+        $password = $_POST['password'];
+        $cpassword = $_POST['cpassword'];
+        $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+        if ($password != $cpassword) {
+            $url = 'user_management.php?errorpassword=true';
+            echo '<script>window.location.href="' . $url . '"</script>';
+            exit();
+        } else {
+            $infoupdate = "UPDATE user_info SET firstname = '$firstname', lastname = '$lastname', gender = '$gender', contact = '$contact', address = '$address' WHERE info_id = '$user_id'";
+            $inforesult = mysqli_query($conn, $infoupdate);
+    
+            if($inforesult) {
+                $passwordupdate = "UPDATE user_account SET password = '$encrypted_password' WHERE user_id = '$user_id'";
+                $passwordresult = mysqli_query($conn, $passwordupdate);
+    
+                if($passwordresult){
+                    $url = 'user_management.php?update=true';
+                    echo '<script>window.location.href= "' . $url . '"</script>';
+                    exit();
+                } else {
+                    $url = "user_management.php?error=true";
+                    echo '<script>window.location.href="' . $url . '";</script';
+                    exit();
+                }
+            }
+        }
+      }
+      ?>
+      <form action="" method="POST"> 
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="userID">User ID:</label>
+                <input type="text" class="form-control" id="userID" name="userid" placeholder="User ID" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="editFirstName">First Name:</label>
+                <input type="text" class="form-control" id="editFirstName" name="firstname" placeholder="First Name" required>
+            </div>
+            <div class="form-group">
+                <label for="editLastName">Last Name:</label>
+                <input type="text" class="form-control" id="editLastName" name="lastname" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+                <label for="editGender">Gender:</label>
+                <input type="text" class="form-control" id="editGender" name="gender" placeholder="Gender" required>
+            </div>
+            <div class="form-group">
+                <label for="editContact">Contact:</label>
+                <input type="text" class="form-control" id="editContact" name="contact" placeholder="Contact" required>
+            </div>
+            <div class="form-group">
+                <label for="editAddress">Address:</label>
+                <input type="text" class="form-control" id="editAddress" name="address" placeholder="Address" required>
+            </div>
+            <div class="form-group">
+                <label for="editPassword">Password:</label>
+                <input type="password" class="form-control" id="editPassword" name="password" placeholder="Password" pattern=".{8,16}" title="Password must be 8-16 characters" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" class="form-control" id="confirmPassword" name="cpassword" placeholder="Confirm Password" required>
+            </div>
+            <div id="passwordError" style="color: red;"></div>
         </div>
-        <div class="form-group">
-            <label for="editFirstName">First Name:</label>
-            <input type="text" class="form-control" id="editFirstName" name="firstname" placeholder="">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" name="btnSave" id="validateButton" class="btn btn-primary">Save changes</button>
         </div>
-        <div class="form-group">
-            <label for="editLastName">Last Name:</label>
-            <input type="text" class="form-control" id="editLastName" name="lastname" placeholder="">
-        </div>
-        <div class="form-group">
-            <label for="editUserName">User Name:</label>
-            <input type="text" class="form-control" id="editUsername" name="username" placeholder="">
-        </div>
-        <div class="form-group">
-            <label for="editPassword">Password:</label>
-            <input type="text" class="form-control" id="editPassword" name="password" placeholder="">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+      </form>
     </div>
   </div>
 </div>
 
+<!-- archive modal -->
+    <div class="modal fade" id="archivemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Archive</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <?php 
+            if(isset($_POST['btnArchive'])){
+                $user_id = $_POST['userid'];
+
+                $statusupdate = "UPDATE user_account SET status = 0 WHERE user_id = '$user_id'";
+                $statusresult = mysqli_query($conn, $statusupdate);
+
+                if($statusresult){
+                    $url = "user_management.php?archive=true";
+                    echo '<script>window.location.href="' . $url . '"</script>';
+                    exit();
+                } else {
+                    $url = "user_management.php?error=true";
+                    echo '<script>window.location.href="' . $url . '";</script';
+                    exit();
+                }
+            }
+            ?>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    Are you sure you want to archive this account?
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label for="userid">User ID</label>
+                    <input type="text" class="form-control" id="userid" name="userid" required readonly>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="btnArchive" class="btn btn-primary">Archive</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
 
     <div class="table-responsive">
             <div class="card-header">
@@ -176,10 +272,10 @@ include('includes/sidebar.php');
         </thead>
         <tbody>
         <?php 
-        $sql = "SELECT user_id, firstname, lastname, gender, contact, address, level
+        $sql = "SELECT user_id, username, firstname, lastname, gender, contact, address, level, status
         FROM user_account 
         JOIN user_info ON user_account.info_id = user_info.info_id
-        JOIN user_level ON user_account.level_id = user_level.level_id";
+        JOIN user_level ON user_account.level_id = user_level.level_id WHERE status = 1";
         $result = mysqli_query($conn, $sql);
 
         if ($result && mysqli_num_rows($result) > 0) {
@@ -188,6 +284,7 @@ include('includes/sidebar.php');
                 $firstname = $row['firstname'];
                 $lastname = $row['lastname'];
                 $name = $firstname . ' ' . $lastname;
+                $username = $row['username'];
                 $gender = $row['gender'];
                 $contact = $row['contact'];
                 $address = $row['address'];
@@ -215,13 +312,13 @@ include('includes/sidebar.php');
                     <td><?php echo $address ?></td>
                     <td><?php echo $type ?></td>
                     <td>
-                    <button type="button" class="btn btn-success edit-button" data-bs-toggle="modal" data-bs-target="#editmodal" account-id="<?php echo $user_id?>" account-name="<?php echo $name?>" 
-                    account-gender="<?php echo $gender?>" account-contact="<?php echo $contact?>" account-address="<?php echo $address?>" account-type="<?php echo $type?>">
-                    <i class="mdi mdi-pencil"></i>
-                    </button>
-                        <a href=#>
-                            <button type="button" class="btn btn-warning"><i class="mdi mdi-archive"></i></button>
-                        </a>
+                    <a href="#" class="btn btn-success edit-button" data-bs-toggle="modal" data-bs-target="#editmodal" data-account-id="<?php echo $user_id?>" data-account-fname="<?php echo $firstname?>" data-account-lname="<?php echo $lastname?>"
+                        data-account-gender="<?php echo $gender?>" data-account-contact="<?php echo $contact?>" data-account-address="<?php echo $address?>" data-account-type="<?php echo $type?>">
+                        <i class="mdi mdi-pencil"></i>
+                    </a>
+                    <a href="#" class="btn btn-primary archive-button" data-bs-toggle="modal" data-bs-target="#archivemodal" data-account-id="<?php echo $user_id?>">
+                        <i class="mdi mdi-archive"></i>
+                    </a>
                     </td>
                     
                 </tr>
@@ -236,24 +333,34 @@ include('includes/sidebar.php');
 </div>
 </div>
 
-    <script>
-        $(document).ready(function() {
-            $('.edit-button').click(function() {
-                var userID = $(this).account('id');
-                var name = $(this).account('name');
-                var gender = $(this).account('gender');
-                var contact = $(this).account('contact');
-                var address = $(this).account('address');
+<script>
+$(document).ready(function() {
+    $('.archive-button').click(function() {
+        var userid = $(this).data('account-id');
+        $('#userid').val(userid);
+    });
+});
+</script>
 
-                $('#userID').val(userID);
-                $('#userID').prop('readonly', true);
-                $('#modalName').attr('placeholder', name);
-                $('#modalGender').attr('placeholder', gendern);
-                $('#modalContact').attr('placeholder', contact);
-                $('#modalAddress').attr('placeholder', address);
-            });
-        });
-    </script>
+<script>
+$(document).ready(function() {
+    $('.edit-button').click(function() {
+        var userID = $(this).data('account-id');
+        var fname = $(this).data('account-fname');
+        var lname = $(this).data('account-lname'); 
+        var gender = $(this).data('account-gender');
+        var contact = $(this).data('account-contact');
+        var address = $(this).data('account-address');
+
+        $('#userID').val(userID);
+        $('#editFirstName').val(fname);
+        $('#editLastName').val(lname);
+        $('#editGender').val(gender);
+        $('#editContact').val(contact);
+        $('#editAddress').val(address);
+    });
+});
+</script>
 
 <script>
     function showAlert(type, message) {
@@ -271,6 +378,12 @@ include('includes/sidebar.php');
             showAlert('success', 'Account added successfully');
         } else if (urlParams.has('error') && urlParams.get('error') === 'true') {
             showAlert('error', 'Something went wrong!');
+        } else if (urlParams.has('update') && urlParams.get('update') === 'true') {
+            showAlert('success', 'Account updated successfully');
+        } else if (urlParams.has('errorpassword') && urlParams.get('errorpassword') === 'true') {
+            showAlert('error', 'Password do not match');
+        } else if (urlParams.has('archive') && urlParams.get('archive') === 'true') {
+            showAlert('success', 'Account archived successfully');
         }
     }
 
@@ -278,6 +391,7 @@ include('includes/sidebar.php');
 </script>
 
 </body>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>

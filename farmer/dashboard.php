@@ -1,4 +1,13 @@
 <?php
+ini_set('session.cache_limiter','public');
+session_cache_limiter(false);
+session_start();
+include("../conn.php");
+if(!isset($_SESSION['user_id']))
+{
+    header("location:../login.php");
+}
+
 include('includes/header.php');
 include('includes/topbar.php');
 include('includes/sidebar.php');

@@ -26,38 +26,61 @@
             <p>Dashboard</p>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="products.php" class="nav-link">
-            <i class="nav-icon fas fa-th"></i>
-            <p>Product Management</p>
-          </a>
-        </li>
 
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#sidebarsell" aria-expanded="false" aria-controls="sidebarsell" class="nav-link">
             <i class="uil-folder-plus"></i>
-            <span><i class="fas fa-shopping-cart"></i> Product Selling</span>
+            <span><i class="fas fa-th"></i> Product Management</span>
             <span class="menu-arrow"></span>
           </a>
           <div class="collapse" id="sidebarsell">
             <ul class="nav nav-second-level">
               <li class="nav-item">
-                <a href="#" class="nav-link"><i class="far fa-circle nav-icon"></i> AAAAA</a>
+                <a href="products.php" class="nav-link"><i class="far fa-circle nav-icon"></i> Products </a>
+              </li>
+            </ul>
+            <ul class="nav nav-second-level">
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="far fa-circle nav-icon"></i> Inventory </a>
               </li>
             </ul>
           </div>
         </li>
 
         <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-shopping-cart"></i>
+            <p>Product Selling</p>
+          </a>
+        </li>  
+
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-money-bill"></i>
+            <p>Payment</p>
+          </a>
+        </li>  
+
+        <li class="nav-item">
           <a data-bs-toggle="collapse" href="#sidebarpayment" aria-expanded="false" aria-controls="sidebarpayment" class="nav-link">
             <i class="uil-folder-plus"></i>
-            <span><i class="fas fa-money-bill"></i> Payment Management</span>
+            <span><i class="fas fa-money-bill"></i> Reports</span>
             <span class="menu-arrow"></span>
           </a>
           <div class="collapse" id="sidebarpayment">
+          <ul class="nav nav-second-level">
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="far fa-circle nav-icon"></i> Customers </a>
+              </li>
+            </ul>
             <ul class="nav nav-second-level">
               <li class="nav-item">
-                <a href="#" class="nav-link"><i class="far fa-circle nav-icon"></i> BBBBBB</a>
+                <a href="#" class="nav-link"><i class="far fa-circle nav-icon"></i> Orders </a>
+              </li>
+            </ul>
+            <ul class="nav nav-second-level">
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="far fa-circle nav-icon"></i> Sales </a>
               </li>
             </ul>
           </div>
