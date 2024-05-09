@@ -7,7 +7,7 @@ include('includes/sidebar.php');
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
     .modal {
         display: none;
@@ -65,12 +65,65 @@ include('includes/sidebar.php');
     <div class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
     <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Create Account</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+    <div class="modal-header">
+        <h5 class="modal-title">Create Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+        <?php
+        include 'conn.php';
+
+        if(isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['accountlevel'])) {
+            $firstname = $_POST['firstname'];
+            $lastname = $_POST['lastname'];
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $account_level = $_POST['accountlevel'];
+            $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+
+            $check_username = "SELECT username FROM user_account WHERE username = '$username'";
+            $check_result = mysqli_query($conn, $check_username);
+
+            if($check_result && mysqli_num_rows($check_result) > 0) {
+                // alert exit
+                $url = "user_management.php?exist=true";
+                echo '<script>window.location.href = "' . $url . '";</script>';
+            } else {
+                $sql = "INSERT INTO user_info (firstname, lastname) VALUES (?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ss", $firstname, $lastname);
+                if($stmt->execute()) {
+                    $info_id = $conn->insert_id;
+    
+                    $sql = "INSERT INTO user_level (level) VALUES (?)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("i", $account_level);
+                    if($stmt->execute()){
+                        $level_id = $conn->insert_id;
+                        $sql = "INSERT INTO user_account (username, password, level_id, info_id, status) VALUES (?, ?, ?, ?, 1)";
+    
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("ssii", $username, $encrypted_password, $level_id, $info_id);
+    
+                        if($stmt->execute()) {
+                            //sweetAlert success
+                            $url = "user_management.php?success=true";
+                            echo '<script>window.location.href= "' . $url . '";</script>';                            
+                        }
+                        else {
+                            //alert error
+                            echo "<script>Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong!',
+                            });
+                            </script>";
+                        }
+                    }
+                }
+            }
+        }
+        ?>
         <form action="" method="POST" id="createAccountForm">
             <div class="modal-body">
                 <div class="form-group">
@@ -90,10 +143,10 @@ include('includes/sidebar.php');
                     <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" pattern=".{8,16}" title="Password must be 8-16 characters" required>
                 </div>
                 <div class="form-group">
-                    <select class="form-select" aria-label="Account Type" required>
+                    <select name="accountlevel" class="form-select" aria-label="Account Type" required>
                         <option selected disabled>Account Type</option>
-                        <option value="1">Customer</option>
-                        <option value="2">Seller</option>
+                        <option value="2">Customer</option>
+                        <option value="3">Seller</option>
                     </select>
                 </div>
             </div>
@@ -234,6 +287,45 @@ include('includes/sidebar.php');
     </table>
 </div>
 </div>
+<script>
+    function showModal(){
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Account Created Successfully',
+            showConfirmButton: false
+        });
+    }
+
+    function checkExistParam() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success') && urlParams.get('success') === 'true') {
+            showModal();
+        }
+    }
+
+    window.onload = checkExistParam; 
+</script>
+
+    <script>
+        function showModal() {
+            Swal.fire({
+                text: 'Username Already Exists',
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+            });
+        }
+
+        function checkExistParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('exist') && urlParams.get('exist') === 'true') {
+                showModal();
+            }
+        }
+
+        window.onload = checkExistParam;
+    </script>
+
 
 <script>
     // Wait for the DOM to be ready
