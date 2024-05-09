@@ -271,10 +271,10 @@ body {
             <label>Username</label>
         </div>
         <div class="user-box">
-            <input type="password" name="password" required>
+            <input type="password" name="password" pattern=".{8,16}" title="Password must be 8-16 characters" required>
             <label>Password</label>
         </div>
-        <button type="submit" name="submit">
+            <button type="submit" name="submit">
             <span></span>
             <span></span>
             <span></span>
