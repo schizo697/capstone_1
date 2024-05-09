@@ -393,7 +393,7 @@ $(document).ready(function() {
         } else if (urlParams.has('errorpassword') && urlParams.get('errorpassword') === 'true') {
             showAlert('error', 'Password do not match');
         } else if (urlParams.has('archive') && urlParams.get('archive') === 'true') {
-            showAlert('success', 'Account acrhived successfully');
+            showAlert('success', 'Account archived successfully');
         }
     }
 
