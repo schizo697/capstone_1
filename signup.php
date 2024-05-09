@@ -221,7 +221,7 @@ body {
               $sql = "INSERT INTO user_level (level) VALUES (2)";
               if($conn->query($sql) === TRUE){
                   $level_id = $conn->insert_id;
-                  $sql = "INSERT INTO user_account (username, password, level_id, info_id, status) VALUES ('$username', '$encrypted', '$level_id', '$info_id', 1)";
+                  $sql = "INSERT INTO user_account (username, password, level_id, info_id, status) VALUES ('$username', '$encrypted', '$level_id', '$info_id', 2)";
   
                   if($conn->query($sql) === TRUE){
                     // sweetalert success

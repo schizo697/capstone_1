@@ -125,13 +125,25 @@ include('includes/sidebar.php');
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+      <div class="form-group">
+            <label for="userID">User ID:</label>
+            <input type="text" class="form-control" id="userID" name="userid" placeholder="" required>
+        </div>
         <div class="form-group">
             <label for="editFirstName">First Name:</label>
-            <input type="text" class="form-control" id="editFirstName" name="edit_firstname" placeholder="Enter first name">
+            <input type="text" class="form-control" id="editFirstName" name="firstname" placeholder="">
         </div>
         <div class="form-group">
             <label for="editLastName">Last Name:</label>
-            <input type="text" class="form-control" id="editLastName" name="edit_lastname" placeholder="Enter last name">
+            <input type="text" class="form-control" id="editLastName" name="lastname" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="editUserName">User Name:</label>
+            <input type="text" class="form-control" id="editUsername" name="username" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="editPassword">Password:</label>
+            <input type="text" class="form-control" id="editPassword" name="password" placeholder="">
         </div>
       </div>
       <div class="modal-footer">
@@ -164,7 +176,7 @@ include('includes/sidebar.php');
         </thead>
         <tbody>
         <?php 
-        $sql = "SELECT firstname, lastname, gender, contact, address, level
+        $sql = "SELECT user_id, firstname, lastname, gender, contact, address, level
         FROM user_account 
         JOIN user_info ON user_account.info_id = user_info.info_id
         JOIN user_level ON user_account.level_id = user_level.level_id";
@@ -172,8 +184,10 @@ include('includes/sidebar.php');
 
         if ($result && mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
+                $user_id = $row['user_id'];
                 $firstname = $row['firstname'];
                 $lastname = $row['lastname'];
+                $name = $firstname . ' ' . $lastname;
                 $gender = $row['gender'];
                 $contact = $row['contact'];
                 $address = $row['address'];
@@ -195,13 +209,14 @@ include('includes/sidebar.php');
                 }
                 ?> 
                 <tr>
-                    <td><?php echo $firstname . ' ' . $lastname?></td>
+                    <td><?php echo $name ?></td>
                     <td><?php echo $gender ?></td>
                     <td><?php echo $contact ?></td>
                     <td><?php echo $address ?></td>
                     <td><?php echo $type ?></td>
                     <td>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editmodal">
+                    <button type="button" class="btn btn-success edit-button" data-bs-toggle="modal" data-bs-target="#editmodal" account-id="<?php echo $user_id?>" account-name="<?php echo $name?>" 
+                    account-gender="<?php echo $gender?>" account-contact="<?php echo $contact?>" account-address="<?php echo $address?>" account-type="<?php echo $type?>">
                     <i class="mdi mdi-pencil"></i>
                     </button>
                         <a href=#>
@@ -230,6 +245,26 @@ include('includes/sidebar.php');
     </table>
 </div>
 </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.edit-button').click(function() {
+                var userID = $(this).account('id');
+                var name = $(this).account('name');
+                var gender = $(this).account('gender');
+                var contact = $(this).account('contact');
+                var address = $(this).account('address');
+
+                $('#userID').val(userID);
+                $('#userID').prop('readonly', true);
+                $('#modalName').attr('placeholder', name);
+                $('#modalGender').attr('placeholder', gendern);
+                $('#modalContact').attr('placeholder', contact);
+                $('#modalAddress').attr('placeholder', address);
+            });
+        });
+    </script>
+
 <script>
     function showAlert(type, message) {
         Swal.fire({
