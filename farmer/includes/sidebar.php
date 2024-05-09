@@ -37,7 +37,7 @@
             <a href="products.php" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Product
+                Product Management
                 <!-- <span class="right badge badge-danger">New</span> -->
               </p>
             </a>
@@ -46,7 +46,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Layout Options
+                Trend Forecast
                 <i class="fas fa-angle-left right"></i>
                 <span class="badge badge-info right">6</span>
               </p>
@@ -100,7 +100,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
-                Charts
+                Product Selling
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -129,7 +129,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tree"></i>
               <p>
-                UI Elements
+                Payment Management
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -188,7 +188,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>
-                Forms
+                SRP
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -223,7 +223,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
               <p>
-                Tables
+                Reports
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
