@@ -15,7 +15,33 @@
         <img src="assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block">Alexander Pierce</a>
+      <?php
+// Check if user is logged in
+if(isset($_SESSION['user_id'])) {
+    // Include connection file if not already included
+    include 'conn.php';
+
+    // Fetch user information using the user_id from session
+    $user_id = $_SESSION['user_id'];
+    $sql = "SELECT firstname, lastname FROM user_info WHERE info_id = '$user_id'";
+    $result = mysqli_query($conn, $sql);
+
+    // Check if query was successful
+    if ($result && mysqli_num_rows($result) == 1) {
+        $row = mysqli_fetch_assoc($result);
+        $firstname = $row['firstname'];
+        $lastname = $row['lastname'];
+        $name = $firstname . ' ' . $lastname;
+        // Display the username
+        echo '<a href="#" class="d-block">' . $name . '</a>';
+    } else {
+        echo '<a href="#" class="d-block">Error fetching username</a>';
+    }
+} else {
+    echo '<a href="#" class="d-block">User not logged in</a>';
+}
+?>
+
       </div>
     </div>
 
