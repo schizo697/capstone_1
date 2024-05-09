@@ -1,4 +1,13 @@
 <?php
+ini_set('session.cache_limiter','public');
+session_cache_limiter(false);
+session_start();
+include("../conn.php");
+if(!isset($_SESSION['user_id']))
+{
+    header("location:../login.php");
+}
+
 include('includes/header.php');
 include('includes/topbar.php');
 include('includes/sidebar.php');
@@ -41,16 +50,16 @@ include('includes/sidebar.php');
         <?php
         include '../conn.php';
 
-        if(isset($_POST['productname']) && isset($_POST['category']) && isset($_POST['price']) && isset($_POST['quantity']) && isset($_POST['status'])) {
+        if(isset($_POST['productname']) && isset($_POST['category']) && isset($_POST['price']) && isset($_POST['quantity'])) {
             $productname = $_POST['productname'];
             $category = $_POST['category'];
             $price = $_POST['price'];
             $quantity = $_POST['quantity'];
-            $status = $_POST['status'];
+            $uid = $_SESSION['user_id'];
 
-            $sql = "INSERT INTO product (pname, catid, price, quantity, status) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO product (pname, catid, price, quantity, uid, status) VALUES (?, ?, ?, ?, ?, 'Available')";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $productname, $category, $price, $quantity, $status);
+            $stmt->bind_param("sssss", $productname, $category, $price, $quantity, $uid);
             if($stmt->execute()) {
                 $url = "products.php?success=true";
                 echo '<script>window.location.href= "' . $url . '";</script>'; 
@@ -74,8 +83,18 @@ include('includes/sidebar.php');
                     <label for="category">Category:</label>
                     <select name="category" class="form-select" aria-label="Category" required>
                         <option selected disabled>Select...</option>
-                        <option value="2">Customer</option>
-                        <option value="3">Seller</option>
+                         <?php
+                            include "../conn.php";
+                                                
+                            $name_query = "SELECT * FROM pcategory";
+                            $r = mysqli_query($conn, $name_query);
+                        
+                            while ($row = mysqli_fetch_array($r)) {
+                            ?>
+                                <option value="<?php echo $row['catid']; ?>"> <?php echo $row['category']; ?></option>
+                            <?php
+                            }
+                        ?>
                     </select>
                 </div>
                 <div class="form-group">
@@ -86,14 +105,14 @@ include('includes/sidebar.php');
                     <label for="quantity">Quantity:</label>
                     <input type="quantity" class="form-control" id="quantity" name="quantity" required>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="status">Status:</label>
                     <select name="status" class="form-select" aria-label="Status" required>
                         <option selected disabled>Select...</option>
                         <option value="2">Customer</option>
                         <option value="3">Seller</option>
                     </select>
-                </div>
+                </div> -->
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Add Product</button>
@@ -118,10 +137,42 @@ include('includes/sidebar.php');
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Status</th>
+                <th>Date Added</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            
+            <?php
+                include "../conn.php";
+                $uid = $_SESSION['user_id'];
+
+                $sql = "SELECT * FROM product JOIN pcategory ON pcategory.catid = product.catid WHERE product.uid = '$uid'";
+                $result = mysqli_query($conn, $sql);
+
+                while ($row = mysqli_fetch_assoc($result)) {
+                ?>
+                    <tr class = "data-row"> 
+                        <td> <?php echo $row['pname']; ?> </td>
+                        <td> <?php echo $row['category']; ?> </td>
+                        <td> <?php echo $row['price']; ?> </td>
+                        <td> <?php echo $row['quantity']; ?> </td>
+                        <td> <?php echo $row['status']; ?> </td>
+                        <td>
+                            <?php
+                                $date = date('F d, Y', strtotime($row['dateadded']));
+                                echo $date;                                        
+                            ?>
+                        </td>
+                        <td>
+                            <div class="row d-flex justify-content-center">
+                                <button type="button" class="edit mx-1" data-id='<?php echo $row['bname_ID']; ?>'><i class="fa fa-edit"></i></button>
+                                <button type="button" class="delete" data-id='<?php echo $row['bname_ID']; ?>'><i class='fa fa-archive' ></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                <?php
+                }
+            ?> 
         </tbody>
     </table>
 </div>
