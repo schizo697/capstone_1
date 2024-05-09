@@ -232,16 +232,6 @@ include('includes/sidebar.php');
         }
         ?>
 </tbody>
-        <tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Contact</th>
-                <th>Address</th>
-                <th>Type</th>
-                <th>Actions</th>
-            </tr>
-        </tfoot>
     </table>
 </div>
 </div>
