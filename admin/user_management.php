@@ -9,38 +9,6 @@ include('includes/sidebar.php');
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
-<style>
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-        z-index: 1000;
-        overflow: auto;
-        animation: fadeIn 0.3s ease; /* Fade-in animation */
-    }
-
-    .modal-content {
-        background-color: white;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-    }
-
-    /* Fade-in animation keyframes */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-</style>
 
 
 </head>
@@ -63,15 +31,13 @@ include('includes/sidebar.php');
     <!-- /.content-header -->
 
     <!-- modal add account-->
-    <div class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-    <div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">Create Account</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+    <div class="modal fade" id="addAccountModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addAccountModal">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
     <?php
     include 'conn.php';
 
@@ -150,28 +116,38 @@ include('includes/sidebar.php');
     </div>
     </div>
 
-    <!-- modal edit account -->
-    <div class="modal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Modal body text goes here.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-            </div>
+<!-- edit Modal -->
+<div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editmodal">Edit User</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="editFirstName">First Name:</label>
+            <input type="text" class="form-control" id="editFirstName" name="edit_firstname" placeholder="Enter first name">
         </div>
+        <div class="form-group">
+            <label for="editLastName">Last Name:</label>
+            <input type="text" class="form-control" id="editLastName" name="edit_lastname" placeholder="Enter last name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
     </div>
-    
+  </div>
+</div>
+
+
     <div class="table-responsive">
             <div class="card-header">
-            <button type="submit" name="submit" class="btn btn-success" id="openModalBtn">Add Account</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAccountModal">
+            Add Account
+            </button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -225,9 +201,9 @@ include('includes/sidebar.php');
                     <td><?php echo $address ?></td>
                     <td><?php echo $type ?></td>
                     <td>
-                        <a href=#>
-                            <button type="button" class="btn btn-success"><i class="mdi mdi-pencil"></i></button>
-                        </a>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editmodal">
+                    <i class="mdi mdi-pencil"></i>
+                    </button>
                         <a href=#>
                             <button type="button" class="btn btn-warning"><i class="mdi mdi-archive"></i></button>
                         </a>
@@ -267,7 +243,7 @@ include('includes/sidebar.php');
         if (urlParams.has('exist') && urlParams.get('exist') === 'true') {
             showAlert('warning', 'Username Already Exists');
         } else if (urlParams.has('success') && urlParams.get('success') === 'true') {
-            showAlert('success', 'User added successfully');
+            showAlert('success', 'Account added successfully');
         } else if (urlParams.has('error') && urlParams.get('error') === 'true') {
             showAlert('error', 'Something went wrong!');
         }
@@ -275,42 +251,6 @@ include('includes/sidebar.php');
 
     window.onload = checkURLParams;
 </script>
-
-
-<script>
-    // Wait for the DOM to be ready
-    document.addEventListener("DOMContentLoaded", function() {
-        // Get the button element
-        var openModalBtn = document.getElementById('openModalBtn');
-
-        // Get the modal element
-        var modal = document.querySelector('.modal');
-
-        // When the button is clicked, show the modal
-        openModalBtn.addEventListener('click', function() {
-            modal.style.display = 'block';
-        });
-
-        // When the close button inside the modal is clicked, hide the modal
-        modal.querySelector('.close').addEventListener('click', function() {
-            modal.style.display = 'none';
-        });
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.addEventListener('click', function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function(){
-        var openModalbtn = document.getElementById('openEditModalBtn')
-    })
-</script>
-
 
 </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
