@@ -9,41 +9,44 @@
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <!-- Sidebar user panel (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
-        <img src="assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+    <div class="container">
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+              <img src="assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          </div>
+          <div class="info">
+              <?php
+              if(isset($_SESSION['user_id'])) {
+                  include 'conn.php';
+
+                  $user_id = $_SESSION['user_id'];
+                  $sql = "SELECT firstname, lastname FROM user_info WHERE info_id = '$user_id'";
+                  $result = mysqli_query($conn, $sql);
+
+                  if ($result && mysqli_num_rows($result) == 1) {
+                      $row = mysqli_fetch_assoc($result);
+                      $firstname = $row['firstname'];
+                      $lastname = $row['lastname'];
+                      $name = $firstname . ' ' . $lastname;
+                      ?> 
+                      <a href="admin_profile.php" class="d-block"><?php echo $name; ?></a>
+                      <?php
+                  } else {
+                      ?> 
+                      <a href="#" class="d-block">Error fetching username</a>
+                      <?php
+                  }
+              } else {
+                  ?> 
+                  <a href="#" class="d-block">User not logged in</a>
+                  <?php
+              }
+              ?>
+          </div>
       </div>
-      <div class="info">
-      <?php
-// Check if user is logged in
-if(isset($_SESSION['user_id'])) {
-    // Include connection file if not already included
-    include 'conn.php';
+  </div>
 
-    // Fetch user information using the user_id from session
-    $user_id = $_SESSION['user_id'];
-    $sql = "SELECT firstname, lastname FROM user_info WHERE info_id = '$user_id'";
-    $result = mysqli_query($conn, $sql);
 
-    // Check if query was successful
-    if ($result && mysqli_num_rows($result) == 1) {
-        $row = mysqli_fetch_assoc($result);
-        $firstname = $row['firstname'];
-        $lastname = $row['lastname'];
-        $name = $firstname . ' ' . $lastname;
-        // Display the username
-        echo '<a href="#" class="d-block">' . $name . '</a>';
-    } else {
-        echo '<a href="#" class="d-block">Error fetching username</a>';
-    }
-} else {
-    echo '<a href="#" class="d-block">User not logged in</a>';
-}
-?>
-
-      </div>
-    </div>
 
     <!-- Sidebar Menu -->
     <nav class="mt-2">
