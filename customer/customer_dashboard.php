@@ -50,6 +50,17 @@
       margin: 0;
     }
 
+    .search-bar {
+      margin: 0 auto; /* Center the search bar */
+      text-align: center; /* Center the input inside the search bar */
+    }
+
+    .search-bar input[type="text"] {
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+
     .properties {
       display: flex;
       flex-wrap: wrap;
@@ -119,7 +130,12 @@
     </div>
     <h1>MARKET</h1>
   </div>
+  
   <br><br>
+  <div class="search-bar">
+    <input type="text" placeholder="Search...">
+  </div>
+<br><br>
   <div class="properties">
     <div class="property">
       <img src="assets/dist/img/tomato.jpg" alt="Property Image 1">

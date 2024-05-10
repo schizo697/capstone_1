@@ -29,7 +29,7 @@
 
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#sidebarproduct" aria-expanded="false" aria-controls="sidebarproduct" class="nav-link">
-            <i class="uil-folder-plus"></i>
+          <i class="fas fa-angle-left right"></i>
             <span><i class="fas fa-th"></i> Product Management</span>
             <span class="menu-arrow"></span>
           </a>
@@ -48,7 +48,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="selling.php" class="nav-link">
             <i class="nav-icon fas fa-shopping-cart"></i>
             <p>Product Selling</p>
           </a>
@@ -63,7 +63,7 @@
 
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#sidebarreport" aria-expanded="false" aria-controls="sidebarreport" class="nav-link">
-            <i class="uil-folder-plus"></i>
+          <i class="fas fa-angle-left right"></i>
             <span><i class="fas fa-money-bill"></i> Reports</span>
             <span class="menu-arrow"></span>
           </a>
@@ -104,6 +104,13 @@
     $('.sidebar .nav-item .nav-link').on('click', function() {
       $(this).parent().siblings().find('.nav-treeview').slideUp();
       $(this).next('.nav-treeview').slideToggle();
+      $(this).parent().toggleClass('active');
     });
   });
 </script>
+
+<style>
+  .nav-item.active {
+    background-color: #f8f9fa;
+  }
+</style>
