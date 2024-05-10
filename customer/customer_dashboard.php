@@ -1,58 +1,18 @@
-<?php
-include('includes/header.php');
-include('includes/topbar.php');
-include('includes/sidebar.php');
-?>
+<script>// Initialization for ES Users
+import { Ripple, initMDB } from "mdb-ui-kit";
 
-<style>
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  margin: auto;
-  text-align: center;
-  font-family: arial;
-}
-
-.price {
-  color: grey;
-  font-size: 22px;
-}
-
-.card button {
-  border: none;
-  outline: 0;
-  padding: 12px;
-  color: white;
-  background-color: #000;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-  font-size: 18px;
-}
-
-.card button:hover {
-  opacity: 0.7;
-}
-</style>
-</head>
-<body>
-
-<h2 style="text-align:center">Product Card</h2>
+initMDB({ Ripple });</script>
 
 <div class="card">
-  <img src="assets/dist/img/user2-160x160.jpg" alt="Denim Jeans" style="width:100%">
-  <h1>Tailored Jeans</h1>
-  <p class="price">$19.99</p>
-  <p>Some text about the jeans. Super slim and comfy lorem ipsum lorem jeansum. Lorem jeamsun denim lorem jeansum.</p>
-  <p><button>Add to Cart</button></p>
+  <div class="bg-image hover-overlay" data-mdb-ripple-init data-mdb-ripple-color="light">
+    <img src="assets/dist/img/photo1.png" class="img-fluid"/>
+    <a href="#!">
+      <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+    </a>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a href="#!" class="btn btn-primary" data-mdb-ripple-init>Button</a>
+  </div>
 </div>
-<div class="card">
-  <img src="assets/dist/img/user2-160x160.jpg" alt="Denim Jeans" style="width:100%">
-  <h1>Tailored Jeans</h1>
-  <p class="price">$19.99</p>
-  <p>Some text about the jeans. Super slim and comfy lorem ipsum lorem jeansum. Lorem jeamsun denim lorem jeansum.</p>
-  <p><button>Add to Cart</button></p>
-</div>
-<?php
-include('includes/footer.php');
-?>
