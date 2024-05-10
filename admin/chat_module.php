@@ -238,73 +238,85 @@ include('includes/chat_module.php');
 						</div>
 						<div class="card-body msg_card_body" style="max-height: 386px;" id="scrollableDiv">
 						<?php
-						if(isset($_SESSION['user_id'])){
-							$sender_id = $_SESSION['user_id'];
+							if(isset($_SESSION['user_id'])){
+								$sender_id = $_SESSION['user_id'];
 
-							if(isset($_GET['recipient_id'])){
-								$receiver_id = $_GET['recipient_id'];
+								if(isset($_GET['recipient_id'])){
+									$receiver_id = $_GET['recipient_id'];
 
-								$messageDisplay = "SELECT user_id, reciever_id, message, time FROM chats WHERE (user_id = '$sender_id' AND reciever_id = '$receiver_id') OR (user_id = '$receiver_id' AND reciever_id = '$sender_id') ORDER BY time ASC";
-								$messageResult = mysqli_query($conn, $messageDisplay);
+									$messageDisplay = "SELECT user_id, reciever_id, message, time FROM chats WHERE (user_id = '$sender_id' AND reciever_id = '$receiver_id') OR (user_id = '$receiver_id' AND reciever_id = '$sender_id') ORDER BY time ASC";
+									$messageResult = mysqli_query($conn, $messageDisplay);
 
-								if($messageResult && mysqli_num_rows($messageResult) > 0){
-									while ($row = mysqli_fetch_assoc($messageResult)){
-										$sent_id = $row['user_id'];
-										$received_id = $row['reciever_id'];
-										$message_content = $row['message'];
-										$time = $row['time'];
+									if($messageResult && mysqli_num_rows($messageResult) > 0){
+										while ($row = mysqli_fetch_assoc($messageResult)){
+											$sent_id = $row['user_id'];
+											$received_id = $row['reciever_id'];
+											$message_content = $row['message'];
+											$time = $row['time'];
 
-										// Convert time to Unix timestamp
-										$message_time = strtotime($time);
-										$current_time = time();
+											$message_time = strtotime($time);
+											$current_time = time();
 
-										// Check if message was sent today
-										if(date('Y-m-d', $message_time) == date('Y-m-d', $current_time)) {
-											$formatted_time = "Today " . date('H:i', $message_time);
-										} else {
-											$formatted_time = date('Y-m-d H:i', $message_time);
+											if(date('Y-m-d', $message_time) == date('Y-m-d', $current_time)) {
+												$formatted_time = "Today " . date('H:i', $message_time);
+											} else {
+												$formatted_time = date('Y-m-d H:i', $message_time);
+											}
+
+											if($sent_id == $sender_id && $received_id == $receiver_id){
+												?>
+												<div class="d-flex justify-content-end mb-4">
+													<?php if (is_file($message_content)) { ?>
+														<div class="msg_cotainer_send">
+															<a href="<?php echo $message_content; ?>"><img src="<?php echo $message_content; ?>" class="img-fluid" style="height: 300px;"></a>
+															<span class="msg_time_send"><?php echo $formatted_time; ?></span>
+														</div>
+													<?php } else { ?>
+														<div class="msg_cotainer_send">
+															<?php echo $message_content; ?>
+															<span class="msg_time_send"><?php echo $formatted_time; ?></span>
+														</div>
+													<?php } ?>
+													<div class="img_cont_msg">
+														<img src="https://avatars.hsoubcdn.com/ed57f9e6329993084a436b89498b6088?s=256" class="rounded-circle user_img_msg">
+													</div>
+												</div>
+												<?php
+											} elseif ($sent_id == $receiver_id && $received_id == $sender_id){
+												?>
+												<div class="d-flex justify-content-start mb-4">
+													<div class="img_cont_msg">
+														<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
+													</div>
+													<?php if (is_file($message_content)) { ?>
+														<div class="msg_cotainer">
+															<a href="<?php echo $message_content; ?>"><img src="<?php echo $message_content; ?>" class="img-fluid" style="height: 300px;"></a>
+															<span class="msg_time"><?php echo $formatted_time; ?></span>
+														</div>
+													<?php } else { ?>
+														<div class="msg_cotainer">
+															<?php echo $message_content; ?>
+															<span class="msg_time"><?php echo $formatted_time; ?></span>
+														</div>
+													<?php } ?>
+												</div>
+												<?php
+											}
 										}
-
-										if($sent_id == $sender_id && $received_id == $receiver_id){
-											?>
-											<div class="d-flex justify-content-end mb-4">
+									}  else {
+										?>
+										<div class="card-body msg_card_body">
+											<div class="d-flex justify-content-center mb-4" style="height: 286px;">
 												<div class="msg_cotainer_send">
-													<?php echo $message_content; ?>
-													<span class="msg_time_send"><?php echo $formatted_time; ?></span>
+													No Conversation
 												</div>
-												<div class="img_cont_msg">
-													<img src="https://avatars.hsoubcdn.com/ed57f9e6329993084a436b89498b6088?s=256" class="rounded-circle user_img_msg">
-												</div>
-											</div>
-											<?php
-										} elseif ($sent_id == $receiver_id && $received_id == $sender_id){
-											?>
-											<div class="d-flex justify-content-start mb-4">
-												<div class="img_cont_msg">
-													<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
-												</div>
-												<div class="msg_cotainer">
-													<?php echo $message_content; ?>
-													<span class="msg_time"><?php echo $formatted_time; ?></span>
-												</div>
-											</div>
-											<?php
-										}
-									}
-								}  else {
-									?>
-									<div class="card-body msg_card_body">
-										<div class="d-flex justify-content-center mb-4" style="height: 286px;">
-											<div class="msg_cotainer_send">
-												No Conversation
 											</div>
 										</div>
-									</div>
-									<?php
+										<?php
+									}
 								}
 							}
-						}
-						?>
+							?>
 						</div>
 						<div class="card-footer">
 							<?php
@@ -315,18 +327,70 @@ include('includes/chat_module.php');
 									$reciever_id = $_GET['recipient_id'];
 
 									if(isset($_POST['btnSend'])){
-										if(!empty($_POST['txtChat'])){
-											$message = $_POST['txtChat'];
-											$upload = $_POST['upload'];
-											date_default_timezone_set('Asia/Singapore');
-											$localDatetime = date('Y-m-d H:i:s');
+										date_default_timezone_set('Asia/Singapore');
+										$localDatetime = date('Y-m-d H:i:s');
 
-											$message = mysqli_real_escape_string($conn, $message);
+										if(!empty($_FILES['upload']['name'])){ // Check if file is uploaded
+											$target_dir = "uploads/";
+											$target_file = $target_dir . basename($_FILES["upload"]["name"]);
+											$uploadOk = 1;
+											$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
+											// Check if file is a real file or fake
+											if(isset($_POST["submit"])) {
+												$check = getimagesize($_FILES["upload"]["tmp_name"]);
+												if($check !== false) {
+													echo "File is an image - " . $check["mime"] . ".";
+													$uploadOk = 1;
+												} else {
+													echo "File is not an image.";
+													$uploadOk = 0;
+												}
+											}
+
+											// Check if file already exists
+											if (file_exists($target_file)) {
+												echo "Sorry, file already exists.";
+												$uploadOk = 0;
+											}
+
+											// Check file size
+											if ($_FILES["upload"]["size"] > 500000) {
+												echo "Sorry, your file is too large.";
+												$uploadOk = 0;
+											}
+
+											// Allow certain file formats
+											if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+											&& $imageFileType != "gif" ) {
+												echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+												$uploadOk = 0;
+											}
+
+											// Check if $uploadOk is set to 0 by an error
+											if ($uploadOk == 0) {
+												echo "Sorry, your file was not uploaded.";
+											// if everything is ok, try to upload file
+											} else {
+												if (move_uploaded_file($_FILES["upload"]["tmp_name"], $target_file)) {
+													echo "The file ". htmlspecialchars( basename( $_FILES["upload"]["name"])). " has been uploaded.";
+													$message = $target_file;
+													$messageSql = "INSERT INTO chats (user_id, reciever_id, message, time) VALUES ('$sender_id', '$reciever_id', '$message', '$localDatetime')";
+													$messageSend = mysqli_query($conn, $messageSql);
+													if($messageSend){
+														$url = "chat_module.php?recipient_id=$reciever_id";
+														echo '<script>window.location.href="' . $url . '"</script>';
+														exit();
+													} 
+												} else {
+													echo "Sorry, there was an error uploading your file.";
+												}
+											}
+										} elseif(!empty($_POST['txtChat'])){ // Check if text message is sent
+											$message = mysqli_real_escape_string($conn, $_POST['txtChat']);
 											$messageSql = "INSERT INTO chats (user_id, reciever_id, message, time) VALUES ('$sender_id', '$reciever_id', '$message', '$localDatetime')";
 											$messageSend = mysqli_query($conn, $messageSql);
 											if($messageSend){
-
 												$url = "chat_module.php?recipient_id=$reciever_id";
 												echo '<script>window.location.href="' . $url . '"</script>';
 												exit();
@@ -340,15 +404,15 @@ include('includes/chat_module.php');
 								}
 							}
 							?>
-                            <form action=" " method="POST">
+							<form action="" method="POST" enctype="multipart/form-data">
 								<div class="input-group">
 									<div class="input-group-append">
-										<input type="file" name="upload" id="fileInput" style="display: none;">
+										<input type="file" name="upload" id="fileInput" style="display: none;" onchange="displaySelectedFile()">
 										<span class="input-group-text attach_btn" onclick="document.getElementById('fileInput').click();">
 											<i class="fas fa-paperclip"></i>
 										</span>
 									</div>
-									<input type="text" name="txtChat" class="form-control type_msg" placeholder="Type your message..."></input>
+									<input type="text" name="txtChat" id="txtChat" class="form-control type_msg" placeholder="Type your message..."></input>
 									<div class="input-group-append">
 										<button type="submit" name="btnSend" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
 									</div>
@@ -361,6 +425,16 @@ include('includes/chat_module.php');
 		</div>
 </body>
 
+<script>
+    function displaySelectedFile() {
+        const fileInput = document.getElementById('fileInput');
+        const txtChat = document.getElementById('txtChat');
+        
+        if (fileInput.files.length > 0) {
+            txtChat.value = fileInput.files[0].name;
+        }
+    }
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
