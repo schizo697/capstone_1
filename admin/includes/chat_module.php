@@ -23,6 +23,7 @@ html {
 	padding: 0.75rem 0 !important;
 	overflow-y: auto;
 	white-space: nowrap;
+	height: 500px;
 }
 
 .msg_card_body {

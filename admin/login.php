@@ -42,6 +42,10 @@
                       $user_level = $level_row['level'];
           
                       if ($user_level == 1) {
+
+                        $isOnline = "UPDATE user_account SET isOnline = 1 WHERE user_id = '$user_id'";
+                        $isOnlineResult = mysqli_query($conn, $isOnline);
+
                           header("location: admin_dashboard.php");
                           exit();
                       } 
