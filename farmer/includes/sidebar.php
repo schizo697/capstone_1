@@ -28,12 +28,12 @@
         </li>
 
         <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#sidebarsell" aria-expanded="false" aria-controls="sidebarsell" class="nav-link">
+          <a data-bs-toggle="collapse" href="#sidebarproduct" aria-expanded="false" aria-controls="sidebarproduct" class="nav-link">
             <i class="uil-folder-plus"></i>
             <span><i class="fas fa-th"></i> Product Management</span>
             <span class="menu-arrow"></span>
           </a>
-          <div class="collapse" id="sidebarsell">
+          <div class="collapse" id="sidebarproduct">
             <ul class="nav nav-second-level">
               <li class="nav-item">
                 <a href="products.php" class="nav-link"><i class="far fa-circle nav-icon"></i> Products </a>
@@ -62,13 +62,13 @@
         </li>  
 
         <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#sidebarpayment" aria-expanded="false" aria-controls="sidebarpayment" class="nav-link">
+          <a data-bs-toggle="collapse" href="#sidebarreport" aria-expanded="false" aria-controls="sidebarreport" class="nav-link">
             <i class="uil-folder-plus"></i>
             <span><i class="fas fa-money-bill"></i> Reports</span>
             <span class="menu-arrow"></span>
           </a>
-          <div class="collapse" id="sidebarpayment">
-          <ul class="nav nav-second-level">
+          <div class="collapse" id="sidebarreport">
+            <ul class="nav nav-second-level">
               <li class="nav-item">
                 <a href="#" class="nav-link"><i class="far fa-circle nav-icon"></i> Customers </a>
               </li>
@@ -91,3 +91,8 @@
   </div>
   <!-- /.sidebar -->
 </aside>
+
+<!-- Include the required JavaScript files -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.2.4/js/bootstrap.bundle.min.js"></script>

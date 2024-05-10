@@ -219,7 +219,7 @@ body {
                         $user_level = $level_row['level'];
                         
                         if ($user_level == 2) {
-                            header("location: customer.php");
+                            header("location: customer/customer_dashboard.php");
                             exit();
                         } elseif ($user_level == 3) {
                             header("location: farmer/dashboard.php");
