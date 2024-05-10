@@ -61,18 +61,18 @@ include('includes/chat_module.php');
                                 $name = $firstname . ' ' . $lastname;
                                 ?>
                                 <li class="active">
-                                <a href="chat_module.php?recipient_id=<?php echo $user_id ?>">
-                                    <div class="d-flex bd-highlight">
-                                        <div class="img_cont">
-                                            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
-                                            <span class="online_icon"></span>
-                                        </div>
-                                        <div class="user_info">
-                                            <span><?php echo $name; ?></span>
-                                            <p>Online</p>
-                                        </div>
-                                    </div>
-                                </a>                              
+								<a href="chat_module.php?recipient_id=<?php echo $user_id ?>" style="text-decoration: none;">
+									<div class="d-flex bd-highlight">
+										<div class="img_cont">
+											<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
+											<span class="online_icon"></span>
+										</div>
+										<div class="user_info">
+											<span><?php echo $name; ?></span>
+											<p>Online</p>
+										</div>
+									</div>
+								</a>                             
                                 </li>
                                 <?php
                             }
