@@ -348,12 +348,6 @@ include('includes/chat_module.php');
 												}
 											}
 
-											// Check if file already exists
-											if (file_exists($target_file)) {
-												echo "Sorry, file already exists.";
-												$uploadOk = 0;
-											}
-
 											// Check file size
 											if ($_FILES["upload"]["size"] > 500000) {
 												echo "Sorry, your file is too large.";
@@ -363,9 +357,11 @@ include('includes/chat_module.php');
 											// Allow certain file formats
 											if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
 											&& $imageFileType != "gif" ) {
-												echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+												$url = "chat_module.php?recipient_id=$recipient_id&error=true"; // Changed ? to &
+												echo '<script>window.location.href="' . $url . '" </script>'; // Added missing closing bracket
 												$uploadOk = 0;
 											}
+										
 
 											// Check if $uploadOk is set to 0 by an error
 											if ($uploadOk == 0) {
@@ -424,6 +420,25 @@ include('includes/chat_module.php');
 			</div>
 		</div>
 </body>
+
+<!-- alert -->
+<script>
+    function showAlert(type, message) {
+        Swal.fire({
+            icon: type,
+            text: message,
+        });
+    }
+
+    function checkURLParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('error') && urlParams.get('error') === 'true') {
+            showAlert('warning', 'Error occurred while uploading image');
+        }
+    }
+
+    window.onload = checkURLParams;
+</script>
 
 <script>
 function handleKeyDown(event) {
@@ -500,6 +515,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
