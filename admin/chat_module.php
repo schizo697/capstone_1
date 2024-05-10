@@ -412,9 +412,9 @@ include('includes/chat_module.php');
 											<i class="fas fa-paperclip"></i>
 										</span>
 									</div>
-									<input type="text" name="txtChat" id="txtChat" class="form-control type_msg" placeholder="Type your message..."></input>
+									<input type="text" name="txtChat" id="txtChat" class="form-control type_msg" placeholder="Type your message..." onkeydown="handleKeyDown(event)"></input>
 									<div class="input-group-append">
-										<button type="submit" name="btnSend" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
+										<button type="submit" name="btnSend" class="input-group-text send_btn" onclick="sendMessage()"><i class="fas fa-location-arrow"></i></button>
 									</div>
 								</div>
 							</form>
@@ -426,6 +426,19 @@ include('includes/chat_module.php');
 </body>
 
 <script>
+function handleKeyDown(event) {
+    if (event.keyCode === 13) { // 13 is the keycode for 'Enter' key
+        sendMessage();
+    }
+}
+
+function sendMessage() {
+    // Your sending logic here
+    console.log(document.getElementById('txtChat').value); // Example: Logging the value of the input field
+}
+</script>
+
+<script>
     function displaySelectedFile() {
         const fileInput = document.getElementById('fileInput');
         const txtChat = document.getElementById('txtChat');
@@ -434,32 +447,6 @@ include('includes/chat_module.php');
             txtChat.value = fileInput.files[0].name;
         }
     }
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  // Function to handle form submission
-  function sendMessage() {
-    var message = document.getElementById("txtChat").value;
-    console.log("Sending message:", message);
-    // Perform actions to send the message
-    // For demonstration, let's just log it to console
-  }
-
-  // Function to handle Enter key press
-  function handleKeyPress(event) {
-    if (event.keyCode === 13 && !event.shiftKey) { // Check for Enter key without Shift
-      event.preventDefault(); // Prevent default behavior (new line in textarea)
-      sendMessage(); // Call sendMessage function
-    }
-  }
-
-  // Add event listener to textarea for Enter key press
-  document.getElementById("txtChat").addEventListener("keydown", handleKeyPress);
-
-  // Add event listener to button for click event
-  document.getElementById("btnSend").addEventListener("click", sendMessage);
-});
 </script>
 
 <script>
