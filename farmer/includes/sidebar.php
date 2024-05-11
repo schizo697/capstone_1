@@ -29,7 +29,7 @@
 
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#sidebarproduct" aria-expanded="false" aria-controls="sidebarproduct" class="nav-link">
-            <i class="uil-folder-plus"></i>
+          <i class="fas fa-angle-left right"></i>
             <span><i class="fas fa-th"></i> Product Management</span>
             <span class="menu-arrow"></span>
           </a>
@@ -48,7 +48,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="selling.php" class="nav-link">
             <i class="nav-icon fas fa-shopping-cart"></i>
             <p>Product Selling</p>
           </a>
@@ -63,7 +63,7 @@
 
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#sidebarreport" aria-expanded="false" aria-controls="sidebarreport" class="nav-link">
-            <i class="uil-folder-plus"></i>
+          <i class="fas fa-angle-left right"></i>
             <span><i class="fas fa-money-bill"></i> Reports</span>
             <span class="menu-arrow"></span>
           </a>
@@ -96,3 +96,21 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.2.4/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    // Enable the dropdown functionality for the sidebar
+    $('.sidebar .nav-treeview').slideUp(0);
+    $('.sidebar .nav-item .nav-link').on('click', function() {
+      $(this).parent().siblings().find('.nav-treeview').slideUp();
+      $(this).next('.nav-treeview').slideToggle();
+      $(this).parent().toggleClass('active');
+    });
+  });
+</script>
+
+<style>
+  .nav-item.active {
+    background-color: #f8f9fa;
+  }
+</style>
