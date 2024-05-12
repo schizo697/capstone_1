@@ -222,7 +222,7 @@ body {
                             header("location: customer/customer_dashboard.php");
                             exit();
                         } elseif ($user_level == 3) {
-                            header("location: farmer/dashboard.php");
+                            header("location: farmer/farmer_dashboard.php");
                             exit();
                         }
                     } else {

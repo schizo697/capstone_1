@@ -5,179 +5,228 @@ session_start();
 include("../conn.php");
 if(!isset($_SESSION['user_id']))
 {
-    header("location:../login.php");
+    header("location:../index.php");
 }
 
 include('includes/header.php');
-include('includes/topbar.php');
-include('includes/sidebar.php');
+include('includes/navbar.php');
+include('../conn.php');
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-    <?php include 'css/product.css' ?>
-</style>
+    <meta charset="utf-8">
+    <title>Farmer's Market</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        <?php 
+            include '../main/css/style.css'; 
+            include '../main/css/bootstrap.min.css';
+        ?>
+    </style>
 </head>
 
 <body>
-  <div class="content-wrapper">
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Selling</h1>
-          </div>
-          <div class="col-sm-6">    
-          </div>
-        </div>
-      </div>
-    </div>
+    
 
+    <!-- Form Start -->
+    <div class="container-fluid about pt-5">
+        <div class="container">
+            <div class="row gx-9">
+                <div class="card">
+                    <div class = "containers">
+                        <div class = "offset-md-12 col-md-12 modal-header" style = "padding: 0; padding-left: 15px; margin-bottom: 15px"> 
+                            <legend class = "text-left"> Sell a Product </legend>
+                                <a href = "listingproducts.php"><button class="btn btn-primary" name="bsubmit">
+   		                            <i class="bx bx-detail"></i> <span>My Listing</span></button>
+                                </a>
+                                    </div> 
+                                <div class="container">
+                                    <div class="content">
+                                    <?php 
+                                            if(isset($_POST['btnPost'])){
+                                                $uid = $_SESSION['user_id'];
+                                                $product = $_POST['product'];
+                                                $visibility = $_POST['visibility'];
+                                                $description = $_POST['description'];
 
-    <!-- modal -->
-    <div class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-    <div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">Add Products</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-        <?php
-        include '../conn.php';
-
-        if(isset($_POST['productname']) && isset($_POST['category']) && isset($_POST['price']) && isset($_POST['quantity'])) {
-            $productname = $_POST['productname'];
-            $category = $_POST['category'];
-            $price = $_POST['price'];
-            $quantity = $_POST['quantity'];
-            $uid = $_SESSION['user_id'];
-
-            $sql = "INSERT INTO product (pname, catid, price, quantity, uid, status) VALUES (?, ?, ?, ?, ?, 'Available')";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $productname, $category, $price, $quantity, $uid);
-            if($stmt->execute()) {
-                $url = "products.php?success=true";
-                echo '<script>window.location.href= "' . $url . '";</script>'; 
-            } else {
-                echo "<script>Swal.fire({
-                    icon: 'error',
-                    text: 'Something went wrong!',
-                });
-                </script>";
-            } 
-                    
-        }
-        ?>
-        <form action="" method="POST" id="addproduct">
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="productname">Product Name:</label>
-                    <input type="text" class="form-control" id="productname" name="productname" required>
-                </div>
-                <div class="form-group">
-                    <label for="category">Category:</label>
-                    <select name="category" class="form-select" aria-label="Category" required>
-                        <option selected disabled>Select...</option>
-                         <?php
-                            include "../conn.php";
+                                                if (isset($_FILES['image'])) {
+                                                    $img_name = $_FILES['image']['name'];
+                                                    $img_size = $_FILES['image']['size'];
+                                                    $tmp_name = $_FILES['image']['tmp_name'];
+                                                    $error = $_FILES['image']['error'];
+                                                    
+                                                    if ($error === 0) {
+                                                        if ($img_size > 1250000) {
+                                                                $message = "Sorry, your file is too large";
+                                                                header("Location: selling.php?error=$message");
+                                                        } else {
+                                                            $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+                                                            $img_ex_loc = strtolower($img_ex);
+                                                    
+                                                            $allowed_ex = array ("jpg", "jpeg", "png", "pdf");
+                                                    
+                                                            if (in_array($img_ex_loc, $allowed_ex)) {
+                                                                $new_img_name = uniqid("FP-", true).'.'.$img_ex_loc;
+                                                                $img_upload_path = '../img/products/'.$new_img_name;
+                                                                move_uploaded_file($tmp_name, $img_upload_path);
+                                                    
+                                                                //into the database
+                                                                $sql = "INSERT INTO listing (prodid, uid, details, imgid, visibility) VALUES (?, ?, ?, ?,?)";
+                                                                $stmt = $conn->prepare($sql);
+                                                                $stmt->bind_param("sssss", $product, $uid, $description, $new_img_name, $visibility);
+                                                                if($stmt->execute()) {
+                                                                    $url = "selling.php?success=true";
+                                                                    echo '<script>window.location.href= "' . $url . '";</script>'; 
+                                                                } else {
+                                                                    echo "<script>Swal.fire({
+                                                                        icon: 'error',
+                                                                        text: 'Something went wrong!',
+                                                                    });
+                                                                    </script>";
+                                                                } 
+                                        
+                                                            } else {
+                                                                $message = "You cannot upload files of this type";
+                                                                header("Location: ownerPost.php?error=$message");
+                                                            }
+                                                        }
+                                                    } else {
+                                                        $message = "Please upload the required images";
+                                                        header("Location: ownerPost.php?error=$message");
+                                                    }
+                                                }
                                                 
-                            $name_query = "SELECT * FROM pcategory";
-                            $r = mysqli_query($conn, $name_query);
-                        
-                            while ($row = mysqli_fetch_array($r)) {
-                            ?>
-                                <option value="<?php echo $row['catid']; ?>"> <?php echo $row['category']; ?></option>
-                            <?php
-                            }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="price">Price:</label>
-                    <input type="text" class="form-control" id="price" name="price" required>
-                </div>
-                <div class="form-group">
-                    <label for="quantity">Quantity:</label>
-                    <input type="quantity" class="form-control" id="quantity" name="quantity" required>
-                </div>
-                <!-- <div class="form-group">
-                    <label for="status">Status:</label>
-                    <select name="status" class="form-select" aria-label="Status" required>
-                        <option selected disabled>Select...</option>
-                        <option value="2">Customer</option>
-                        <option value="3">Seller</option>
-                    </select>
-                </div> -->
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Add Product</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </form>
-    </div>
-    </div>
-    </div>
-
-    <div class="card">
-            <div class="card-header">
-            <button type="submit" name="submit" class="btn btn-success" id="openModalBtn">Add New</button>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-            <table id="example" class="table table-striped" style="width:100%">
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Status</th>
-                <th>Date Added</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-                include "../conn.php";
-                $uid = $_SESSION['user_id'];
-
-                $sql = "SELECT * FROM product JOIN pcategory ON pcategory.catid = product.catid WHERE product.uid = '$uid'";
-                $result = mysqli_query($conn, $sql);
-
-                while ($row = mysqli_fetch_assoc($result)) {
-                ?>
-                    <tr class = "data-row"> 
-                        <td> <?php echo $row['pname']; ?> </td>
-                        <td> <?php echo $row['category']; ?> </td>
-                        <td> <?php echo $row['price']; ?> </td>
-                        <td> <?php echo $row['quantity']; ?> </td>
-                        <td> <?php echo $row['status']; ?> </td>
-                        <td>
-                            <?php
-                                $date = date('F d, Y', strtotime($row['dateadded']));
-                                echo $date;                                        
-                            ?>
-                        </td>
-                        <td>
-                            <div class="row d-flex justify-content-center">
-                                <button type="button" class="edit mx-1" data-id='<?php echo $row['bname_ID']; ?>'><i class="fa fa-edit"></i></button>
-                                <button type="button" class="delete" data-id='<?php echo $row['bname_ID']; ?>'><i class='fa fa-archive' ></i></button>
+                                            }
+                                        ?>
+                                        <form method="POST" action="" class="needs-validation" enctype = "multipart/form-data" novalidate>
+                                            <div class="row">
+    											<div class="col-xl-12">
+                                                    <div class="form-group row">
+                                                        <label class="col-lg-2 col-form-label"> Choose Product <span style = "color:red;">*</span></label>
+    													<div class="col-lg-4">
+    														<select class="custom-select" id = "product" name="product" required>
+                                                            <option selected disabled>Choose...</option>
+                                                                <?php
+                                                                    include "../conn.php";
+                                                                    $uid = $_SESSION['user_id'];
+                                                                                        
+                                                                    $name_query = "SELECT * FROM product WHERE uid = '$uid'";
+                                                                    $r = mysqli_query($conn, $name_query);
+                                                                
+                                                                    while ($row = mysqli_fetch_array($r)) {
+                                                                    ?>
+                                                                        <option value="<?php echo $row['prodid']; ?>"> <?php echo $row['pname']; ?></option>
+                                                                    <?php
+                                                                    }
+                                                                ?>
+    														</select>
+    													</div>
+    												</div>
+    												<div class="form-group row">  
+    													<label class="col-lg-2 col-form-label"> Visibility <span style = "color:red;">*</span></label>
+    													<div class="col-lg-4">
+    														<select class="custom-select" required name="visibility">
+                                                                <option selected disabled value="">Choose...</option>
+                                                                <option value="Public">Public</option>
+                                                                <option value="Private">Private</option>
+    														</select>
+    													</div>
+    											    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-lg-2 col-form-label">Image <span style = "color:red;">*</span></label>
+                                                        <div class="col-lg-5">
+                                                            <input type = "file" name="image" id="image' style="border: solid gray 1px; padding: 6px; width: 80%; border-radius: 4px"/>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+    												<div class="form-group row">
+    													<label class="col-lg-2 col-form-label">Description</label>
+    													<div class="col-lg-9">
+                                                            <textarea name = "description" id = "description" class="form-control" id="validationCustom07" required></textarea>	
+    													</div>
+                                                        <div class = "invalid-feedback"> 
+                                                                Please provide some description
+                                                            </div>
+    												</div>
+                                                </div>
+    										</div><br>
+                                            <!-- Button trigger modal -->
+                                            <a href="#" class="btn btn-primary post-button" data-bs-toggle="modal" data-bs-target="#postmodal">
+                                                Post
+                                            </a>   
+                                        </div> 
+                                    </div>
+                                </div>
+                                <!-- post modal -->
+                                <div class="modal fade" id="postmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Archive</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        
+                                                <div class="modal-body">
+                                                    Are you sure you want to sell this product?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" name="btnPost" class="btn btn-primary">Confirm</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </td>
-                    </tr>
-                <?php
-                }
-            ?> 
-        </tbody>
-    </table>
-</div>
-</div>
-<script>
+                        </div>
+                    </div>         
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Table End -->
+
+    
+
+    <br>
+    <br>
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <script>
     function showModal(){
         Swal.fire({
             position: 'center',
@@ -225,16 +274,37 @@ include('includes/sidebar.php');
     });
 </script>
 
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/counterup/counterup.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
 
-</body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script>
+    <!-- Template Javascript -->
+    <script src="../js/main.js"></script>
+
+    <script>
+        function enableDropdown() {
+            $('.dropdown-toggle').on('click', function() {
+                $(this).siblings('.dropdown-menu').toggleClass('show');
+            });
+
+            $(document).on('click', function(e) {
+                if (!$('.dropdown-toggle').is(e.target) && $('.dropdown-toggle').has(e.target).length === 0 &&
+                    $('.show').has(e.target).length === 0) {
+                    $('.dropdown-menu').removeClass('show');
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            enableDropdown();
+        });
+    </script>
+
+<script>
     $(document).ready(function() {
         $('#example').DataTable();
     });
@@ -243,7 +313,8 @@ include('includes/sidebar.php');
         $('#myInput').trigger('focus')
     })
   </script>
-
+</body>
 <?php
 include('includes/footer.php');
 ?>
+</html>

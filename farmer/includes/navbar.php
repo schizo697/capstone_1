@@ -16,7 +16,7 @@
                         <a href="#" class="dropdown-item">Inventory</a>
                     </div>
                 </div>
-                <a href="#" class="nav-item nav-link">Sell</a>
+                <a href="selling.php" class="nav-item nav-link">Sell</a>
                 <a href="#" class="nav-item nav-link">Payment</a>
                 <a href="#" class="nav-item nav-link">Trends</a>
                 <a href="#" class="nav-item nav-link">Reports</a>
