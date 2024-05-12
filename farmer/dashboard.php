@@ -5,7 +5,7 @@ session_start();
 include("../conn.php");
 if(!isset($_SESSION['user_id']))
 {
-    header("location:../login.php");
+    header("location:../index.php");
 }
 
 include('includes/header.php');

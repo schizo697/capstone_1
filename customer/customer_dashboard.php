@@ -1,190 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Property Listing</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f8f8f8;
-    }
+    <meta charset="utf-8">
+    <title>FarmFresh - Organic Farm Website Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
 
-    h1 {
-      text-align: center;
-      padding: 20px 0;
-      background-color: #333;
-      color: #fff;
-      margin: 0;
-    }
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
 
-    .header {
-      background-color: #333;
-      color: #fff;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
 
-    .header h1 {
-      flex-grow: 1; /* Allow the text to take up remaining space */
-      text-align: center; /* Center the text within the header */
-    }
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    .profile {
-      display: flex;
-      align-items: center;
-    }
+    <!-- Libraries Stylesheet -->
+    <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-    .profile img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-
-    .profile h3 {
-      margin: 0;
-    }
-
-    .search-bar {
-      margin: 0 auto; /* Center the search bar */
-      text-align: center; /* Center the input inside the search bar */
-    }
-
-    .search-bar input[type="text"] {
-      padding: 5px;
-      border-radius: 5px;
-      border: none;
-    }
-
-    .properties {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin: 0 auto;
-      width: 80%;
-    }
-
-    .property {
-      background-color: #fff;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      margin-bottom: 20px;
-      width: 30%;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .property:hover {
-      transform: scale(1.05);
-    }
-
-    .property img {
-      width: 100%;
-      height: 300px; /* Set a fixed height for all images */
-      object-fit: cover; /* Ensure the images maintain their aspect ratio */
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
-
-    h2, p {
-      margin: 0;
-    }
-
-    h2 {
-      margin-bottom: 10px;
-      font-size: 18px;
-      color: #333;
-    }
-
-    p:nth-child(odd) {
-      font-weight: bold;
-    }
-
-    button {
-      display: block;
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #333;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease-in-out;
-    }
-
-    button:hover {
-      background-color: #555;
-    }
-  </style>
+    <style>
+        <?php 
+            include '../main/css/style.css'; 
+            include '../main/css/bootstrap.min.css';
+        ?>
+    </style>
 </head>
+
 <body>
-  <div class="header">
-    <div class="profile">
-      <img src="assets/dist/img/avatar.png" alt="Profile Image">
-      <h3>Welcome, John Doe</h3>
+    <!-- Topbar Start -->
+    <div class="container-fluid px-5 d-none d-lg-block">
+        <div class="row gx-5 py-3 align-items-center">
+            <div class="col-lg-3">
+                <div class="d-flex align-items-center justify-content-start">
+                    <i class="bi bi-phone-vibrate fs-1 text-primary me-2"></i>
+                    <h2 class="mb-0">logo</h2>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="d-flex align-items-center justify-content-center">
+                    <a href="index.html" class="navbar-brand ms-lg-5">
+                        <h1 class="m-0 display-4 text-primary"><span class="text-secondary">Farmer's </span>Market</h1>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="d-flex align-items-center justify-content-end">
+                    <a class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
+                    <a class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
+                </div>
+            </div>
+        </div>
     </div>
-    <h1>MARKET</h1>
-  </div>
-  
-  <br><br>
-  <div class="search-bar">
-    <input type="text" placeholder="Search...">
-  </div>
-<br><br>
-  <div class="properties">
-    <div class="property">
-      <img src="assets/dist/img/tomato.jpg" alt="Property Image 1">
-      <h2>FRESH TOMATO</h2>
-      <p>Price : ₱400.00</p>
-      <p>Address: Gensan</p>
-      <p>Owner: Elmer Watapampam</p>
-      <button>Check out</button>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-primary navbar-dark shadow-sm py-3 py-lg-0 px-3 px-lg-5">
+        <a href="index.html" class="navbar-brand d-flex d-lg-none">
+            <h1 class="m-0 display-4 text-secondary"><span class="text-white">Farmer's </span>Market</h1>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+    <!-- Navbar End -->
+
+
+    <!-- Hero Start -->
+    <div class="container-fluid bg-primary py-5 bg-hero mb-5">
+        <div class="container py-5">
+            <div class="row justify-content-start">
+                <div class="col-lg-8 text-center text-lg-start">
+                <div class="col-md-20">
+                  <form id="filter-list" method="POST">
+                      <div class="row g-4" style="margin-bottom: 8px;">
+                          <div class="col-md-8">
+                              <input type="text" class="form-control border-0 py-3 enter-loc" id="product" name="product" placeholder="Search Product">
+                            </div> 
+                          </div>
+                         <div class="row g-3">
+                            <div class="col-md-2" style="width: 300px">
+                                <select name="cate" id="cate" value="category" class="form-control border-0 py-3 enter-loc">
+                                    <option value="" selected disabled>Category</option>
+                                    <option value="Vegetable"> Vegetable </option>
+                                    <option value="Fruits"> Fruits </option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 ">
+                                <button type = "submit" id = "search" class="btn btn-dark border-0 w-100 py-3">Search</button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="property">
-      <img src="assets/dist/img/eggplant.png" alt="Property Image 1">
-      <h2>EGGPLANT</h2>
-      <p>Price : ₱400.00</p>
-      <p>Address: Gensan</p>
-      <p>Owner: Elmer Watapampam</p>
-      <button>Check out</button>
+    <!-- Hero End -->
+
+
+    <!-- Products Start -->
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="mx-auto text-center mb-5" style="max-width: 500px;">
+                <h6 class="text-primary text-uppercase">Products</h6>
+                <h1 class="display-5">Available Products</h1>
+            </div>
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6 px-5">
+                    <div class="product-item position-relative bg-white d-flex flex-column text-center">
+                        <img class="img-fluid mb-4" src="../img/product-1.png" alt="">
+                        <h6 class="mb-3">Organic Vegetable</h6>
+                        <h5 class="text-primary mb-0">$19.00</h5>
+                        <div class="btn-action d-flex justify-content-center">
+                            <a class="btn bg-primary py-2 px-3" href=""><i class="bi bi-cart text-white"></i></a>
+                            <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 px-5">
+                    <div class="product-item position-relative bg-white d-flex flex-column text-center">
+                        <img class="img-fluid mb-4" src="../img/product-2.png" alt="">
+                        <h6 class="mb-3">Organic Vegetable</h6>
+                        <h5 class="text-primary mb-0">$19.00</h5>
+                        <div class="btn-action d-flex justify-content-center">
+                            <a class="btn bg-primary py-2 px-3" href=""><i class="bi bi-cart text-white"></i></a>
+                            <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 px-5">
+                    <div class="product-item position-relative bg-white d-flex flex-column text-center">
+                        <img class="img-fluid mb-4" src="../img/product-1.png" alt="">
+                        <h6 class="mb-3">Organic Vegetable</h6>
+                        <h5 class="text-primary mb-0">$19.00</h5>
+                        <div class="btn-action d-flex justify-content-center">
+                            <a class="btn bg-primary py-2 px-3" href=""><i class="bi bi-cart text-white"></i></a>
+                            <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 px-5">
+                    <div class="product-item position-relative bg-white d-flex flex-column text-center">
+                        <img class="img-fluid mb-4" src="../img/product-1.png" alt="">
+                        <h6 class="mb-3">Organic Vegetable</h6>
+                        <h5 class="text-primary mb-0">$19.00</h5>
+                        <div class="btn-action d-flex justify-content-center">
+                            <a class="btn bg-primary py-2 px-3" href=""><i class="bi bi-cart text-white"></i></a>
+                            <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 px-5">
+                    <div class="product-item position-relative bg-white d-flex flex-column text-center">
+                        <img class="img-fluid mb-4" src="../img/product-2.png" alt="">
+                        <h6 class="mb-3">Organic Vegetable</h6>
+                        <h5 class="text-primary mb-0">$19.00</h5>
+                        <div class="btn-action d-flex justify-content-center">
+                            <a class="btn bg-primary py-2 px-3" href=""><i class="bi bi-cart text-white"></i></a>
+                            <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 px-5">
+                    <div class="product-item position-relative bg-white d-flex flex-column text-center">
+                        <img class="img-fluid mb-4" src="../img/product-1.png" alt="">
+                        <h6 class="mb-3">Organic Vegetable</h6>
+                        <h5 class="text-primary mb-0">$19.00</h5>
+                        <div class="btn-action d-flex justify-content-center">
+                            <a class="btn bg-primary py-2 px-3" href=""><i class="bi bi-cart text-white"></i></a>
+                            <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+            </div>
+        </div>
     </div>
-    <div class="property">
-      <img src="assets/dist/img/kalabasa.jpg" alt="Property Image 1">
-      <h2>SQUASH</h2>
-      <p>Price : ₱400.00</p>
-      <p>Address: Gensan</p>
-      <p>Owner: Elmer Watapampam</p>
-      <button>Check out</button>
-    </div>  
-    <div class="property">
-      <img src="assets/dist/img/tomato.jpg" alt="Property Image 1">
-      <h2>FRESH TOMATO</h2>
-      <p>Price : ₱400.00</p>
-      <p>Address: Gensan</p>
-      <p>Owner: Elmer Watapampam</p>
-      <button>Check out</button>
+    <!-- Products End -->
+
+    <div class="container-fluid bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="https://freewebsitecode.com/">Your Site Name</a>. All Rights Reserved. Designed by <a class="text-secondary fw-bold" href="https://freewebsitecode.com">Free Website Code</a></p>
+        </div>
     </div>
-    <div class="property">
-      <img src="assets/dist/img/eggplant.png" alt="Property Image 1">
-      <h2>EGGPLANT</h2>
-      <p>Price : ₱400.00</p>
-      <p>Address: Gensan</p>
-      <p>Owner: Elmer Watapampam</p>
-      <button>Check out</button>
-    </div>
-    <div class="property">
-      <img src="assets/dist/img/kalabasa.jpg" alt="Property Image 1">
-      <h2>SQUASH</h2>
-      <p>Price : ₱400.00</p>
-      <p>Address: Gensan</p>
-      <p>Owner: Elmer Watapampam</p>
-      <button>Check out</button>
-    </div> 
-  </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="../main/js/main.js"></script>
 </body>
+
 </html>
