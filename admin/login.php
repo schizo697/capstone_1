@@ -5,8 +5,13 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <?php include('includes/login_css.php'); ?>
+  <link href="../main/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+  <?php 
+    include '../main/css/login.css'; 
+  ?>
+</style>
 <body>
     
   <div class="login-box">
@@ -66,23 +71,25 @@
         }
     }
     ?>
-    <form action="" method="POST">
-      <div class="user-box">
-        <input type="text" name="username" required>
-        <label>Username</label>
-      </div>
-      <div class="user-box">
-        <input type="password" name="password" required>
-        <label>Password</label>
-      </div>
-      <button type="submit" name="submit">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        Login
-      </button>
-    </form>
+    <div class="col-md-12 right-box">
+        <div class="row align-items-center">
+            <form action="" method="POST">
+                <div class="input-group mb-3">
+                    <input type="text" name="username" id="username" class="form-control form-control-lg bg-light fs-6" placeholder="Username">
+                </div>
+                <div class="input-group mb-1">
+                    <input type="password" name="password" id="password" class="form-control form-control-lg bg-light fs-6" placeholder="Password">
+                </div>
+                <div class="input-group mb-3">
+                    <button type="submit" name="submit" class="btn btn-lg btn-primary w-100 fs-6">Login
+                    <span class="loading-text" style="display: none;">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </span></button>
+                </div>
+            </form>
+          </div>
+       </div> 
   </div>
 </body>
 </html>

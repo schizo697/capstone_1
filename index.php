@@ -1,3 +1,7 @@
+<?php 
+
+include('main/includes/header.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,33 +37,6 @@
 </head>
 
 <body>
-    <!-- Topbar Start -->
-    <div class="container-fluid px-5 d-none d-lg-block">
-        <div class="row gx-5 py-3 align-items-center">
-            <div class="col-lg-3">
-                <div class="d-flex align-items-center justify-content-start">
-                    <i class="bi bi-phone-vibrate fs-1 text-primary me-2"></i>
-                    <h2 class="mb-0">logo</h2>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="d-flex align-items-center justify-content-center">
-                    <a href="index.html" class="navbar-brand ms-lg-5">
-                        <h1 class="m-0 display-4 text-primary"><span class="text-secondary">Farmer's</span>Market</h1>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="d-flex align-items-center justify-content-end">
-                    <a href="customer/customer_dashboard.php" class="btn btn-primary py-md-3 px-md-5 me-3">Buy</a>
-                    <a href="signup.php" class="btn btn-secondary py-md-3 px-md-5">Sell</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Topbar End -->
-
-
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-primary navbar-dark shadow-sm py-3 py-lg-0 px-3 px-lg-5">
         
@@ -88,19 +65,8 @@
                         <div class="text-start p-5" style="max-width: 900px;">
                             <h3 class="text-white">See what we provide</h3>
                             <h1 class="display-1 text-white mb-md-4">Everything is Fresh and Safe</h1>
-                            <a href="" class="btn btn-primary py-md-3 px-md-5 me-3">Buy Now</a>
-                            <a href="signup.php" class="btn btn-secondary py-md-3 px-md-5">Start Selling</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img class="w-100" src="img/carousel-2.jpg" alt="Image">
-                    <div class="carousel-caption top-0 bottom-0 start-0 end-0 d-flex flex-column align-items-center justify-content-center">
-                        <div class="text-start p-5" style="max-width: 900px;">
-                            <h3 class="text-white">Organic Fruits</h3>
-                            <h1 class="display-1 text-white mb-md-4">Organic Fruits For Better Health</h1>
-                            <a href="" class="btn btn-primary py-md-3 px-md-5 me-3">Explore</a>
-                            <a href="" class="btn btn-secondary py-md-3 px-md-5">Contact</a>
+                            <a href="customer/customer_dashboard.php" class="btn btn-primary py-md-3 px-md-5 me-3">Buy Now</a>
+                            <a href="login.php" class="btn btn-secondary py-md-3 px-md-5">Start Selling</a>
                         </div>
                     </div>
                 </div>
