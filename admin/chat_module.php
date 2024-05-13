@@ -115,22 +115,22 @@ include('includes/chat_module.php');
 						if(isset($_SESSION['user_id'])){
 							$user_id = $_SESSION['user_id'];
 
-							$sql = "SELECT user_info.info_id, user_info.firstname, user_info.lastname, user_account.isOnline, MAX(chats.time) AS last_chat_time, chats.reciever_id AS user_id
+							$sqlreceive = "SELECT user_info.info_id, user_info.firstname, user_info.lastname, user_account.isOnline, MAX(chats.time) AS last_chat_time, chats.reciever_id AS user_id
 							FROM user_account
 							JOIN user_info ON user_account.info_id = user_info.info_id
-							JOIN chats ON user_info.info_id = chats.reciever_id
-							WHERE chats.user_id = '$user_id'
+							JOIN chats ON user_info.info_id = chats.user_id
+							WHERE chats.reciever_id = '$user_id'
 							GROUP BY user_info.info_id, user_info.firstname, user_info.lastname, user_account.isOnline, chats.reciever_id
 							ORDER BY last_chat_time DESC";
-							$result = mysqli_query($conn, $sql);
+							$receiveresult = mysqli_query($conn, $sqlreceive);
 	
-							if($result && mysqli_num_rows($result) > 0){
-								while($row = mysqli_fetch_assoc($result)){
-									$info_id = $row['info_id'];
-									$firstname = $row['firstname'];
-									$lastname = $row['lastname'];
+							if($receiveresult && mysqli_num_rows($receiveresult) > 0){
+								while($receiverow = mysqli_fetch_assoc($receiveresult)){
+									$info_id = $receiverow['info_id'];
+									$firstname = $receiverow['firstname'];
+									$lastname = $receiverow['lastname'];
 									$name = $firstname . ' ' . $lastname;
-									$isOnline = $row['isOnline'];
+									$isOnline = $receiverow['isOnline'];
 									
 									?>
 									<li class="active">
@@ -165,6 +165,59 @@ include('includes/chat_module.php');
 									</a>                             
 									</li>
 									<?php
+								}
+							} else {
+								$sqlsend = "SELECT user_info.info_id, user_info.firstname, user_info.lastname, user_account.isOnline, MAX(chats.time) AS last_chat_time, chats.reciever_id AS user_id
+								FROM user_account
+								JOIN user_info ON user_account.info_id = user_info.info_id
+								JOIN chats ON user_info.info_id = chats.reciever_id
+								WHERE chats.user_id = '$user_id'
+								GROUP BY user_info.info_id, user_info.firstname, user_info.lastname, user_account.isOnline, chats.reciever_id
+								ORDER BY last_chat_time DESC";
+								$sendresult = mysqli_query($conn, $sqlsend);
+
+								if($sendresult && mysqli_num_rows($sendresult)){
+									while($sendrow = mysqli_fetch_assoc($sendresult)){
+										$info_id = $sendrow['info_id'];
+										$firstname = $sendrow['firstname'];
+										$lastname = $sendrow['lastname'];
+										$name = $firstname . ' ' . $lastname;
+										$isOnline = $sendrow['isOnline'];
+										
+										?>
+										<li class="active">
+										<a href="chat_module.php?recipient_id=<?php echo $info_id ?>" style="text-decoration: none;">
+											<div class="d-flex bd-highlight">
+												<?php
+												if($isOnline == 1) {
+													?>
+													<div class="img_cont">
+														<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
+														<span class="online_icon"></span>
+													</div>
+													<div class="user_info">
+														<span><?php echo $name; ?></span>
+														<p>Online</p>
+													</div>												
+													<?php
+												} else {
+													?>
+													<div class="img_cont">
+														<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
+														<span class="offline_icon"></span>
+													</div>
+													<div class="user_info">
+														<span><?php echo $name; ?></span>
+														<p>Offline</p>
+													</div>
+													<?php
+												}
+												?>
+											</div>
+										</a>                             
+										</li>
+										<?php
+									}
 								}
 							}
 						}
