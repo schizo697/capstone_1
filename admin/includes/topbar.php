@@ -1,3 +1,9 @@
+<?php
+if(!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
