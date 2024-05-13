@@ -20,6 +20,20 @@
     include 'conn.php';
     session_start();
 
+    // Check if logout parameter is set and true
+    if(isset($_GET['logout']) && $_GET['logout'] == 'true') {
+        // If user is logged in, update isOnline status to NULL
+        if(isset($_SESSION['user_id'])) {
+            $user_id = $_SESSION['user_id'];
+            $updateIsOnline = "UPDATE user_account SET isOnline = NULL WHERE user_id = '$user_id'";
+            mysqli_query($conn, $updateIsOnline);
+
+            session_destroy();
+            header("Location: login.php");
+            exit;
+        }
+    }
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['username'], $_POST['password'])) {
             $username = $_POST['username'];

@@ -1,7 +1,15 @@
 <?php
+ini_set('session.cache_limiter','public');
+session_cache_limiter(false);
+session_start();
+include("../conn.php");
+if(!isset($_SESSION['user_id']))
+{
+    header("location:../index.php");
+}
+
 include('includes/header.php');
-include('includes/topbar.php');
-include('includes/sidebar.php');
+include('includes/navbar.php');
 ?>
 <script>https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css</script>
 <script>https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js</script>
@@ -94,7 +102,3 @@ include('includes/sidebar.php');
 </div>
 </div>
 </div>
-
-<?php
-include('includes/footer.php');
-?>
