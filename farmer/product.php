@@ -1,11 +1,12 @@
 <?php
-ini_set('session.cache_limiter','public');
+ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
 session_start();
 include("../conn.php");
-if(!isset($_SESSION['user_id']))
-{
+
+if (!isset($_SESSION['user_id'])) {
     header("location:../index.php");
+    exit; // Always exit after redirecting
 }
 
 include('includes/header.php');
@@ -73,32 +74,6 @@ include('includes/navbar.php');
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <?php
-                include '../conn.php';
-
-                if(isset($_POST['productname']) && isset($_POST['category']) && isset($_POST['price']) && isset($_POST['quantity'])) {
-                    $productname = $_POST['productname'];
-                    $category = $_POST['category'];
-                    $price = $_POST['price'];
-                    $quantity = $_POST['quantity'];
-                    $uid = $_SESSION['user_id'];
-
-                    $sql = "INSERT INTO product (pname, catid, price, quantity, uid, status) VALUES (?, ?, ?, ?, ?, 'Available')";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("sssss", $productname, $category, $price, $quantity, $uid);
-                    if($stmt->execute()) {
-                        $url = "product.php?success=true";
-                        echo '<script>window.location.href= "' . $url . '";</script>'; 
-                    } else {
-                        echo "<script>Swal.fire({
-                            icon: 'error',
-                            text: 'Something went wrong!',
-                        });
-                        </script>";
-                    } 
-                            
-                }
-                ?>
                 <form action="" method="POST" id="addproduct">
                     <div class="modal-body">
                         <div class="form-group">
@@ -111,7 +86,6 @@ include('includes/navbar.php');
                                 <option selected disabled>Select...</option>
                                 <?php
                                     include "../conn.php";
-                                                        
                                     $name_query = "SELECT * FROM pcategory";
                                     $r = mysqli_query($conn, $name_query);
                                 
@@ -142,63 +116,131 @@ include('includes/navbar.php');
     </div>
     <!-- Modal End -->
 
-   <!-- Table Start -->
-<div class="container-fluid about pt-5">
-    <div class="container">
-        <div class="row gx-9">
-            <div class="card">
-                <div class="card-header">
-                    <button type="button" class="btn btn-success" id="openModalBtn">Add New</button>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <table id="example" class="table table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Kilo</th>
-                                <th>Status</th>
-                                <th>Date Added</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            include "../conn.php";
-                            $uid = $_SESSION['user_id'];
-
-                            $sql = "SELECT * FROM product JOIN pcategory ON pcategory.catid = product.catid WHERE product.uid = '$uid'";
-                            $result = mysqli_query($conn, $sql);
-
-                            while ($row = mysqli_fetch_assoc($result)) {
-                            ?>
-                                <tr class="data-row">
-                                    <td><?php echo $row['pname']; ?></td>
-                                    <td><?php echo $row['category']; ?></td>
-                                    <td><?php echo $row['price']; ?></td>
-                                    <td><?php echo $row['quantity']; ?></td>
-                                    <td><?php echo $row['status']; ?></td>
-                                    <td><?php echo date('F d, Y', strtotime($row['dateadded'])); ?></td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm edit-button" data-toggle="modal" data-target="#editModal" data-id="<?php echo $row['prodid']; ?>" data-name="<?php echo $row['pname']; ?>" data-category="<?php echo $row['category']; ?>" data-price="<?php echo $row['price']; ?>" data-quantity="<?php echo $row['quantity']; ?>">Edit<i class="fa fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm archive-button" data-id="<?php echo $row['prodid']; ?>">Archive</button>
-                                    </td>
+    <!-- Table Start -->
+    <div class="container-fluid about pt-5">
+        <div class="container">
+            <div class="row gx-9">
+                <div class="card">
+                    <div class="card-header">
+                        <button type="button" class="btn btn-success" id="openModalBtn">Add New</button>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example" class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Kilo</th>
+                                    <th>Status</th>
+                                    <th>Date Added</th>
+                                    <th>Action</th>
                                 </tr>
-                            <?php
-                            }
-                            ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php
+                                include "../conn.php";
+                                $uid = $_SESSION['user_id'];
+
+                                $sql = "SELECT * FROM product JOIN pcategory ON pcategory.catid = product.catid WHERE product.uid = '$uid'";
+                                $result = mysqli_query($conn, $sql);
+
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                  
+                                ?>
+                                    <tr class="data-row">
+                                      
+                                        <td><?php echo $row['pname']; ?></td>
+                                        <td><?php echo $row['category']; ?></td>
+                                        <td><?php echo $row['price']; ?></td>
+                                        <td><?php echo $row['quantity']; ?></td>
+                                        <td><?php echo $row['status']; ?></td>
+                                        <td><?php echo date('F d, Y', strtotime($row['dateadded'])); ?></td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary btn-sm edit-button" data-toggle="modal" data-target="#editModal" 
+                                                    data-product-id="<?php echo $row['prodid']; ?>"
+                                                    data-product-name="<?php echo $row['pname']; ?>"
+                                                    data-product-category="<?php echo $row['catid']; ?>"
+                                                    data-product-price="<?php echo $row['price']; ?>"
+                                                    data-product-quantity="<?php echo $row['quantity']; ?>">
+                                                Edit
+                                            </button>
+
+                                            <button type="button" class="btn btn-danger btn-sm archive-button" data-id="<?php echo $row['prodid']; ?>">
+                                                Archive
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Table End -->
+    <!-- Table End -->
+ <!-- modal edit account -->
+ <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <!-- Edit product form -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <?php 
+                            if(isset($_POST['btnSubmit'])){
+                                $pname = $_POST['pname'];
+                                $category = $_POST['category'];
+                                $price = $_POST['price'];
+                                $quantity = $_POST['quantity'];
 
-
+                                $updateQuery = "UPDATE product SET pname='$pname', catid='$category', price='$price', quantity='$quantity' WHERE prodid=".$_POST['product_id'];
+                                $updateResult = mysqli_query($conn, $updateQuery);
+                                
+                                if($updateResult) {
+                                    echo '<div class="alert alert-success" role="alert">Product updated successfully</div>';
+                                } else {
+                                    echo '<div class="alert alert-danger" role="alert">Failed to update product</div>';
+                                }
+                            }
+                            ?>
+                            <form action="" method="POST">
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputpname">Product Name:</label>
+                                    <input class="form-control" name="pname" type="text" placeholder="Enter your pname" required>
+                                </div>
+                                <div class="row gx-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputcategory">Category</label>
+                                        <input class="form-control" name="category" type="text" placeholder="Enter category" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputcategory">Price</label>
+                                        <input class="form-control" name="price" type="text" placeholder="Enter price" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputquantity">Kilo</label>
+                                    <input class="form-control" name="quantity" type="text" placeholder="Enter your quantity" required>
+                                </div>
+                                <input type="hidden" name="product_id" id="edit_product_id">
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" name="btnSubmit">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
     <br>
     <br>
     <!-- Footer Start -->
@@ -209,89 +251,7 @@ include('includes/navbar.php');
     </div>
     <!-- Footer End -->
 
-    <!-- Edit Product Modal -->
-    <div class="modal" id="editModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Product</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="editProductForm" method="POST">
-                    <div class="modal-body">
-                        <input type="hidden" id="editProductId" name="productId">
-                        <div class="form-group">
-                            <label for="editProductName">Product Name:</label>
-                            <input type="text" class="form-control" id="editProductName" name="productName" >
-                        </div>
-                        <div class="form-group">
-                            <label for="editCategory">Category:</label>
-                            <select id="editCategory" name="category" class="form-select" aria-label="Category" >
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="editPrice">Price per Kilo:</label>
-                            <input type="text" class="form-control" id="editPrice" name="price" >
-                        </div>
-                        <div class="form-group">
-                            <label for="editQuantity">Kilo:</label>
-                            <input type="text" class="form-control" id="editQuantity" name="quantity" >
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Update Product</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-  <script>
-$(document).ready(function() {
-  // Populate modal with data when edit button is clicked
-  $('.edit-button').click(function() {
-    var productId = $(this).data('data-id');
-    var productName = $(this).data('name');
-    var category = $(this).data('category');
-    var price = $(this).data('price');
-    var kilo = $(this).data('quantity');
-    
-
-    $('#productId').val(productId);
-    $('#editProductName').val(productName);
-    $('#editCategory').val(category);
-    $('#editPrice').val(price);
-    $('#editQuantity').val(kilo);
-    
-  
-  });
-}
-  // Handle form submission for updating data
-  $('#editForm').submit(function(event) {
-    event.preventDefault();
-    var formData = new FormData($(this)[0]);
-    $.ajax({
-      type: 'POST',
-      url: 'edit_product.php',
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function(response) {
-        console.log(response);
-        $('#editModal').modal('hide');
-        location.reload(); // Reload the page after successful update
-      },
-      error: function(xhr, status, error) {
-        console.error(xhr.responseText);
-      }
-    });
-  }));
-
-
-    </script>
+   
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -340,6 +300,26 @@ $(document).ready(function() {
             if (event.target == modal) {
                 modal.style.display = 'none';
             }
+        });
+
+        // Populate form fields in edit modal when edit button is clicked
+        var editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var productId = button.getAttribute('data-product-id');
+                var productName = button.getAttribute('data-product-name');
+                var productCategory = button.getAttribute('data-product-category');
+                var productPrice = button.getAttribute('data-product-price');
+                var productQuantity = button.getAttribute('data-product-quantity');
+
+                document.querySelector('#edit_product_id').value = productId;
+                document.querySelector('[name="pname"]').value = productName;
+                document.querySelector('[name="category"]').value = productCategory;
+                document.querySelector('[name="price"]').value = productPrice;
+                document.querySelector('[name="quantity"]').value = productQuantity;
+
+                modal.style.display = 'block';
+            });
         });
     });
     </script>
