@@ -1,3 +1,7 @@
+<?php 
+
+include('main/includes/header.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,33 +37,6 @@
 </head>
 
 <body>
-    <!-- Topbar Start -->
-    <div class="container-fluid px-5 d-none d-lg-block">
-        <div class="row gx-5 py-3 align-items-center">
-            <div class="col-lg-3">
-                <div class="d-flex align-items-center justify-content-start">
-                    <i class="bi bi-phone-vibrate fs-1 text-primary me-2"></i>
-                    <h2 class="mb-0">logo</h2>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="d-flex align-items-center justify-content-center">
-                    <a href="index.html" class="navbar-brand ms-lg-5">
-                        <h1 class="m-0 display-4 text-primary"><span class="text-secondary">Farmer's</span>Market</h1>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="d-flex align-items-center justify-content-end">
-                    <a href="customer/customer_dashboard.php" class="btn btn-primary py-md-3 px-md-5 me-3">Buy</a>
-                    <a href="signup.php" class="btn btn-secondary py-md-3 px-md-5">Sell</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Topbar End -->
-
-
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-primary navbar-dark shadow-sm py-3 py-lg-0 px-3 px-lg-5">
         
@@ -88,19 +65,8 @@
                         <div class="text-start p-5" style="max-width: 900px;">
                             <h3 class="text-white">See what we provide</h3>
                             <h1 class="display-1 text-white mb-md-4">Everything is Fresh and Safe</h1>
-                            <a href="" class="btn btn-primary py-md-3 px-md-5 me-3">Buy Now</a>
-                            <a href="signup.php" class="btn btn-secondary py-md-3 px-md-5">Start Selling</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img class="w-100" src="img/carousel-2.jpg" alt="Image">
-                    <div class="carousel-caption top-0 bottom-0 start-0 end-0 d-flex flex-column align-items-center justify-content-center">
-                        <div class="text-start p-5" style="max-width: 900px;">
-                            <h3 class="text-white">Organic Fruits</h3>
-                            <h1 class="display-1 text-white mb-md-4">Organic Fruits For Better Health</h1>
-                            <a href="" class="btn btn-primary py-md-3 px-md-5 me-3">Explore</a>
-                            <a href="" class="btn btn-secondary py-md-3 px-md-5">Contact</a>
+                            <a href="customer/customer_dashboard.php" class="btn btn-primary py-md-3 px-md-5 me-3">Buy Now</a>
+                            <a href="login.php" class="btn btn-secondary py-md-3 px-md-5">Start Selling</a>
                         </div>
                     </div>
                 </div>
@@ -125,27 +91,15 @@
             <div class="row gx-5">
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="d-flex h-100 border border-5 border-primary border-bottom-0 pt-4">
-                        <img class="img-fluid mt-auto mx-auto" src="img/about.png">
+                        <img class="img-fluid mt-auto mx-auto" src="">
                     </div>
                 </div>
                 <div class="col-lg-6 pb-5">
                     <div class="mb-3 pb-2">
                         <h6 class="text-primary text-uppercase">About Us</h6>
-                        <h1 class="display-5">We Produce Organic Food For Your Family</h1>
+                        <h1 class="display-5">We Provide Fresh Food For You and Your Family</h1>
                     </div>
-                    <p class="mb-4">Tempor erat elitr at rebum at at clita. Diam dolor diam ipsum et tempor sit. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor eirmod magna dolore erat amet magna</p>
-                    <div class="row gx-5 gy-4">
-                        <div class="col-sm-6">
-                            <i class="fa fa-seedling display-1 text-secondary"></i>
-                            <h4>100% Organic</h4>
-                            <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
-                        </div>
-                        <div class="col-sm-6">
-                            <i class="fa fa-award display-1 text-secondary"></i>
-                            <h4>Award Winning</h4>
-                            <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
-                        </div>
-                    </div>
+                    <p class="mb-4">Browse available products from different farmers</p>
                 </div>
             </div>
         </div>
@@ -205,20 +159,20 @@
                         <h6 class="text-primary text-uppercase">Services</h6>
                         <h1 class="display-5">In Farmer's Market </h1>
                     </div>
-                    <p class="mb-4">Tempor erat elitr at rebum at at clita. Diam dolor diam ipsum et tempor sit. Clita erat ipsum et lorem et sit sed stet labore</p>
+                    <p class="mb-4">We provide what you need</p>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="service-item bg-light text-center p-5">
                         <i class="fa fa-carrot display-1 text-primary mb-3"></i>
                         <h4>Fresh Vegetables</h4>
-                        <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
+                        <p class="mb-0"></p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="service-item bg-light text-center p-5">
                         <i class="fa fa-apple-alt display-1 text-primary mb-3"></i>
                         <h4>Fresh Fruits</h4>
-                        <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
+                        <p class="mb-0"></p>
                     </div>
                 </div>
             </div>
@@ -311,7 +265,7 @@
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white py-4">
         <div class="container text-center">
-            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="https://freewebsitecode.com/">Your Site Name</a>. All Rights Reserved. Designed by <a class="text-secondary fw-bold" href="https://freewebsitecode.com">Free Website Code</a></p>
+            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
         </div>
     </div>
     <!-- Footer End -->

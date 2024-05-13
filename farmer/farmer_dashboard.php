@@ -56,21 +56,21 @@ include('includes/navbar.php');
                     <div class="service-item bg-light text-center p-5">
                         <i class="fa fa-carrot display-1 text-primary mb-3"></i>
                         <h4>Total Listing</h4>
-                        <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
+                        <h1> 5 </h1>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="service-item bg-light text-center p-5">
                         <i class="fa fa-apple-alt display-1 text-primary mb-3"></i>
                         <h4>Total Products</h4>
-                        <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
+                        <h1> 8 </h1>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="service-item bg-light text-center p-5">
                         <i class="fa fa-dog display-1 text-primary mb-3"></i>
                         <h4>Orders</h4>
-                        <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
+                        <h1> 2 </h1>
                     </div>
                 </div>
             </div>

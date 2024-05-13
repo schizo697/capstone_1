@@ -257,6 +257,7 @@ include('includes/admin_profile.php');
             </div>
 
             <!-- Account details card-->
+            
             <div class="card mb-4">
                 <div class="card-header">Account Information</div>
                 <div class="card-body">
@@ -299,7 +300,10 @@ include('includes/admin_profile.php');
                                     <label class="small mb-1" for="inputEmailAddress">Address</label>
                                     <input class="form-control" name="address" type="text" placeholder="Enter your address" value="<?php echo $row['address'] ?>" readonly>
                                 </div>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editAccount"> Edit </button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editAccount" style="margin-left: 290px"> Edit </button>
+                                <a href="login.php?logout=true">
+                                    <button type="button" class="btn btn-danger">Logout</button>
+                                </a>
                             </form>
                             <?php
                         }
