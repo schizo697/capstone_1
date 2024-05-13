@@ -69,12 +69,12 @@ include('main/includes/header.php');
                     $error = "Username or password is incorrect";
                 }
             } else {
-                echo "<script>
+                echo '<script>
                 Swal.fire({
-                  icon: 'error',
-                  text: 'Incorrect Username or Password ',
+                    icon: "error",
+                    text: "Incorrect Username or Password"
                 });
-                </script>";
+                </script>';            
             }
         }
     }
@@ -113,5 +113,5 @@ include('main/includes/header.php');
        </div> 
 </body>
 <script src="main/js/main.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>

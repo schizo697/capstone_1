@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link href="../main/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
   <?php 
@@ -75,12 +76,12 @@
                   $error = "Username or password is incorrect";
               }
           } else {
-              echo "<script>
-              Swal.fire({
-                icon: 'error',
-                text: 'Incorrect Username or Password ',
-              });
-              </script>";
+            echo '<script>
+            Swal.fire({
+                icon: "error",
+                text: "Incorrect Username or Password"
+            });
+            </script>';
           }          
         }
     }

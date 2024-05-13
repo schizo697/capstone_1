@@ -19,26 +19,12 @@ include('../conn.php');
 </head>
 
 <body>
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Profile</h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">    
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-    <!-- /.content-header -->
+
 
     <div class="container-xl px-4 mt-4">
     <!-- Account page navigation-->
     <nav class="nav nav-borders">
-        <a class="nav-link active ms-0" href="admin_profile.php">Profile</a>
+        <a class="nav-link active ms-0" href="profile.php">Profile</a>
         <a class="nav-link" href="paymentmethod.php">Payment Method</a>
     </nav>
     <hr class="mt-0 mb-4">
@@ -80,11 +66,11 @@ include('../conn.php');
                                     $updareresult = mysqli_query($conn, $update);
 
                                     if($updareresult) {
-                                        $url = "admin_profile.php?upload=true";
+                                        $url = "profile.php?upload=true";
                                         echo "<script>window.location.href='" . $url. "' </script>";
                                         exit();
                                     } else {
-                                        $url = "admin_profile.php?upload=false";
+                                        $url = "profile.php?upload=false";
                                         echo "<script>window.location.href='" . $url. "' </script>";
                                         exit();
                                     }
@@ -93,23 +79,23 @@ include('../conn.php');
                                     $result = mysqli_query($conn, $query);
     
                                     if($result){
-                                        $url = "admin_profile.php?upload=true";
+                                        $url = "profile.php?upload=true";
                                         echo "<script>window.location.href='" . $url. "' </script>";
                                         exit();
 
                                     } else {
-                                        $url = "admin_profile.php?upload=false";
+                                        $url = "profile.php?upload=false";
                                         echo "<script>window.location.href='" . $url. "' </script>";
                                         exit();
                                     }
                                 }
                             } else {
-                                $url = "admin_profile.php?upload=false";
+                                $url = "profile.php?upload=false";
                                 echo "<script>window.location.href='" . $url. "' </script>";
                                 exit();
                             }
                         } else {
-                            $url = "admin_profile.php?upload=false";
+                            $url = "profile.php?upload=false";
                             echo "<script>window.location.href='" . $url. "' </script>";
                             exit();
                         }
@@ -127,7 +113,7 @@ include('../conn.php');
                         <!-- Profile picture image (clickable) -->
                         <label for="profileimg">
                             <div class="rounded-circle overflow-hidden d-inline-block">
-                                <img class="img-account-profile" src="profiles/<?php echo $profilerow['img']; ?>" alt="" style="cursor: pointer; width: 170px;">
+                                <img class="img-account-profile" src="profiles/<?php echo $profilerow['img']; ?>" alt="" style="cursor: pointer; width: 170px; height: 100px;">
                             </div>
                         </label>
                         <!-- Display selected file name -->
@@ -203,7 +189,7 @@ include('../conn.php');
                                             $accresult = mysqli_query($conn, $updateacc);
                                             
                                             if($accresult){
-                                                $url = "admin_profile.php?success=true";
+                                                $url = "profile.php?success=true";
                                                 echo "<script>window.location.href='" . $url . "' </script>";
                                                 exit();
                                             }
@@ -308,7 +294,7 @@ include('../conn.php');
                                     <input class="form-control" name="address" type="text" placeholder="Enter your address" value="<?php echo $row['address'] ?>" readonly>
                                 </div>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editAccount" style="margin-left: 290px"> Edit </button>
-                                <a href="login.php?logout=true">
+                                <a href="../login.php?logout=true">
                                     <button type="button" class="btn btn-danger">Logout</button>
                                 </a>
                             </form>
