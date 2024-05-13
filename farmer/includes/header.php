@@ -15,7 +15,7 @@
             </div>
             <div class="col-lg-3">
                 <div class="d-flex align-items-center justify-content-end">
-                    <a class="btn btn-primary btn-square rounded-circle me-2" href="#"><i class="fab fa-twitter">Profile</i></a>
+                    <a class="btn btn-primary btn-square rounded-circle me-2" href="profile.php"><i class="fab fa-twitter">Profile</i></a>
                 </div>
             </div>
         </div>
