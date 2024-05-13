@@ -187,8 +187,6 @@ body {
     <h2>Create Account</h2>
     <?php 
     include 'conn.php';
-    session_start();
-
     if(isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['gender']) && isset($_POST['contactnum']) && isset($_POST['address'])
     && isset($_POST['username']) && isset($_POST['password'])) {
         $firstname = $_POST['firstname'];

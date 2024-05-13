@@ -27,7 +27,22 @@ include('main/includes/header.php');
   <div class="login-box">
     <h2>Login</h2>
     <?php
-    include 'conn.php';
+    include 'conn.php'; // Include database connection
+
+    // Check if logout parameter is set and true
+    if(isset($_GET['logout']) && $_GET['logout'] == 'true') {
+        // If user is logged in, update isOnline status to NULL
+        if(isset($_SESSION['user_id'])) {
+            $user_id = $_SESSION['user_id'];
+            $updateIsOnline = "UPDATE user_account SET isOnline = NULL WHERE user_id = '$user_id'";
+            mysqli_query($conn, $updateIsOnline);
+
+            session_destroy();
+            header("Location: login.php");
+            exit;
+        }
+    }
+
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['username'], $_POST['password'])) {
@@ -45,7 +60,7 @@ include('main/includes/header.php');
 
                 if (password_verify($password, $hashed_password)) {
                     $_SESSION['username'] = $username;
-                    $_SESSION['user_id'] = $row['user_id'];
+                    $_SESSION['user_id'] = $row['user_id']; // Store user_id in session
                     
                     $level_id = $row['level_id'];
                     $sql = "SELECT level FROM user_level WHERE level_id = '$level_id'";
