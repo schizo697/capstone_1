@@ -91,27 +91,15 @@ include('main/includes/header.php');
             <div class="row gx-5">
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="d-flex h-100 border border-5 border-primary border-bottom-0 pt-4">
-                        <img class="img-fluid mt-auto mx-auto" src="img/about.png">
+                        <img class="img-fluid mt-auto mx-auto" src="">
                     </div>
                 </div>
                 <div class="col-lg-6 pb-5">
                     <div class="mb-3 pb-2">
                         <h6 class="text-primary text-uppercase">About Us</h6>
-                        <h1 class="display-5">We Produce Organic Food For Your Family</h1>
+                        <h1 class="display-5">We Provide Fresh Food For You and Your Family</h1>
                     </div>
-                    <p class="mb-4">Tempor erat elitr at rebum at at clita. Diam dolor diam ipsum et tempor sit. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor eirmod magna dolore erat amet magna</p>
-                    <div class="row gx-5 gy-4">
-                        <div class="col-sm-6">
-                            <i class="fa fa-seedling display-1 text-secondary"></i>
-                            <h4>100% Organic</h4>
-                            <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
-                        </div>
-                        <div class="col-sm-6">
-                            <i class="fa fa-award display-1 text-secondary"></i>
-                            <h4>Award Winning</h4>
-                            <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
-                        </div>
-                    </div>
+                    <p class="mb-4">Browse available products from different farmers</p>
                 </div>
             </div>
         </div>
@@ -171,20 +159,20 @@ include('main/includes/header.php');
                         <h6 class="text-primary text-uppercase">Services</h6>
                         <h1 class="display-5">In Farmer's Market </h1>
                     </div>
-                    <p class="mb-4">Tempor erat elitr at rebum at at clita. Diam dolor diam ipsum et tempor sit. Clita erat ipsum et lorem et sit sed stet labore</p>
+                    <p class="mb-4">We provide what you need</p>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="service-item bg-light text-center p-5">
                         <i class="fa fa-carrot display-1 text-primary mb-3"></i>
                         <h4>Fresh Vegetables</h4>
-                        <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
+                        <p class="mb-0"></p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="service-item bg-light text-center p-5">
                         <i class="fa fa-apple-alt display-1 text-primary mb-3"></i>
                         <h4>Fresh Fruits</h4>
-                        <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
+                        <p class="mb-0"></p>
                     </div>
                 </div>
             </div>
@@ -277,7 +265,7 @@ include('main/includes/header.php');
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white py-4">
         <div class="container text-center">
-            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="https://freewebsitecode.com/">Your Site Name</a>. All Rights Reserved. Designed by <a class="text-secondary fw-bold" href="https://freewebsitecode.com">Free Website Code</a></p>
+            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
         </div>
     </div>
     <!-- Footer End -->
