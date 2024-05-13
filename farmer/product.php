@@ -275,7 +275,7 @@ $(document).ready(function() {
     var formData = new FormData($(this)[0]);
     $.ajax({
       type: 'POST',
-      url: 'edit_doctor.php',
+      url: 'edit_product.php',
       data: formData,
       processData: false,
       contentType: false,
