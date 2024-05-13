@@ -63,9 +63,9 @@ include('includes/navbar.php');
 </head>
 
 <body>
-    <!-- modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <!-- Modal Start -->
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Products</h5>
@@ -96,6 +96,7 @@ include('includes/navbar.php');
                         });
                         </script>";
                     } 
+                            
                 }
                 ?>
                 <form action="" method="POST" id="addproduct">
@@ -110,6 +111,7 @@ include('includes/navbar.php');
                                 <option selected disabled>Select...</option>
                                 <?php
                                     include "../conn.php";
+                                                        
                                     $name_query = "SELECT * FROM pcategory";
                                     $r = mysqli_query($conn, $name_query);
                                 
@@ -132,12 +134,13 @@ include('includes/navbar.php');
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Add Product</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <!-- Modal End -->
 
    <!-- Table Start -->
 <div class="container-fluid about pt-5">
@@ -145,7 +148,7 @@ include('includes/navbar.php');
         <div class="row gx-9">
             <div class="card">
                 <div class="card-header">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal"> Add New </button>
+                    <p>Report</p>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -179,8 +182,8 @@ include('includes/navbar.php');
                                     <td><?php echo $row['status']; ?></td>
                                     <td><?php echo date('F d, Y', strtotime($row['dateadded'])); ?></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm edit-button" data-toggle="modal" data-target="#editModal" data-id="<?php echo $row['prodid']; ?>" data-name="<?php echo $row['pname']; ?>" data-category="<?php echo $row['category']; ?>" data-price="<?php echo $row['price']; ?>" data-quantity="<?php echo $row['quantity']; ?>">Edit<i class="fa fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm archive-button" data-id="<?php echo $row['prodid']; ?>">Archive</button>
+                                        
+                                        <button type="button" class="btn btn-success btn-sm archive-button" data-id="<?php echo $row['prodid']; ?>">Restore</button>
                                     </td>
                                 </tr>
                             <?php
@@ -206,89 +209,6 @@ include('includes/navbar.php');
     </div>
     <!-- Footer End -->
 
-    <!-- Edit Product Modal -->
-    <div class="modal" id="editModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Product</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="editProductForm" method="POST">
-                    <div class="modal-body">
-                        <input type="hidden" id="editProductId" name="productId">
-                        <div class="form-group">
-                            <label for="editProductName">Product Name:</label>
-                            <input type="text" class="form-control" id="editProductName" name="productName" >
-                        </div>
-                        <div class="form-group">
-                            <label for="editCategory">Category:</label>
-                            <select id="editCategory" name="category" class="form-select" aria-label="Category" >
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="editPrice">Price per Kilo:</label>
-                            <input type="text" class="form-control" id="editPrice" name="price" >
-                        </div>
-                        <div class="form-group">
-                            <label for="editQuantity">Kilo:</label>
-                            <input type="text" class="form-control" id="editQuantity" name="quantity" >
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Update Product</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-  <script>
-$(document).ready(function() {
-  // Populate modal with data when edit button is clicked
-  $('.edit-button').click(function() {
-    var productId = $(this).data('data-id');
-    var productName = $(this).data('name');
-    var category = $(this).data('category');
-    var price = $(this).data('price');
-    var kilo = $(this).data('quantity');
-    
-
-    $('#productId').val(productId);
-    $('#editProductName').val(productName);
-    $('#editCategory').val(category);
-    $('#editPrice').val(price);
-    $('#editQuantity').val(kilo);
-    
-  
-  });
-}
-  // Handle form submission for updating data
-  $('#editForm').submit(function(event) {
-    event.preventDefault();
-    var formData = new FormData($(this)[0]);
-    $.ajax({
-      type: 'POST',
-      url: 'edit_product.php',
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function(response) {
-        console.log(response);
-        $('#editModal').modal('hide');
-        location.reload(); // Reload the page after successful update
-      },
-      error: function(xhr, status, error) {
-        console.error(xhr.responseText);
-      }
-    });
-  }));
-
-
-    </script>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -342,9 +262,6 @@ $(document).ready(function() {
     </script>
 
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> <!-- Include DataTables -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> <!-- Include Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../lib/easing/easing.min.js"></script>
@@ -375,11 +292,12 @@ $(document).ready(function() {
     </script>
 
     <script>
-    const myModal = document.getElementById('myModal')
-    const myInput = document.getElementById('myInput')
+    $(document).ready(function() {
+        $('#example').DataTable();
+    });
 
-    myModal.addEventListener('shown.bs.modal', () => {
-    myInput.focus()
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
     })
     </script>
 

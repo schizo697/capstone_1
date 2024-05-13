@@ -19,7 +19,7 @@
                 <a href="selling.php" class="nav-item nav-link">Sell</a>
                 <a href="#" class="nav-item nav-link">Payment</a>
                 <a href="#" class="nav-item nav-link">Trends</a>
-                <a href="#" class="nav-item nav-link">Reports</a>
+                <a href="report.php" class="nav-item nav-link">Reports</a>
             </div>
         </div>
     </nav>
