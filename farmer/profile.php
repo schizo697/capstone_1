@@ -26,6 +26,7 @@ include('../conn.php');
     <nav class="nav nav-borders">
         <a class="nav-link active ms-0" href="profile.php">Profile</a>
         <a class="nav-link" href="paymentmethod.php">Payment Method</a>
+        <a class="nav-link" href="chats.php">Chats</a>
     </nav>
     <hr class="mt-0 mb-4">
     <div class="row">
