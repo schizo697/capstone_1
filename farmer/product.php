@@ -109,11 +109,11 @@ include('includes/navbar.php');
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="price">Price:</label>
+                    <label for="price">Price per Kilo:</label>
                     <input type="text" class="form-control" id="price" name="price" required>
                 </div>
                 <div class="form-group">
-                    <label for="quantity">Quantity:</label>
+                    <label for="quantity">Kilo:</label>
                     <input type="quantity" class="form-control" id="quantity" name="quantity" required>
                 </div>
                 <!-- <div class="form-group">
@@ -151,7 +151,7 @@ include('includes/navbar.php');
                                     <th>Product Name</th>
                                     <th>Category</th>
                                     <th>Price</th>
-                                    <th>Quantity</th>
+                                    <th>Kilo</th>
                                     <th>Status</th>
                                     <th>Date Added</th>
                                     <th>Action</th>
