@@ -63,9 +63,9 @@ include('includes/navbar.php');
 </head>
 
 <body>
-    <!-- Modal Start -->
-    <div class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <!-- modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Products</h5>
@@ -96,7 +96,6 @@ include('includes/navbar.php');
                         });
                         </script>";
                     } 
-                            
                 }
                 ?>
                 <form action="" method="POST" id="addproduct">
@@ -110,16 +109,16 @@ include('includes/navbar.php');
                             <select name="category" class="form-select" aria-label="Category" required>
                                 <option selected disabled>Select...</option>
                                 <?php
-                                    include "../conn.php";
-                                                        
-                                    $name_query = "SELECT * FROM pcategory";
-                                    $r = mysqli_query($conn, $name_query);
-                                
-                                    while ($row = mysqli_fetch_array($r)) {
-                                    ?>
-                                        <option value="<?php echo $row['catid']; ?>"> <?php echo $row['category']; ?></option>
-                                    <?php
-                                    }
+                                include "../conn.php";
+                                                            
+                                $name_query = "SELECT * FROM pcategory";
+                                $r = mysqli_query($conn, $name_query);
+                                    
+                                while ($row = mysqli_fetch_array($r)) {
+                                ?>
+                                    <option value="<?php echo $row['catid']; ?>"> <?php echo $row['category']; ?></option>
+                                <?php
+                                }
                                 ?>
                             </select>
                         </div>
@@ -134,13 +133,12 @@ include('includes/navbar.php');
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Add Product</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <!-- Modal End -->
 
    <!-- Table Start -->
 <div class="container-fluid about pt-5">
@@ -148,7 +146,7 @@ include('includes/navbar.php');
         <div class="row gx-9">
             <div class="card">
                 <div class="card-header">
-                    <button type="button" class="btn btn-success" id="openModalBtn">Add New</button>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal"> Add New </button>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -345,6 +343,9 @@ $(document).ready(function() {
     </script>
 
     <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> <!-- Include DataTables -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> <!-- Include Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../lib/easing/easing.min.js"></script>
@@ -375,12 +376,11 @@ $(document).ready(function() {
     </script>
 
     <script>
-    $(document).ready(function() {
-        $('#example').DataTable();
-    });
+    const myModal = document.getElementById('myModal')
+    const myInput = document.getElementById('myInput')
 
-    $('#myModal').on('shown.bs.modal', function () {
-        $('#myInput').trigger('focus')
+    myModal.addEventListener('shown.bs.modal', () => {
+    myInput.focus()
     })
     </script>
 

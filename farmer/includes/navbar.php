@@ -7,7 +7,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav mx-auto py-0">
-                <a href="farmer_dashboard.php" class="nav-item nav-link active">Dashboard</a>
+                <a href="farmer_dashboard.php" class="nav-item nav-link">Dashboard</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-controls="sidebarproduct">Manage Products</a>
                     <div class="dropdown-menu m-0">
@@ -23,3 +23,17 @@
             </div>
         </div>
     </nav>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var currentPath = window.location.pathname;
+    var navLinks = document.querySelectorAll(".nav-link");
+
+    navLinks.forEach(function(navLink) {
+      var href = navLink.getAttribute("href");
+      // Check if the current path contains the href (to handle cases where the href has more details)
+      if (currentPath.includes(href)) {
+        navLink.classList.add("active");
+      }
+    });
+  });
+</script>

@@ -186,16 +186,18 @@ include('includes/admin_profile.php');
                                         $contact = $_POST['contact'];
                                         $address =$_POST['address'];
                                         $password = $_POST['password'];
+                                        $cpassword = $_POST['cpassword'];
                                         $encrypyed_passwowrd = password_hash($password, PASSWORD_DEFAULT);
 
-                                        $updateinfo = "UPDATE user_info SET firstname = '$firstname', lastname = '$lastname', gender = '$gender', contact = '$contact', address = '$address' WHERE info_id = '$user_id'";
-                                        $inforesult = mysqli_query($conn, $updateinfo);
-
-                                        if($inforesult) {
-                                            $updateacc = "UPDATE user_account SET username = '$username', password = '$encrypyed_passwowrd' WHERE user_id = '$user_id'";
-                                            $accresult = mysqli_query($conn, $updateacc);
-                                            
-                                            if($accresult){
+                                        if($password != $cpassword){
+                                            $url = "admin_profile.php?error=true";
+                                            echo "<script>window.location.href='" . $url . "' </script>";
+                                            exit();
+                                        } else {
+                                            $updateinfo = "UPDATE user_info SET firstname = '$firstname', lastname = '$lastname', gender = '$gender', contact = '$contact', address = '$address' WHERE info_id = '$user_id'";
+                                            $inforesult = mysqli_query($conn, $updateinfo);
+    
+                                            if($inforesult) {
                                                 $url = "admin_profile.php?success=true";
                                                 echo "<script>window.location.href='" . $url . "' </script>";
                                                 exit();
