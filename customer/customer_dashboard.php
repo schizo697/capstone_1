@@ -32,7 +32,7 @@
 /* Ensure all product images are of the same size */
 .product-item img {
     width: 100%;
-    height: 200px; /* Adjust height as needed */
+    height: 250px; /* Adjust height as needed */
     object-fit: cover; /* Ensure images cover the area without distortion */
 }
 
@@ -167,7 +167,7 @@
                         <h6 class="mb-3">Quantity: <?php echo $row['quantity'];?> Kilo</h6>
                         <div class="btn-action d-flex justify-content-center">
                             <a class="btn bg-primary py-2 px-3" href=""><i class="bi bi-cart text-white"></i></a>
-                            <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
+                            <a class="btn bg-secondary py-2 px-3" href="view_products.php?id=<?php echo $row['prodid']; ?>"><i class="bi bi-eye text-white"></i></a>
                         </div>
                     </div>
                 </div>
