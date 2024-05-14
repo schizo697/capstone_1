@@ -24,6 +24,7 @@
 
     <!-- Custom CSS -->
     <link href="../main/css/style.css" rel="stylesheet">
+    <link href="css/customer_dashboard.css" rel="stylesheet">
     <link href="../main/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -88,6 +89,12 @@
                 <div class="d-flex align-items-center justify-content-end">
                     <a class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
                     <a class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
+                    <div class="icon-cart">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1"/>
+                </svg>
+                <span>0</span>
+            </div>
                 </div>
             </div>
         </div>
@@ -143,39 +150,49 @@
     <!-- Products Start -->
     <div class="container-fluid py-5">
         <div class="container">
-            <div class="mx-auto text-center mb-5" style="max-width: 500px;">
-                <h6 class="text-primary text-uppercase">Products</h6>
-                <h1 class="display-5">Available Products</h1>
-            </div>
-            <div class="row g-5">
-                <?php 
-                    include "../conn.php";
-                    
-                    $getlisting = "SELECT * FROM listing 
-                                    JOIN product ON listing.prodid = product.prodid 
-                                    JOIN pcategory ON pcategory.catid = product.catid";
-                    $fetch = $conn->query($getlisting);
-                ?>               
-                <?php 
-                    while($row = mysqli_fetch_assoc($fetch)){ 
-                ?>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-item position-relative bg-white d-flex flex-column text-center">
-                        <img class="img-fluid mb-4" src="<?php echo "../img/products/".$row['imgid']; ?>" alt="">
-                        <h6 class="mb-3"><?php echo $row['pname'];?></h6>
-                        <h5 class="text-primary mb-0">&#8369; <?php echo $row['price'];?>.00</h5>
-                        <h6 class="mb-3">Quantity: <?php echo $row['quantity'];?> Kilo</h6>
-                        <div class="btn-action d-flex justify-content-center">
-                            <a class="btn bg-primary py-2 px-3" href=""><i class="bi bi-cart text-white"></i></a>
-                            <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <?php } ?>
-            </div>
+        <div class="listProduct"> </div>
+        <?php
+            include "../conn.php";
+
+            $sql = "SELECT * FROM listing 
+                        JOIN product ON listing.prodid = product.prodid 
+                        JOIN pcategory ON pcategory.catid = product.catid";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                $data = array();
+
+                while ($row = $result->fetch_assoc()) {
+                    $data[] = $row;
+                }
+
+                $jsonResponse = json_encode($data);
+
+                // Save JSON data to a file
+                file_put_contents('product.json', $jsonResponse);
+
+                echo $jsonResponse;
+            } else {
+                echo "No data found.";
+            }
+
+            $conn->close();
+            ?>
+            
         </div>
     </div>
     <!-- Products End -->
+
+    <div class="cartTab">
+        <h1>Shopping Cart</h1>
+        <div class="listCart">
+            
+        </div>
+        <div class="btn">
+            <button class="close">CLOSE</button>
+            <button class="checkOut">Check Out</button>
+        </div>
+    </div>
 
     <div class="container-fluid bg-dark text-white py-4">
         <div class="container text-center">
@@ -199,6 +216,7 @@
 
     <!-- Template Javascript -->
     <script src="../main/js/main.js"></script>
+    <script src="js/cart.js"></script>
 </body>
 
 </html>
