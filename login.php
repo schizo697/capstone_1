@@ -121,7 +121,7 @@ include('main/includes/header.php');
                         </span></button>
                 </div>
                 <div class="row">
-                    <small>Don't have account? <a href="farmersignup.php">Sign Up</a></small>
+                    <small>Don't have account? <a href="signup.php">Sign Up</a></small>
                 </div>
             </form>
           </div>
