@@ -41,7 +41,7 @@ include('../conn.php');
     <link href="../main/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* Custom Styles */
+        /* Custom Stylessss*/
 
 /* Ensure all product images are of the same size */
 .product-item img {
