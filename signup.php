@@ -1,287 +1,177 @@
+<?php 
+session_start();
+
+include('main/includes/header.php');
+include 'conn.php'; // Include database connection
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Farming</title>
+  <title>Farming - Signup</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <!-- baba kay sweetalert -->
+  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style>
-      html {
-  height: 100%;
-}
-body {
-  margin:0;
-  padding:0;
-  font-family: sans-serif;
-  background: linear-gradient(#2af598, #08b3e5);
-}
-
-.login-box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  padding: 40px;
-  transform: translate(-50%, -50%);
-  background: rgba(0,0,0,.5);
-  box-sizing: border-box;
-  box-shadow: 0 15px 25px rgba(0,0,0,.6);
-  border-radius: 10px;
-}
-
-.login-box h2 {
-  margin: 0 0 30px;
-  padding: 0;
-  color: #fff;
-  text-align: center;
-}
-
-.login-box .user-box {
-  position: relative;
-}
-
-.login-box .user-box input {
-  width: 100%;
-  padding: 10px 0;
-  font-size: 16px;
-  color: #fff;
-  margin-bottom: 30px;
-  border: none;
-  border-bottom: 1px solid #fff;
-  outline: none;
-  background: transparent;
-}
-.login-box .user-box label {
-  position: absolute;
-  top:0;
-  left: 0;
-  padding: 10px 0;
-  font-size: 16px;
-  color: #fff;
-  pointer-events: none;
-  transition: .5s;
-}
-
-.login-box .user-box input:focus ~ label,
-.login-box .user-box input:valid ~ label {
-  top: -20px;
-  left: 0;
-  color: #f68e44;
-  font-size: 12px;
-}
-
-.login-box button {
-  position: relative;
-  display: inline-block;
-  padding: 10px 20px;
-  color: #22e4ac;
-  font-size: 16px;
-  text-decoration: none;
-  text-transform: uppercase;
-  overflow: hidden;
-  transition: .5s;
-  margin-top: 40px;
-  letter-spacing: 4px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-}
-
-.login-box button:hover {
-  background: #08b3e5;
-  color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 5px #08b3e5,
-              0 0 25px #2af598,
-              0 0 50px #22e4ac,
-              0 0 100px #d5cf1e;
-}
-
-.login-box button span {
-  position: absolute;
-  display: block;
-}
-
-.login-box button span:nth-child(1) {
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #08b3e5);
-  animation: btn-anim1 1s linear infinite;
-}
-
-@keyframes btn-anim1 {
-  0% {
-    left: -100%;
-  }
-  50%,100% {
-    left: 100%;
-  }
-}
-
-.login-box button span:nth-child(2) {
-  top: -100%;
-  right: 0;
-  width: 2px;
-  height: 100%;
-  background: linear-gradient(180deg, transparent, #08b3e5);
-  animation: btn-anim2 1s linear infinite;
-  animation-delay: .25s
-}
-
-@keyframes btn-anim2 {
-  0% {
-    top: -100%;
-  }
-  50%,100% {
-    top: 100%;
-  }
-}
-
-.login-box button span:nth-child(3) {
-  bottom: 0;
-  right: -100%;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(270deg, transparent, #08b3e5);
-  animation: btn-anim3 1s linear infinite;
-  animation-delay: .5s
-}
-
-@keyframes btn-anim3 {
-  0% {
-    right: -100%;
-  }
-  50%,100% {
-    right: 100%;
-  }
-}
-
-.login-box button span:nth-child(4) {
-  bottom: -100%;
-  left: 0;
-  width: 2px;
-  height: 100%;
-  background: linear-gradient(360deg, transparent, #08b3e5);
-  animation: btn-anim4 1s linear infinite;
-  animation-delay: .75s
-}
-
-@keyframes btn-anim4 {
-  0% {
-    bottom: -100%;
-  }
-  50%,100% {
-    bottom: 100%;
-  }
-}
-
-  </style>
+  <link href="main/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="main/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>     
+  <?php
+    include 'main/css/login.css';
+  ?>
+</style>
 <body>
     
-<div class="login-box">
-    <h2>Create Account</h2>
-    <?php 
-    include 'conn.php';
-    if(isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['gender']) && isset($_POST['contactnum']) && isset($_POST['address'])
-    && isset($_POST['username']) && isset($_POST['password'])) {
-        $firstname = $_POST['firstname'];
-        $lastname = $_POST['lastname'];
-        $gender = $_POST['gender'];
-        $contactnum = $_POST['contactnum'];
-        $address = $_POST['address'];
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $encrypted = password_hash($password, PASSWORD_DEFAULT);
+  <div class="login-box">
+    <h2>Signup</h2>
 
-        $check_username = "SELECT username FROM user_account WHERE username = '$username'";
-        $check_result = mysqli_query($conn, $check_username);
-        
-        if($check_result && mysqli_num_rows($check_result) > 0) {
-          // sweetalert exist
-          echo "<script>
-                  Swal.fire({
-                      text: 'Username Already Exist',
-                      icon: 'warning',
-                      confirmButtonColor: '#3085d6',
-                  });
-                </script>";
-      } else {
-          $sql = "INSERT INTO user_info (firstname, lastname, gender, contact, address) VALUES ('$firstname', '$lastname', '$gender', '$contactnum', '$address')";
-    
-          if($conn->query($sql) === TRUE){
-              $info_id = $conn->insert_id;
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST['username'], $_POST['password'], $_POST['first_name'], $_POST['last_name'], $_POST['contact'], $_POST['address'])) {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $first_name = $_POST['first_name'];
+            $middle_name = isset($_POST['middle_name']) ? $_POST['middle_name'] : ''; // Optional field
+            $last_name = $_POST['last_name'];
+            $gender = isset($_POST['gender']) ? $_POST['gender'] : ''; // Optional field
+            $contact = $_POST['contact'];
+            $address = $_POST['address'];
 
-              $sql = "INSERT INTO user_level (level) VALUES (2)";
-              if($conn->query($sql) === TRUE){
-                  $level_id = $conn->insert_id;
-                  $sql = "INSERT INTO user_account (username, password, level_id, info_id, status) VALUES ('$username', '$encrypted', '$level_id', '$info_id', 2)";
-  
-                  if($conn->query($sql) === TRUE){
-                    // sweetalert success
-                    echo "<script>Swal.fire({
-                      position: 'center',
-                      icon: 'success',
-                      title: 'Account Created Successfully',
-                      showConfirmButton: false
-                  });</script>";
-                  } else {
-                    // sweetalert error
-                      echo "<script>
-                      Swal.fire({
-                        icon: 'error',
-                        text: 'Something went wrong!',
-                      });
-                      </script>";
-                  }
-              }
-          }
+            // Sanitize inputs
+            $escaped_username = mysqli_real_escape_string($conn, $username);
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            // Check if the username already exists
+            $sql_check = "SELECT username FROM user_account WHERE username = ?";
+            $stmt_check = $conn->prepare($sql_check);
+            $stmt_check->bind_param("s", $escaped_username);
+            $stmt_check->execute();
+            $stmt_check->store_result();
+
+            if ($stmt_check->num_rows > 0) {
+                echo '<script>
+                Swal.fire({
+                    icon: "error",
+                    text: "Username already exists"
+                });
+                </script>';
+            } else {
+                // Insert into user_info table
+                $sql_insert_info = "INSERT INTO user_info (firstname, lastname, gender, contact, address) VALUES (?, ?, ?, ?, ?)";
+                $stmt_insert_info = $conn->prepare($sql_insert_info);
+                $stmt_insert_info->bind_param("sssss", $first_name, $last_name, $gender, $contact, $address);
+
+                if ($stmt_insert_info->execute()) {
+                    // Get the info_id of the newly inserted user_info
+                    $info_id = $stmt_insert_info->insert_id;
+
+                    // Insert into user_account table
+                    $sql_insert_account = "INSERT INTO user_account (username, password, level_id, info_id, statues, isOnline) VALUES (?, ?, 2, ?, 1, 0)";
+                    $stmt_insert_account = $conn->prepare($sql_insert_account);
+                    $stmt_insert_account->bind_param("ssi", $escaped_username, $hashed_password, $info_id);
+
+                    if ($stmt_insert_account->execute()) {
+                        echo '<script>
+                        Swal.fire({
+                            icon: "success",
+                            text: "Signup successful"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "login.php";
+                            }
+                        });
+                        </script>';
+                    } else {
+                        echo '<script>
+                        Swal.fire({
+                            icon: "error",
+                            text: "Error in registration"
+                        });
+                        </script>';
+                    }
+
+                    $stmt_insert_account->close();
+                } else {
+                    echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        text: "Error in registration"
+                    });
+                    </script>';
+                }
+
+                $stmt_insert_info->close();
+            }
+
+            $stmt_check->close();
         }
     }
     ?>
-    <form action="" method="POST">
-        <div class="user-box">
-            <input type="text" name="firstname" required>
-            <label>First Name</label>
+
+    <div class="col-md-12">
+        <div class="row justify-content-center align-items-center">
+            <form action="" method="POST" class="w-100">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" name="first_name" id="first_name" class="form-control form-control-lg bg-light fs-6" placeholder="First Name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" name="last_name" id="last_name" class="form-control form-control-lg bg-light fs-6" placeholder="Last Name" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" name="gender" id="gender" class="form-control form-control-lg bg-light fs-6" placeholder="Gender">
+                        </div>
+                    </div>                             
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" name="contact" id="contact" class="form-control form-control-lg bg-light fs-6" placeholder="Contact" required>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <input type="text" name="address" id="address" class="form-control form-control-lg bg-light fs-6" placeholder="Address" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" name="username" id="username" class="form-control form-control-lg bg-light fs-6" placeholder="Username" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="password" name="password" id="password" class="form-control form-control-lg bg-light fs-6" placeholder="Password" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <button type="submit" name="submit" class="btn btn-lg btn-primary w-100 fs-6">Signup
+                                <span class="loading-text" style="display: none;">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Loading...
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="user-box">
-            <input type="text" name="lastname" required>
-            <label>Last Name</label>
-        </div>
-        <div class="user-box">
-            <input type="text" name="gender" required>
-            <label>Gender</label>
-        </div>
-        <div class="user-box">
-            <input type="text" name="contactnum" required>
-            <label>Contact Number</label>
-        </div>
-        <div class="user-box">
-            <input type="text" name="address" required>
-            <label>Address</label>
-        </div>
-        <div class="user-box">
-            <input type="text" name="username" required>
-            <label>Username</label>
-        </div>
-        <div class="user-box">
-            <input type="password" name="password" pattern=".{8,16}" title="Password must be 8-16 characters" required>
-            <label>Password</label>
-        </div>
-            <button type="submit" name="submit">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            Create Account
-        </button>
-    </form>
-    <a href="login.php"> <button> Login </button> </a>
-</div>
+    </div>
 
 </body>
+<script src="main/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>
