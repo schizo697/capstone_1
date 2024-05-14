@@ -1,10 +1,9 @@
 <?php
-ini_set('session.cache_limiter','public');
+ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
 session_start();
 include("../conn.php");
-if(!isset($_SESSION['user_id']))
-{
+if (!isset($_SESSION['user_id'])) {
     header("location:../index.php");
 }
 
@@ -37,11 +36,43 @@ include('../conn.php');
     <!-- Libraries Stylesheet -->
     <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
+    <!-- Custom CSS -->
+    <link href="../main/css/style.css" rel="stylesheet">
+    <link href="../main/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        <?php 
-            include '../main/css/style.css'; 
-            include '../main/css/bootstrap.min.css';
-        ?>
+        /* Custom Styles */
+
+/* Ensure all product images are of the same size */
+.product-item img {
+    width: 100%;
+    height: 200px; /* Adjust height as needed */
+    object-fit: cover; /* Ensure images cover the area without distortion */
+}
+
+/* Ensure all product items have the same height */
+.product-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.product-item .btn-action {
+    margin-top: auto;
+}
+
+.product-item h6,
+.product-item h5 {
+    margin: 10px 0;
+}
+
+.btn-action a {
+    margin: 0 5px;
+}
+
     </style>
 </head>
 
@@ -55,10 +86,8 @@ include('../conn.php');
             </div>
             <div class="row g-5">
                 <?php 
-                    include "../conn.php";
-                                        
                     $uid = $_SESSION['user_id'];
-                            
+                    
                     $getlisting = "SELECT * FROM listing 
                                     JOIN product ON listing.prodid = product.prodid 
                                     JOIN pcategory ON pcategory.catid = product.catid 
@@ -68,7 +97,7 @@ include('../conn.php');
                 <?php 
                     while($row = mysqli_fetch_assoc($fetch)){ 
                 ?>
-                <div class="col-lg-4 col-md-6 px-5">
+                <div class="col-lg-4 col-md-6">
                     <div class="product-item position-relative bg-white d-flex flex-column text-center">
                         <img class="img-fluid mb-4" src="<?php echo "../img/products/".$row['imgid']; ?>" alt="">
                         <h6 class="mb-3"><?php echo $row['pname'];?></h6>
@@ -101,10 +130,10 @@ include('../conn.php');
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/counterup/counterup.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/counterup/counterup.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="../main/js/main.js"></script>

@@ -1,10 +1,9 @@
 <?php
-ini_set('session.cache_limiter','public');
+ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
 session_start();
 include("../conn.php");
-if(!isset($_SESSION['user_id']))
-{
+if (!isset($_SESSION['user_id'])) {
     header("location:../index.php");
 }
 
@@ -63,7 +62,7 @@ include('includes/navbar.php');
 </head>
 
 <body>
-    <!-- modal -->
+    <!-- Add Product Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -76,7 +75,7 @@ include('includes/navbar.php');
                 <?php
                 include '../conn.php';
 
-                if(isset($_POST['productname']) && isset($_POST['category']) && isset($_POST['price']) && isset($_POST['quantity'])) {
+                if (isset($_POST['productname']) && isset($_POST['category']) && isset($_POST['price']) && isset($_POST['quantity'])) {
                     $productname = $_POST['productname'];
                     $category = $_POST['category'];
                     $price = $_POST['price'];
@@ -86,16 +85,16 @@ include('includes/navbar.php');
                     $sql = "INSERT INTO product (pname, catid, price, quantity, uid, status) VALUES (?, ?, ?, ?, ?, 'Available')";
                     $stmt = $conn->prepare($sql);
                     $stmt->bind_param("sssss", $productname, $category, $price, $quantity, $uid);
-                    if($stmt->execute()) {
+                    if ($stmt->execute()) {
                         $url = "product.php?success=true";
-                        echo '<script>window.location.href= "' . $url . '";</script>'; 
+                        echo '<script>window.location.href= "' . $url . '";</script>';
                     } else {
                         echo "<script>Swal.fire({
                             icon: 'error',
                             text: 'Something went wrong!',
                         });
                         </script>";
-                    } 
+                    }
                 }
                 ?>
                 <form action="" method="POST" id="addproduct">
@@ -139,212 +138,182 @@ include('includes/navbar.php');
         </div>
     </div>
 
-   <!-- Table Start -->
-<div class="container-fluid about pt-5">
-    <div class="container">
-        <div class="row gx-9">
-            <div class="card">
-                <div class="card-header">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal"> Add New </button>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <table id="example" class="table table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Kilo</th>
-                                <th>Status</th>
-                                <th>Date Added</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            include "../conn.php";
-                            $uid = $_SESSION['user_id'];
-
-                            $sql = "SELECT * FROM product JOIN pcategory ON pcategory.catid = product.catid WHERE product.uid = '$uid'";
-                            $result = mysqli_query($conn, $sql);
-
-                            while ($row = mysqli_fetch_assoc($result)) {
-                            ?>
-                                <tr class="data-row">
-                                    <td><?php echo $row['pname']; ?></td>
-                                    <td><?php echo $row['category']; ?></td>
-                                    <td><?php echo $row['price']; ?></td>
-                                    <td><?php echo $row['quantity']; ?></td>
-                                    <td><?php echo $row['status']; ?></td>
-                                    <td><?php echo date('F d, Y', strtotime($row['dateadded'])); ?></td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm edit-button" data-toggle="modal" data-target="#editModal" data-id="<?php echo $row['prodid']; ?>" data-name="<?php echo $row['pname']; ?>" data-category="<?php echo $row['category']; ?>" data-price="<?php echo $row['price']; ?>" data-quantity="<?php echo $row['quantity']; ?>">Edit<i class="fa fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm archive-button" data-id="<?php echo $row['prodid']; ?>">Archive</button>
-                                    </td>
-                                </tr>
-                            <?php
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Table End -->
-
-
-    <br>
-    <br>
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-white py-4">
-        <div class="container text-center">
-            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
-        </div>
-    </div>
-    <!-- Footer End -->
-
     <!-- Edit Product Modal -->
-    <div class="modal" id="editModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Product</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="editProductForm" method="POST">
+                <?php
+                if (isset($_POST['editproductname']) && isset($_POST['editcategory']) && isset($_POST['editprice']) && isset($_POST['editquantity']) && isset($_POST['editprodid'])) {
+                    $productname = $_POST['editproductname'];
+                    $category = $_POST['editcategory'];
+                    $price = $_POST['editprice'];
+                    $quantity = $_POST['editquantity'];
+                    $prodid = $_POST['editprodid'];
+
+                    $sql = "UPDATE product SET pname = ?, catid = ?, price = ?, quantity = ? WHERE prodid = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("sssss", $productname, $category, $price, $quantity, $prodid);
+
+                    if ($stmt->execute()) {
+                        $url = "product.php?update_success=true";
+                        echo '<script>window.location.href= "' . $url . '";</script>';
+                    } else {
+                        echo "<script>Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong!',
+                        });
+                        </script>";
+                    }
+                }
+                ?>
+                <form action="" method="POST" id="editproduct">
                     <div class="modal-body">
-                        <input type="hidden" id="editProductId" name="productId">
                         <div class="form-group">
-                            <label for="editProductName">Product Name:</label>
-                            <input type="text" class="form-control" id="editProductName" name="productName" >
+                            <label for="editproductname">Product Name:</label>
+                            <input type="text" class="form-control" id="editproductname" name="editproductname" required>
                         </div>
                         <div class="form-group">
-                            <label for="editCategory">Category:</label>
-                            <select id="editCategory" name="category" class="form-select" aria-label="Category" >
+                            <label for="editcategory">Category:</label>
+                            <select name="editcategory" id="editcategory" class="form-select" required>
+                                <option selected disabled>Select...</option>
+                                <?php
+                                    include "../conn.php";
+                                    $name_query = "SELECT * FROM pcategory";
+                                    $r = mysqli_query($conn, $name_query);
+                                
+                                    while ($row = mysqli_fetch_array($r)) {
+                                    ?>
+                                        <option value="<?php echo $row['catid']; ?>"> <?php echo $row['category']; ?></option>
+                                    <?php
+                                    }
+                                ?>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="editPrice">Price per Kilo:</label>
-                            <input type="text" class="form-control" id="editPrice" name="price" >
+                            <label for="editprice">Price per Kilo:</label>
+                            <input type="text" class="form-control" id="editprice" name="editprice" required>
                         </div>
                         <div class="form-group">
-                            <label for="editQuantity">Kilo:</label>
-                            <input type="text" class="form-control" id="editQuantity" name="quantity" >
+                            <label for="editquantity">Kilo:</label>
+                            <input type="quantity" class="form-control" id="editquantity" name="editquantity" required>
                         </div>
+                        <input type="hidden" id="editprodid" name="editprodid">
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Update Product</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-  <script>
-$(document).ready(function() {
-  // Populate modal with data when edit button is clicked
-  $('.edit-button').click(function() {
-    var productId = $(this).data('data-id');
-    var productName = $(this).data('name');
-    var category = $(this).data('category');
-    var price = $(this).data('price');
-    var kilo = $(this).data('quantity');
-    
+    <!-- Table Start -->
+    <div class="container-fluid about pt-5">
+        <div class="container">
+            <div class="row gx-9">
+                <div class="card">
+                    <div class="card-header">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Add Product
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <table id="example" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Price per Kilo</th>
+                                    <th scope="col">Kilo</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    $uid = $_SESSION['user_id'];
+                                    $query = "SELECT p.prodid, p.pname, c.category, p.price, p.quantity, p.status FROM product p JOIN pcategory c ON p.catid = c.catid WHERE p.uid = $uid";
+                                    $result = mysqli_query($conn, $query);
 
-    $('#productId').val(productId);
-    $('#editProductName').val(productName);
-    $('#editCategory').val(category);
-    $('#editPrice').val(price);
-    $('#editQuantity').val(kilo);
-    
-  
-  });
-}
-  // Handle form submission for updating data
-  $('#editForm').submit(function(event) {
-    event.preventDefault();
-    var formData = new FormData($(this)[0]);
-    $.ajax({
-      type: 'POST',
-      url: 'edit_product.php',
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function(response) {
-        console.log(response);
-        $('#editModal').modal('hide');
-        location.reload(); // Reload the page after successful update
-      },
-      error: function(xhr, status, error) {
-        console.error(xhr.responseText);
-      }
-    });
-  }));
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            echo "<td>" . $row['pname'] . "</td>";
+                                            echo "<td>" . $row['category'] . "</td>";
+                                            echo "<td>" . $row['price'] . "</td>";
+                                            echo "<td>" . $row['quantity'] . "</td>";
+                                            echo "<td>" . $row['status'] . "</td>";
+                                            echo "<td>";
+                                            echo "<button class='btn btn-primary edit-button edit-btn' data-id='" . $row['prodid'] . "' data-name='" . $row['pname'] . "' data-category='" . $row['category'] . "' data-price='" . $row['price'] . "' data-quantity='" . $row['quantity'] . "'><i class='fas fa-edit'></i> Edit</button> ";
+                                            echo "<button class='btn btn-danger archive-btn'><i class='fas fa-archive'></i> Archive</button>";
+                                            echo "</td>";
+                                            echo "</tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='6' class='text-center'>No products found</td></tr>";
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Table End -->
 
-
-    </script>
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
-
-    <script>
-    function showModal(){
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Product Added Successfully',
-            showConfirmButton: false
-        });
-    }
-
-    function checkExistParam() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('success') && urlParams.get('success') === 'true') {
-            showModal();
-        }
-    }
-
-    window.onload = checkExistParam; 
-    </script>
-
-    <script>
-    // Wait for the DOM to be ready
-    document.addEventListener("DOMContentLoaded", function() {
-        // Get the button element
-        var openModalBtn = document.getElementById('openModalBtn');
-
-        // Get the modal element
-        var modal = document.querySelector('.modal');
-
-        // When the button is clicked, show the modal
-        openModalBtn.addEventListener('click', function() {
-            modal.style.display = 'block';
-        });
-
-        // When the close button inside the modal is clicked, hide the modal
-        modal.querySelector('.close').addEventListener('click', function() {
-            modal.style.display = 'none';
-        });
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.addEventListener('click', function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        });
-    });
-    </script>
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light mt-5 py-5">
+        <div class="container">
+            <div class="row gx-5">
+                <div class="col-lg-4 col-md-6 mb-5">
+                    <h4 class="text-uppercase text-primary">Get In Touch</h4>
+                    <p class="mb-4">Contact us for any inquiries.</p>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>123 Street, City, Country</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt text-primary me-3"></i>+123 456 7890</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>khytwatapampam@example.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-primary btn-social" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-primary btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-primary btn-social" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-primary btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-5">
+                    <h4 class="text-uppercase text-primary">Quick Links</h4>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Home</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>About Us</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Services</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Contact</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-5">
+                    <h4 class="text-uppercase text-primary">Newsletter</h4>
+                    <p class="mb-4">Subscribe to our newsletter for the latest updates.</p>
+                    <form action="">
+                        <div class="input-group">
+                            <input type="email" class="form-control border-0 p-3" placeholder="Your Email">
+                            <button class="btn btn-primary">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="container border-top border-light pt-5">
+            <p class="m-0 text-center text-light">&copy; <a href="#">Farmer's Market</a>. All Rights Reserved.</p>
+        </div>
+    </div>
+    <!-- Footer End -->
 
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> <!-- Include DataTables -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> <!-- Include Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../lib/easing/easing.min.js"></script>
@@ -353,38 +322,51 @@ $(document).ready(function() {
     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="../js/main.js"></script>
+    <script src="js/main.js"></script>
 
     <script>
-    function enableDropdown() {
-        $('.dropdown-toggle').on('click', function() {
-            $(this).siblings('.dropdown-menu').toggleClass('show');
+        document.addEventListener('DOMContentLoaded', function() {
+            $('#example').on('click', '.edit-button', function() {
+                var prodid = $(this).data('id');
+                var pname = $(this).data('name');
+                var category = $(this).data('category');
+                var price = $(this).data('price');
+                var quantity = $(this).data('quantity');
+
+                $('#editprodid').val(prodid);
+                $('#editproductname').val(pname);
+                $('#editcategory').val(category);
+                $('#editprice').val(price);
+                $('#editquantity').val(quantity);
+
+                $('#editModal').modal('show');
+            });
         });
 
-        $(document).on('click', function(e) {
-            if (!$('.dropdown-toggle').is(e.target) && $('.dropdown-toggle').has(e.target).length === 0 &&
-                $('.show').has(e.target).length === 0) {
-                $('.dropdown-menu').removeClass('show');
+        function showModal(message, type = 'success') {
+            Swal.fire({
+                position: 'center',
+                icon: type,
+                title: message,
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+
+        function checkExistParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success') && urlParams.get('success') === 'true') {
+                showModal('Product Added Successfully');
+            } else if (urlParams.has('update_success') && urlParams.get('update_success') === 'true') {
+                showModal('Product Updated Successfully');
             }
-        });
-    }
+        }
 
-    $(document).ready(function() {
-        enableDropdown();
-    });
+        window.onload = checkExistParam;
     </script>
-
-    <script>
-    const myModal = document.getElementById('myModal')
-    const myInput = document.getElementById('myInput')
-
-    myModal.addEventListener('shown.bs.modal', () => {
-    myInput.focus()
-    })
-    </script>
-
 </body>
+</html>
+
 <?php
 include('includes/footer.php');
 ?>
-</html>
