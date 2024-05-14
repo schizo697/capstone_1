@@ -182,7 +182,7 @@
             <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
         </div>
     </div>
-    <!-- Footer EndEEE -->
+    <!-- Footer End -->
 
 
     <!-- Back to Top -->

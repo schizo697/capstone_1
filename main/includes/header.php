@@ -1,9 +1,16 @@
+<style>
+    .logo {
+    max-height: 120px; /* Adjust the height as needed */
+    width: auto;
+    margin-right: 0.5rem;
+}
+</style>
+
 <div class="container-fluid px-5 d-none d-lg-block">
         <div class="row gx-5 py-3 align-items-center">
             <div class="col-lg-3">
                 <div class="d-flex align-items-center justify-content-start">
-                    <i class="bi bi-phone-vibrate fs-1 text-primary me-2"></i>
-                    <h2 class="mb-0">logo</h2>
+                <img src="farmer/assets/dist/img/logo.png" alt="Your Logo" class="logo">
                 </div>
             </div>
             <div class="col-lg-6">

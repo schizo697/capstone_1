@@ -321,7 +321,7 @@ include('includes/navbar.php');
     <script src="../lib/counterup/counterup.min.js"></script>
     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
 
-    <!-- Template Javascriptttt -->
+    <!-- Template Javascript -->
     <script src="js/main.js"></script>
 
     <script>
