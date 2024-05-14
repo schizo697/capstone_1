@@ -169,9 +169,9 @@
                 $jsonResponse = json_encode($data);
 
                 // Save JSON data to a file
-                file_put_contents('product.json', $jsonResponse);
+                file_put_contents('js/product.json', $jsonResponse);
 
-                echo $jsonResponse;
+                //echo $jsonResponse;
             } else {
                 echo "No data found.";
             }
@@ -188,6 +188,7 @@
         <div class="listCart">
             
         </div>
+                
         <div class="btn">
             <button class="close">CLOSE</button>
             <button class="checkOut">Check Out</button>
