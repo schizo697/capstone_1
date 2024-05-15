@@ -25,10 +25,17 @@ const addDataToHTML = () => {
             newProduct.dataset.listid = product.listid;
             newProduct.classList.add('item');
             newProduct.innerHTML = 
-            `<img src="${product.imgid}" alt="">
-            <h2>${product.pname}</h2>
-            <div class="price">$${product.price}</div>
-            <button class="addCart">Add To Cart</button>`;
+            `<div class="col-lg-30 col-md-30">
+            <div class="product-item position-relative bg-white d-flex flex-column text-center">
+                <img class="img-fluid mb-4" src="../img/products/${product.imgid}" alt="">
+                <h6 class="mb-3">${product.pname}</h6>
+                <h5 class="text-primary mb-0">&#8369; ${product.price}.00</h5>
+                <h6 class="mb-3">Quantity: <?php echo $row['quantity'];?> available</h6>
+                <div class="btn-action d-flex justify-content-center">
+                    <button class = "addCart"><a class="addCart btn bg-primary py-2 px-3" href=""><i class="bi bi-cart text-white"></i></a></button>
+                    <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
+                </div>
+            </div>`;
             listProductHTML.appendChild(newProduct);
         });
     }
@@ -40,55 +47,54 @@ const addDataToHTML = () => {
             addToCart(id_product);
         }
     })
-const addToCart = (product_id) => {
-    let positionThisProductInCart = cart.findIndex((value) => value.product_id == product_id);
-    if(cart.length <= 0){
-        cart = [{
-            product_id: product_id,
-            quantity: 1
-        }];
-    }else if(positionThisProductInCart < 0){
-        cart.push({
-            product_id: product_id,
-            quantity: 1
-        });
-    }else{
-        cart[positionThisProductInCart].quantity = cart[positionThisProductInCart].quantity + 1;
+    const addToCart = (product_id) => {
+        let product = products.find(product => product.id === product_id);
+        if (product) {
+            let cartItem = cart.find(item => item.product_id === product_id);
+            if (cartItem) {
+                cartItem.quantity += 1;
+            } else {
+                cart.push({
+                    product_id: product_id,
+                    quantity: 1
+                });
+            }
+            addCartToHTML();
+            addCartToMemory();
+        }
     }
-    addCartToHTML();
-    addCartToMemory();
-}
 const addCartToMemory = () => {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 const addCartToHTML = () => {
     listCartHTML.innerHTML = '';
     let totalQuantity = 0;
-    if(cart.length > 0){
+    if (cart.length > 0) {
         cart.forEach(item => {
-            totalQuantity = totalQuantity +  item.quantity;
-            let newItem = document.createElement('div');
-            newItem.classList.add('item');
-            newItem.dataset.id = item.product_id;
+            let product = products.find(product => product.id === item.product_id);
+            if (product) {
+                totalQuantity += item.quantity;
+                let newItem = document.createElement('div');
+                newItem.classList.add('item');
+                newItem.dataset.listProductHTMLid = item.product_id;
 
-            let positionProduct = products.findIndex((value) => value.id == item.product_id);
-            let info = products[positionProduct];
-            listCartHTML.appendChild(newItem);
-            newItem.innerHTML = `
-            <div class="image">
-                    <img src="${info.image}">
-                </div>
-                <div class="name">
-                ${info.name}
-                </div>
-                <div class="totalPrice">$${info.price * item.quantity}</div>
-                <div class="quantity">
-                    <span class="minus"><</span>
-                    <span>${item.quantity}</span>
-                    <span class="plus">></span>
-                </div>
-            `;
-        })
+                listCartHTML.appendChild(newItem);
+                newItem.innerHTML = `
+                    <div class="image">
+                        <img src="../img/products/${product.imgid}">
+                    </div>
+                    <div class="name">
+                        ${product.pname}
+                    </div>
+                    <div class="totalPrice">&#8369;${product.price * item.quantity}</div>
+                    <div class="quantity">
+                        <span class="minus"><</span>
+                        <span>${item.quantity}</span>
+                        <span class="plus">></span>
+                    </div>
+                `;
+            }
+        });
     }
     iconCartSpan.innerText = totalQuantity;
 }
