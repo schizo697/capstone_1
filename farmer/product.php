@@ -90,7 +90,7 @@ include('includes/navbar.php');
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" name="btnUpdate" class="btn btn-primary">Update</button>
+                        <button type="submit" name="btnUpdate" class="btn btn-primary">Yes</button>
                     </div>
                 </form>
             </div>
@@ -313,7 +313,7 @@ include('includes/navbar.php');
                     <p class="mb-4">Contact us for any inquiries.</p>
                     <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>123 Street, City, Country</p>
                     <p class="mb-2"><i class="fa fa-phone-alt text-primary me-3"></i>+123 456 7890</p>
-                    <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>khytwatapampam@example.com</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>watapampam@example.com</p>
                     <div class="d-flex pt-2">
                         <a class="btn btn-outline-primary btn-social" href=""><i class="fab fa-twitter"></i></a>
                         <a class="btn btn-outline-primary btn-social" href=""><i class="fab fa-facebook-f"></i></a>
@@ -404,7 +404,7 @@ include('includes/navbar.php');
             if (urlParams.has('success') && urlParams.get('success') === 'true') {
                 showModal('Product Added Successfully');
             } else if (urlParams.has('update_success') && urlParams.get('update_success') === 'true') {
-                showModal('Product Updated Successfully');
+                showModal('Product Archived Successfully');
             }
         }
 
