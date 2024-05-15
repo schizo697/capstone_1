@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <a href="selling.php" class="nav-item nav-link">Sell</a>
-                <a href="#" class="nav-item nav-link">Payment</a>
+                <a href="sales.php" class="nav-item nav-link">Sales</a>
                 <a href="#" class="nav-item nav-link">Trends</a>
                 <a href="report.php" class="nav-item nav-link">Reports</a>
             </div>
