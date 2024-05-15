@@ -1,9 +1,18 @@
+<?php 
+session_start();
+include '../conn.php';
+if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'];
+} else {
+    
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>Farmer's Market</title>
+    <title>FarmFresh - Organic Farm Website Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -22,49 +31,14 @@
     <!-- Libraries Stylesheet -->
     <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="../main/css/style.css" rel="stylesheet">
-    <link href="css/customer_dashboard.css" rel="stylesheet">
-    <link href="../main/css/bootstrap.min.css" rel="stylesheet">
+    <!-- sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        /* Custom Styles */
-
-/* Ensure all product images are of the same size */
-.product-item img {
-    width: 100%;
-    height: 200px; /* Adjust height as needed */
-    object-fit: cover; /* Ensure images cover the area without distortion */
-}
-
-/* Ensure all product items have the same height */
-.product-item {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.product-item .btn-action {
-    margin-top: auto;
-}
-
-.product-item h6,
-.product-item h5 {
-    margin: 10px 0;
-}
-
-.btn-action a {
-    margin: 0 5px;
-}
-
-.logo {
-    max-height: 120px; /* Adjust the height as needed */
-    width: auto;
-    margin-right: 0.5rem;
-}
+        <?php 
+            include '../main/css/style.css'; 
+            include '../main/css/bootstrap.min.css';
+        ?>
     </style>
 </head>
 
@@ -74,8 +48,8 @@
         <div class="row gx-5 py-3 align-items-center">
             <div class="col-lg-3">
                 <div class="d-flex align-items-center justify-content-start">
-                 
-                    <img src="assets/dist/img/logo.png" alt="Your Logo" class="logo">
+                    <i class="bi bi-phone-vibrate fs-1 text-primary me-2"></i>
+                    <h2 class="mb-0">logo</h2>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -87,14 +61,7 @@
             </div>
             <div class="col-lg-3">
                 <div class="d-flex align-items-center justify-content-end">
-                    <a class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
-                    <a class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
-                    <div class="icon-cart">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1"/>
-                </svg>
-                <span>0</span>
-            </div>
+                    <a class="btn btn-primary rounded-circle"><i class="bi bi-cart"></i></a>
                 </div>
             </div>
         </div>
@@ -119,24 +86,24 @@
         <div class="container py-5">
             <div class="row justify-content-start">
                 <div class="col-lg-8 text-center text-lg-start">
-                    <div class="col-md-20">
-                        <form id="filter-list" method="POST">
-                            <div class="row g-4" style="margin-bottom: 8px;">
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control border-0 py-3 enter-loc" id="product" name="product" placeholder="Search Product">
-                                </div>
+                <div class="col-md-20">
+                  <form id="filter-list" method="POST">
+                      <div class="row g-4" style="margin-bottom: 8px;">
+                          <div class="col-md-8">
+                              <input type="text" class="form-control border-0 py-3 enter-loc" id="product" name="product" placeholder="Search Product">
+                            </div> 
+                          </div>
+                         <div class="row g-3">
+                            <div class="col-md-2" style="width: 300px">
+                                <select name="cate" id="cate" value="category" class="form-control border-0 py-3 enter-loc">
+                                    <option value="" selected disabled>Category</option>
+                                    <option value="Vegetable"> Vegetable </option>
+                                    <option value="Fruits"> Fruits </option>
+                                </select>
                             </div>
-                            <div class="row g-3">
-                                <div class="col-md-2" style="width: 300px">
-                                    <select name="cate" id="cate" value="category" class="form-control border-0 py-3 enter-loc">
-                                        <option value="" selected disabled>Category</option>
-                                        <option value="Vegetable"> Vegetable </option>
-                                        <option value="Fruits"> Fruits </option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" id="search" class="btn btn-dark border-0 w-100 py-3">Search</button>
-                                </div>
+                            <div class="col-md-2 ">
+                                <button type = "submit" id = "search" class="btn btn-dark border-0 w-100 py-3">Search</button>
+                            </div>
                             </form>
                         </div>
                     </div>
@@ -150,54 +117,47 @@
     <!-- Products Start -->
     <div class="container-fluid py-5">
         <div class="container">
-        <div class="listProduct"> </div>
-        <?php
-            include "../conn.php";
+            <div class="mx-auto text-center mb-5" style="max-width: 500px;">
+                <h6 class="text-primary text-uppercase">Products</h6>
+                <h1 class="display-5">Available Products</h1>
+            </div>
+            <div class="row g-5">
+            <?php 
+            $sqlproduct = "SELECT * FROM listing 
+            JOIN product ON listing.prodid = product.prodid 
+            JOIN pcategory ON pcategory.catid = product.catid
+            WHERE status = 'Available'";
+            $productresult = mysqli_query($conn, $sqlproduct);
 
-            $sql = "SELECT * FROM listing 
-                        JOIN product ON listing.prodid = product.prodid 
-                        JOIN pcategory ON pcategory.catid = product.catid";
-            $result = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-                $data = array();
-
-                while ($row = $result->fetch_assoc()) {
-                    $data[] = $row;
+            if($productresult && mysqli_num_rows($productresult)){
+                while($productrow = mysqli_fetch_assoc($productresult)){
+                    ?>
+                    <div class="col-lg-4 col-md-6 px-5">
+                        <div class="product-item position-relative bg-white d-flex flex-column text-center">
+                            <img class="img-fluid mb-4" src="../img/product-1.png" alt="">
+                            <h6 class="mb-3"><?php echo $productrow['pname'] ?></h6>
+                            <h5 class="text-primary mb-0"><?php echo $productrow['price']?></h5>
+                            <div class="btn-action d-flex justify-content-center">
+                                <button class="btn btn-primary py-2 px-3 add-to-cart" type="button" data-pname="<?php echo $productrow['pname'] ?>">
+                                    <i class="bi bi-cart text-white"></i>
+                                </button>
+                                <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
                 }
-
-                $jsonResponse = json_encode($data);
-
-                // Save JSON data to a file
-                file_put_contents('js/product.json', $jsonResponse);
-
-                //echo $jsonResponse;
-            } else {
-                echo "No data found.";
             }
-
-            $conn->close();
             ?>
-            
+            </div>
+            </div>
         </div>
     </div>
     <!-- Products End -->
 
-    <div class="cartTab">
-        <h1>Shopping Cart</h1>
-        <div class="listCart">
-            
-        </div>
-                
-        <div class="btn">
-            <button class="close">CLOSE</button>
-            <button class="checkOut">Check Out</button>
-        </div>
-    </div>
-
     <div class="container-fluid bg-dark text-white py-4">
         <div class="container text-center">
-            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
+            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="https://freewebsitecode.com/">Your Site Name</a>. All Rights Reserved. Designed by <a class="text-secondary fw-bold" href="https://freewebsitecode.com">Free Website Code</a></p>
         </div>
     </div>
     <!-- Footer End -->
@@ -206,18 +166,46 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('.add-to-cart').click(function(){
+            var pname = $(this).data('pname');
+
+            $.ajax({
+                url: 'add_to_cart.php', // Make sure this path is correct
+                type: 'POST',
+                data: {
+                    pname: pname
+                },
+                success: function(response){
+                    Swal.fire({
+                        icon: 'success',
+                        text: response,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                },
+                error: function(xhr, status, error){
+                    console.error('AJAX Error: ' + status + error);
+                    console.error(xhr);
+                }
+            });
+        });
+    });
+    </script>
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../lib/easing/easing.min.js"></script>
-    <script src="../lib/waypoints/waypoints.min.js"></script>
-    <script src="../lib/counterup/counterup.min.js"></script>
-    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="../main/js/main.js"></script>
-    <script src="js/cart.js"></script>
 </body>
 
 </html>

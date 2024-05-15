@@ -60,7 +60,7 @@ include('main/includes/header.php');
 
                 if (password_verify($password, $hashed_password)) {
                     $_SESSION['username'] = $username;
-                    $_SESSION['user_id'] = $row['user_id']; // Store user_id in session
+                    $_SESSION['user_id'] = $row['user_id']; 
                     
                     $level_id = $row['level_id'];
                     $sql = "SELECT level FROM user_level WHERE level_id = '$level_id'";
