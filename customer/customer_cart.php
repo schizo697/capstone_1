@@ -44,6 +44,12 @@ include('../conn.php');
             include '../main/css/bootstrap.min.css';
             include 'css/customer_cart.css';
         ?>
+
+        .logo {
+            max-height: 120px;
+            width: auto;
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 

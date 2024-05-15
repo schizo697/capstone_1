@@ -12,7 +12,7 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-controls="sidebarproduct">Manage Products</a>
                     <div class="dropdown-menu m-0">
                         <a href="product.php" class="dropdown-item dropdown-toggle" id="sidebarproduct">Products</a>
-                        <a href="#" class="dropdown-item">Orders</a>
+                        <a href="orders.php" class="dropdown-item">Orders</a>
                         <a href="#" class="dropdown-item">Inventory</a>
                     </div>
                 </div>
