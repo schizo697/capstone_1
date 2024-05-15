@@ -158,7 +158,7 @@ if(isset($_SESSION['user_id'])){
                         <button class="btn btn-primary py-2 px-3 add-to-cart" type="button" data-pname="<?php echo $productrow['pname'] ?>">
                                     <i class="bi bi-cart text-white"></i>
                                 </button>
-                                <a class="btn bg-secondary py-2 px-3" href="view_products.php?product_id=<?php echo $productrow['prodid']; ?>"><i class="bi bi-eye text-white"></i></a>
+                                <a class="btn bg-secondary py-2 px-3" href="view_products.php?pid=<?php echo $productrow['prodid']; ?>"><i class="bi bi-eye text-white"></i></a>
 
                         </div>
                     </div>

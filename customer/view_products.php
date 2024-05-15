@@ -1,7 +1,7 @@
 <?php
 include "../conn.php";
-if (isset($_GET['id'])) {
-    $prodid = intval($_GET['id']);
+if (isset($_GET['pid'])) {
+    $prodid = intval($_GET['pid']);
     $stmt = $conn->prepare("SELECT 
     product.*,
     pcategory.category,
@@ -117,8 +117,8 @@ WHERE
             <div class="col-lg-6">
                 <h1><?php echo $product['pname']; ?></h1>
                 <h2>&#8369; <?php echo $product['price']; ?>.00</h2>
-                <h3>Category: <?php echo $product['category']; ?></h3>
-                <h3>Kilo: <?php echo $product['quantity']; ?></h3>
+                <h5>Category: <?php echo $product['category']; ?></h5>
+                <h5>Kilo: <?php echo $product['quantity']; ?></h5>
                 <p><?php echo $product['details']; ?></p>
                 <a href="customer_dashboard.php" class="btn btn-secondary btn-back">Back to Products</a>
                 <a href="add_to_cart.php?id=<?php echo $product['prodid']; ?>" class="btn btn-primary btn-add-to-cart"><i class="fas fa-cart-plus"></i> Add to Cart</a>
