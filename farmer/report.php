@@ -3,6 +3,7 @@ ini_set('session.cache_limiter','public');
 session_cache_limiter(false);
 session_start();
 include("../conn.php");
+
 if(!isset($_SESSION['user_id']))
 {
     header("location:../index.php");
@@ -96,7 +97,6 @@ include('includes/navbar.php');
                         });
                         </script>";
                     } 
-                            
                 }
                 ?>
                 <form action="" method="POST" id="addproduct">
@@ -142,62 +142,60 @@ include('includes/navbar.php');
     </div>
     <!-- Modal End -->
 
-   <!-- Table Start -->
-<div class="container-fluid about pt-5">
-    <div class="container">
-        <div class="row gx-9">
-            <div class="card">
-                <div class="card-header">
-                    <p>Report</p>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <table id="example" class="table table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Kilo</th>
-                                <th>Status</th>
-                                <th>Date Added</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            include "../conn.php";
-                            $uid = $_SESSION['user_id'];
-
-                            $sql = "SELECT * FROM product JOIN pcategory ON pcategory.catid = product.catid WHERE product.uid = '$uid'";
-                            $result = mysqli_query($conn, $sql);
-
-                            while ($row = mysqli_fetch_assoc($result)) {
-                            ?>
-                                <tr class="data-row">
-                                    <td><?php echo $row['pname']; ?></td>
-                                    <td><?php echo $row['category']; ?></td>
-                                    <td><?php echo $row['price']; ?></td>
-                                    <td><?php echo $row['quantity']; ?></td>
-                                    <td><?php echo $row['status']; ?></td>
-                                    <td><?php echo date('F d, Y', strtotime($row['dateadded'])); ?></td>
-                                    <td>
-                                        
-                                        <button type="button" class="btn btn-success btn-sm archive-button" data-id="<?php echo $row['prodid']; ?>">Restore</button>
-                                    </td>
+    <!-- Table Start -->
+    <div class="container-fluid about pt-5">
+        <div class="container">
+            <div class="row gx-9">
+                <div class="card">
+                    <div class="card-header">
+                        <p>Report</p>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example" class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Kilo</th>
+                                    <th>Status</th>
+                                    <th>Date Added</th>
+                                    <th>Action</th>
                                 </tr>
-                            <?php
-                            }
-                            ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php
+                                include "../conn.php";
+                                $uid = $_SESSION['user_id'];
+
+                                $sql = "SELECT * FROM product JOIN pcategory ON pcategory.catid = product.catid WHERE product.status = 'Not Available'";
+                                $result = mysqli_query($conn, $sql);
+
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                ?>
+                                    <tr class="data-row">
+                                        <td><?php echo $row['pname']; ?></td>
+                                        <td><?php echo $row['category']; ?></td>
+                                        <td><?php echo $row['price']; ?></td>
+                                        <td><?php echo $row['quantity']; ?></td>
+                                        <td><?php echo $row['status']; ?></td>
+                                        <td><?php echo date('F d, Y', strtotime($row['dateadded'])); ?></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-sm restore-button" data-id="<?php echo $row['prodid']; ?>">Restore</button>
+                                        </td>
+                                    </tr>
+                                <?php
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Table End -->
-
+    <!-- Table End -->
 
     <br>
     <br>
@@ -208,7 +206,6 @@ include('includes/navbar.php');
         </div>
     </div>
     <!-- Footer End -->
-
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -301,6 +298,35 @@ include('includes/navbar.php');
     })
     </script>
 
+    <script>
+    // Restore product functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.restore-button').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const prodId = this.getAttribute('data-id');
+
+                if (confirm('Are you sure you want to restore this product?')) {
+                    fetch(`restore_product.php?prodid=${prodId}`, {
+                        method: 'GET'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Product restored successfully!');
+                            location.reload();
+                        } else {
+                            alert('Error restoring product.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error restoring product.');
+                    });
+                }
+            });
+        });
+    });
+    </script>
 </body>
 <?php
 include('includes/footer.php');

@@ -12,33 +12,50 @@ if(isset($_SESSION['user_id'])){
 
 <head>
     <meta charset="utf-8">
-    <title>FarmFresh - Organic Farm Website Template</title>
+    <title>Farmer's Market</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
-
-    <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
-
-    <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
-
-    <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
     <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-    <!-- sweetalert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <link href="../main/css/style.css" rel="stylesheet">
+    <link href="../main/css/bootstrap.min.css" rel="stylesheet">
+     <!-- sweetalert -->
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        <?php 
-            include '../main/css/style.css'; 
-            include '../main/css/bootstrap.min.css';
-        ?>
+        /* Custom Styles */
+        .product-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .product-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .product-item .btn-action {
+            margin-top: auto;
+        }
+        .product-item h6,
+        .product-item h5 {
+            margin: 10px 0;
+        }
+        .btn-action a {
+            margin: 0 5px;
+        }
+        .logo {
+            max-height: 120px;
+            width: auto;
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 
@@ -48,8 +65,7 @@ if(isset($_SESSION['user_id'])){
         <div class="row gx-5 py-3 align-items-center">
             <div class="col-lg-3">
                 <div class="d-flex align-items-center justify-content-start">
-                    <i class="bi bi-phone-vibrate fs-1 text-primary me-2"></i>
-                    <h2 class="mb-0">logo</h2>
+                    <img src="assets/dist/img/logo.png" alt="Your Logo" class="logo">
                 </div>
             </div>
             <div class="col-lg-6">
@@ -61,13 +77,13 @@ if(isset($_SESSION['user_id'])){
             </div>
             <div class="col-lg-3">
                 <div class="d-flex align-items-center justify-content-end">
-                    <a class="btn btn-primary rounded-circle" href="customer_cart.php"><i class="bi bi-cart"></i></a>
+                    <a class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
+                    <a class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
                 </div>
             </div>
         </div>
     </div>
     <!-- Topbar End -->
-
 
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-primary navbar-dark shadow-sm py-3 py-lg-0 px-3 px-lg-5">
@@ -77,33 +93,34 @@ if(isset($_SESSION['user_id'])){
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
+       
+        </div>
     </nav>
     <!-- Navbar End -->
-
 
     <!-- Hero Start -->
     <div class="container-fluid bg-primary py-5 bg-hero mb-5">
         <div class="container py-5">
             <div class="row justify-content-start">
                 <div class="col-lg-8 text-center text-lg-start">
-                <div class="col-md-20">
-                  <form id="filter-list" method="POST">
-                      <div class="row g-4" style="margin-bottom: 8px;">
-                          <div class="col-md-8">
-                              <input type="text" class="form-control border-0 py-3 enter-loc" id="product" name="product" placeholder="Search Product">
-                            </div> 
-                          </div>
-                         <div class="row g-3">
-                            <div class="col-md-2" style="width: 300px">
-                                <select name="cate" id="cate" value="category" class="form-control border-0 py-3 enter-loc">
-                                    <option value="" selected disabled>Category</option>
-                                    <option value="Vegetable"> Vegetable </option>
-                                    <option value="Fruits"> Fruits </option>
-                                </select>
+                    <div class="col-md-20">
+                        <form id="filter-list" method="POST">
+                            <div class="row g-4" style="margin-bottom: 8px;">
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control border-0 py-3 enter-loc" id="product" name="product" placeholder="Search Product">
+                                </div>
                             </div>
-                            <div class="col-md-2 ">
-                                <button type = "submit" id = "search" class="btn btn-dark border-0 w-100 py-3">Search</button>
-                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-2" style="width: 300px">
+                                    <select name="cate" id="cate" value="category" class="form-control border-0 py-3 enter-loc">
+                                        <option value="" selected disabled>Category</option>
+                                        <option value="Vegetable"> Vegetable </option>
+                                        <option value="Fruits"> Fruits </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" id="search" class="btn btn-dark border-0 w-100 py-3">Search</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -112,7 +129,6 @@ if(isset($_SESSION['user_id'])){
         </div>
     </div>
     <!-- Hero End -->
-
 
     <!-- Products Start -->
     <div class="container-fluid py-5">
@@ -132,24 +148,25 @@ if(isset($_SESSION['user_id'])){
             if($productresult && mysqli_num_rows($productresult)){
                 while($productrow = mysqli_fetch_assoc($productresult)){
                     ?>
-                    <div class="col-lg-4 col-md-6 px-5">
-                        <div class="product-item position-relative bg-white d-flex flex-column text-center">
-                            <img class="img-fluid mb-4" src="../img/product-1.png" alt="">
-                            <h6 class="mb-3"><?php echo $productrow['pname'] ?></h6>
-                            <h5 class="text-primary mb-0"><?php echo $productrow['price']?></h5>
-                            <div class="btn-action d-flex justify-content-center">
-                                <button class="btn btn-primary py-2 px-3 add-to-cart" type="button" data-pname="<?php echo $productrow['pname'] ?>">
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-item position-relative bg-white d-flex flex-column text-center">
+                        <img class="img-fluid mb-4" src="<?php echo "../img/products/".$productrow['imgid']; ?>" alt="<?php echo $productrow['pname']; ?>">
+                        <h6 class="mb-3"><?php echo $productrow['pname'];?></h6>
+                        <h5 class="text-primary mb-0">&#8369; <?php echo $productrow['price'];?>.00</h5>
+                        <h6 class="mb-3">Quantity: <?php echo $productrow['quantity'];?> Kilo</h6>
+                        <div class="btn-action d-flex justify-content-center">
+                        <button class="btn btn-primary py-2 px-3 add-to-cart" type="button" data-pname="<?php echo $productrow['pname'] ?>">
                                     <i class="bi bi-cart text-white"></i>
                                 </button>
-                                <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
-                            </div>
+                                <a class="btn bg-secondary py-2 px-3" href="view_products.php?product_id=<?php echo $productrow['prodid']; ?>"><i class="bi bi-eye text-white"></i></a>
+
                         </div>
                     </div>
-                    <?php
-                }
-            }
+                </div>
+                <?php 
+            } 
+        }
             ?>
-            </div>
             </div>
         </div>
     </div>
@@ -157,15 +174,13 @@ if(isset($_SESSION['user_id'])){
 
     <div class="container-fluid bg-dark text-white py-4">
         <div class="container text-center">
-            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="https://freewebsitecode.com/">Your Site Name</a>. All Rights Reserved. Designed by <a class="text-secondary fw-bold" href="https://freewebsitecode.com">Free Website Code</a></p>
+            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
         </div>
     </div>
     <!-- Footer End -->
 
-
     <!-- Back to Top -->
     <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     $(document).ready(function(){
@@ -195,14 +210,13 @@ if(isset($_SESSION['user_id'])){
     });
     </script>
 
-
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/counterup/counterup.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/counterup/counterup.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="../main/js/main.js"></script>
