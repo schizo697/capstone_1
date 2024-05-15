@@ -27,6 +27,10 @@ if(isset($_SESSION['user_id'])){
      <!-- sweetalert -->
      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        <?php 
+            include '../main/css/style.css'; 
+            include '../main/css/bootstrap.min.css';
+        ?>
         /* Custom Styles */
         .product-item img {
             width: 100%;
@@ -77,8 +81,7 @@ if(isset($_SESSION['user_id'])){
             </div>
             <div class="col-lg-3">
                 <div class="d-flex align-items-center justify-content-end">
-                    <a class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
-                    <a class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
+                    <a class="btn btn-primary rounded-circle" href="customer_cart.php"><i class="bi bi-cart"></i></a>
                 </div>
             </div>
         </div>
