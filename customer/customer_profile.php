@@ -2,7 +2,6 @@
 session_start();
 
 include('includes/header.php');
-include('includes/navbar.php');
 include('../conn.php');
 ?>
 <head>
@@ -15,6 +14,12 @@ include('../conn.php');
             include '../main/css/style.css'; 
             include '../main/css/bootstrap.min.css';
         ?>
+
+        .logo {
+            max-height: 120px;
+            width: auto;
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 
@@ -26,7 +31,7 @@ include('../conn.php');
     <nav class="nav nav-borders">
         <a class="nav-link active ms-0" href="customer_profile.php">Profile</a>
         <a class="nav-link" href="customer_mypurchase.php">My Purchases</a>
-        <a class="nav-link" href="chats.php">Chats</a>
+        <a class="nav-link" href="#">Chats</a>
     </nav>
     <hr class="mt-0 mb-4">
     <div class="row">

@@ -2,7 +2,6 @@
 session_start();
 
 include('includes/header.php');
-include('includes/navbar.php');
 include('../conn.php');
 ?>
 <head>
@@ -15,37 +14,79 @@ include('../conn.php');
             include '../main/css/style.css'; 
             include '../main/css/bootstrap.min.css';
         ?>
+
+        .logo {
+            max-height: 120px;
+            width: auto;
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 
 <body>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Payment Setting</h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">    
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-    <!-- /.content-header -->
-
     <div class="container-xl px-4 mt-4">
     <!-- Account page navigation-->
     <nav class="nav nav-borders">
-        <a class="nav-link active ms-0" href="profile.php">Profile</a>
-        <a class="nav-link" href="paymentmethod.php">Payment Method</a>
-        <a class="nav-link" href="chats.php">Chats</a>
+        <a class="nav-link active ms-0" href="customer_profile.php">Profile</a>
+        <a class="nav-link" href="customer_mypurchase.php">My Purchases</a>
+        <a class="nav-link" href="#">Chats</a>
     </nav>
     <hr class="mt-0 mb-4">
     <div class="row">
-        <div class="col-xl-8">
-        
+        <div class="col-xl-15">
+            <!-- Table Start -->
+            <div class="container-fluid about pt-5">
+                <div class="container">
+                    <div class="row gx-9">
+                        <div class="card">
+                            <h1> My Purchase </h1>
+                            <div class="card-header">
+                                <p>- query to be change-</p>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example" class="table table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total Amount</th>
+                                            <th>Date of Order</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        include "../conn.php";
+                                        $uid = $_SESSION['user_id'];
+
+                                        $sql = "SELECT * FROM product JOIN pcategory ON pcategory.catid = product.catid WHERE product.status = 'Not Available'";
+                                        $result = mysqli_query($conn, $sql);
+
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                        ?>
+                                            <tr class="data-row">
+                                                <td><?php echo $row['pname']; ?></td>
+                                                <td><?php echo $row['category']; ?></td>
+                                                <td><?php echo $row['price']; ?></td>
+                                                <td><?php echo $row['quantity']; ?></td>
+                                                <td><?php echo $row['status']; ?></td>
+                                                <td><?php echo date('F d, Y', strtotime($row['dateadded'])); ?></td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Table End -->
         </div>
     </div>
 </div>
