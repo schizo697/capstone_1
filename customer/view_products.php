@@ -3,11 +3,11 @@ include "../conn.php";
 if (isset($_GET['pid'])) {
     $prodid = intval($_GET['pid']);
     $stmt = $conn->prepare("SELECT product.*, pcategory.category, listing.imgid, listing.details, user_info.firstname, user_info.lastname, user_info.contact, user_info.address 
-                            FROM product 
-                            JOIN pcategory ON pcategory.catid = product.catid 
-                            JOIN listing ON listing.prodid = product.prodid 
-                            JOIN user_info ON user_info.userid = product.userid 
-                            WHERE product.prodid = ?");
+    FROM product 
+    JOIN pcategory ON pcategory.catid = product.catid 
+    JOIN listing ON listing.prodid = product.prodid 
+    JOIN user_info ON user_info.info_id = product.prodid 
+    WHERE product.prodid = ?");
     
     $stmt->bind_param("i", $prodid);
     $stmt->execute();
@@ -44,7 +44,7 @@ if (isset($_GET['pid'])) {
     <link href="../main/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        .logo {
+          .logo {
             max-height: 120px;
             width: auto;
             margin-right: 0.5rem;
@@ -77,6 +77,7 @@ if (isset($_GET['pid'])) {
         }
     </style>
 
+    </style>
 </head>
 
 <body>
@@ -101,10 +102,10 @@ if (isset($_GET['pid'])) {
                 </div>
             </div>
             <div class="container-fluid bg-dark text-white py-4">
-                <div class="container text-center">
-                    <p class="mb-0"> <a class="text-secondary fw-bold" href="#"></a></p>
-                </div>
-            </div>
+        <div class="container text-center">
+            <p class="mb-0"> <a class="text-secondary fw-bold" href="#"></a></p>
+        </div>
+    </div>
         </div>
     </div>
     <!-- Topbar End -->
@@ -127,8 +128,8 @@ if (isset($_GET['pid'])) {
     </div>
     <!-- Navbar End -->
 
-    <!-- Product Details Start -->
-    <div class="container product-details">
+       <!-- Product Details Start -->
+       <div class="container product-details">
         <div class="row">
             <div class="col-lg-6">
                 <img src="<?php echo "../img/products/" . $product['imgid']; ?>" alt="<?php echo $product['pname']; ?>">
@@ -138,11 +139,11 @@ if (isset($_GET['pid'])) {
                 <h2>&#8369; <?php echo $product['price']; ?>.00</h2>
                 <h5>Category: <?php echo $product['category']; ?></h5>
                 <h5>Kilo: <?php echo $product['quantity']; ?></h5>
-                <h5>Farmer Name: <?php echo $product['firstname'] . " " . $product['lastname']; ?></h5>
-                <h5>Address: <?php echo $product['address']; ?></h5>
-                <h5>Contact: <?php echo $product['contact']; ?></h5>
+                <h5>Farmer Name: <?php echo $product['firstname']; ?></h5>
+                <h5>Address: <?php echo $product['firstname']; ?></h5>
+                <h5>Contact: <?php echo $product['firstname']; ?></h5>
                 <p><?php echo $product['details']; ?></p>
-                <p>Date posted:<?php echo $product['dateadded']; ?></p>
+                <p>Date posted:<?php echo $product['details']; ?></p>
                 <a href="customer_dashboard.php" class="btn btn-secondary btn-back">Back to Products</a>
                 <a href="add_to_cart.php?id=<?php echo $product['prodid']; ?>" class="btn btn-primary btn-add-to-cart"><i class="fas fa-cart-plus"></i> Add to Cart</a>
             </div>
