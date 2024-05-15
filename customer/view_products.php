@@ -56,36 +56,7 @@ WHERE
             width: auto;
             margin-right: 0.5rem;
         }
-/* Product Details Styles */
-.product-details {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 40px;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-.product-item img {
-    width: 100%;
-    height: 200px; /* Adjust the height as needed */
-    object-fit: cover; /* Ensure images cover the area without distortion */
-}
 
-.product-details .product-image img {
-    max-width: 100%;
-    max-height: 400px; /* Adjust the max height as needed */
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    object-fit: contain; /* Ensure the image fits within the container while maintaining aspect ratio */
-}
-
-.product-details .product-info {
-    flex: 0 0 calc(60% - 30px);
-    max-width: calc(60% - 30px);
-}
     </style>
 </head>
 
