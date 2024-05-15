@@ -30,7 +30,7 @@ if(isset($_SESSION['user_id'])){
         /* Custom Styles */
         .product-item img {
             width: 100%;
-            height: 200px;
+            height: 250px;
             object-fit: cover;
         }
         .product-item {
