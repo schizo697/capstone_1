@@ -63,9 +63,11 @@ const addDataToHTML = () => {
             addCartToMemory();
         }
     }
+
 const addCartToMemory = () => {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
+
 const addCartToHTML = () => {
     listCartHTML.innerHTML = '';
     let totalQuantity = 0;
