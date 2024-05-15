@@ -6,13 +6,17 @@ if(isset($_SESSION['user_id'])){
 } else {
     echo 'Error: session';
 }
+
+include('includes/header.php');
+include('includes/footer.php');
+include('../conn.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>FarmFresh - Organic Farm Website Template</title>
+    <title>Farmer's Market</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -44,158 +48,77 @@ if(isset($_SESSION['user_id'])){
 </head>
 
 <body>
-    <!-- Topbar Start -->
-    <div class="container-fluid px-5 d-none d-lg-block">
-        <div class="row gx-5 py-3 align-items-center">
-            <div class="col-lg-3">
-                <div class="d-flex align-items-center justify-content-start">
-                    <i class="bi bi-phone-vibrate fs-1 text-primary me-2"></i>
-                    <h2 class="mb-0">logo</h2>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="d-flex align-items-center justify-content-center">
-                    <a href="index.html" class="navbar-brand ms-lg-5">
-                        <h1 class="m-0 display-4 text-primary"><span class="text-secondary">Farmer's </span>Market</h1>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="d-flex align-items-center justify-content-end">
-                    <a class="btn btn-primary rounded-circle" href="customer_cart.php"><i class="bi bi-cart"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Topbar End -->
-
-
-    <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg bg-primary navbar-dark shadow-sm py-3 py-lg-0 px-3 px-lg-5">
-        <a href="index.html" class="navbar-brand d-flex d-lg-none">
-            <h1 class="m-0 display-4 text-secondary"><span class="text-white">Farmer's </span>Market</h1>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </nav>
-    <!-- Navbar End -->
-
-
     <!-- body -->
-    <div class="container-fluid">
-        <div class="row">
-            <aside class="col-lg-9">
-                <div class="card">
-                    <div class="table-responsive">
-                        <table class="table table-borderless table-shopping-cart">
-                            <thead class="text-muted">
-                                <tr class="small text-uppercase">
-                                    <th scope="col">Product</th>
-                                    <th scope="col" width="120">Quantity</th>
-                                    <th scope="col" width="120">Price</th>
-                                    <th scope="col" class="text-right d-none d-md-block" width="200"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <figure class="itemside align-items-center">
-                                            <div class="aside"><img src="https://i.imgur.com/1eq5kmC.png" class="img-sm"></div>
-                                            <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Tshirt with round nect</a>
-                                                <p class="text-muted small">SIZE: L <br> Brand: MAXTRA</p>
-                                            </figcaption>
-                                        </figure>
-                                    </td>
-                                    <td> <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                        </select> </td>
-                                    <td>
-                                        <div class="price-wrap"> <var class="price">$10.00</var> <small class="text-muted"> $9.20 each </small> </div>
-                                    </td>
-                                    <td class="text-right d-none d-md-block"> <a data-original-title="Save to Wishlist" title="" href="" class="btn btn-light" data-toggle="tooltip" data-abc="true"> <i class="fa fa-heart"></i></a> <a href="" class="btn btn-light" data-abc="true"> Remove</a> </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <figure class="itemside align-items-center">
-                                            <div class="aside"><img src="https://i.imgur.com/hqiAldf.jpg" class="img-sm"></div>
-                                            <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Flower Formal T-shirt</a>
-                                                <p class="text-muted small">SIZE: L <br> Brand: ADDA </p>
-                                            </figcaption>
-                                        </figure>
-                                    </td>
-                                    <td> <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                        </select> </td>
-                                    <td>
-                                        <div class="price-wrap"> <var class="price">$15</var> <small class="text-muted"> $12 each </small> </div>
-                                    </td>
-                                    <td class="text-right d-none d-md-block"> <a data-original-title="Save to Wishlist" title="" href="" class="btn btn-light" data-toggle="tooltip" data-abc="true"> <i class="fa fa-heart"></i></a> <a href="" class="btn btn-light btn-round" data-abc="true"> Remove</a> </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <figure class="itemside align-items-center">
-                                            <div class="aside"><img src="https://i.imgur.com/UwvU0cT.jpg" class="img-sm"></div>
-                                            <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Printed White Tshirt</a>
-                                                <p class="small text-muted">SIZE:M <br> Brand: Cantabil</p>
-                                            </figcaption>
-                                        </figure>
-                                    </td>
-                                    <td> <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                        </select> </td>
-                                    <td>
-                                        <div class="price-wrap"> <var class="price">$9</var> <small class="text-muted"> $6 each</small> </div>
-                                    </td>
-                                    <td class="text-right d-none d-md-block"> <a data-original-title="Save to Wishlist" title="" href="" class="btn btn-light" data-toggle="tooltip" data-abc="true"> <i class="fa fa-heart"></i></a> <a href="" class="btn btn-light btn-round" data-abc="true"> Remove</a> </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </aside>
-            <aside class="col-lg-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <form>
-                            <div class="form-group"> <label>Have coupon?</label>
-                                <div class="input-group"> <input type="text" class="form-control coupon" name="" placeholder="Coupon code"> <span class="input-group-append"> <button class="btn btn-primary btn-apply coupon">Apply</button> </span> </div>
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="container-fluid">
+                <div class="row">
+                    <aside class="col-lg-9">
+                        <div class="card">
+                            <div class="table-responsive">
+                                <table class="table table-borderless table-shopping-cart">
+                                    <thead class="text-muted">
+                                        <tr class="small text-uppercase">
+                                            <th scope="col">Product</th>
+                                            <th scope="col" width="120">Quantity</th>
+                                            <th scope="col" width="120">Price</th>
+                                            <th scope="col" class="text-right d-none d-md-block" width="200"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <figure class="itemside align-items-center">
+                                                    <div class="aside"><img src="https://i.imgur.com/1eq5kmC.png" class="img-sm"></div>
+                                                    <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Tshirt with round nect</a>
+                                                        <p class="text-muted small">SIZE: L <br> Brand: MAXTRA</p>
+                                                    </figcaption>
+                                                </figure>
+                                            </td>
+                                            <td> 
+                                                <input class="form-control" name="quantity" value="">
+                                            </td>
+                                            <td>
+                                                <div class="price-wrap"> <var class="price">$10.00</var> <small class="text-muted"> $9.20 each </small> </div>
+                                            </td>
+                                            <td class="text-right d-none d-md-block">
+                                                <a href="" class="btn btn-light" data-abc="true"> Remove</a> 
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </aside>
+                    <aside class="col-lg-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <dl class="dlist-align">
+                                    <dt>Total price:</dt>
+                                    <dd class="text-right ml-3">$69.97</dd>
+                                </dl>
+                                <dl class="dlist-align">
+                                    <dt>Discount:</dt>
+                                    <dd class="text-right text-danger ml-3">- $10.00</dd>
+                                </dl>
+                                <dl class="dlist-align">
+                                    <dt>Total:</dt>
+                                    <dd class="text-right text-dark b ml-3"><strong>$59.97</strong></dd>
+                                </dl>
+                                <hr> 
+                                <a href="#" class="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Place Order </a> 
+                                <a href="#" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Shop More</a>
+                            </div>
+                        </div>
+                    </aside>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <dl class="dlist-align">
-                            <dt>Total price:</dt>
-                            <dd class="text-right ml-3">$69.97</dd>
-                        </dl>
-                        <dl class="dlist-align">
-                            <dt>Discount:</dt>
-                            <dd class="text-right text-danger ml-3">- $10.00</dd>
-                        </dl>
-                        <dl class="dlist-align">
-                            <dt>Total:</dt>
-                            <dd class="text-right text-dark b ml-3"><strong>$59.97</strong></dd>
-                        </dl>
-                        <hr> <a href="#" class="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Make Purchase </a> <a href="#" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Continue Shopping</a>
-                    </div>
-                </div>
-            </aside>
+            </div>
         </div>
     </div>
     <!-- body -->
     <div class="container-fluid bg-dark text-white py-4">
         <div class="container text-center">
-            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="https://freewebsitecode.com/">Your Site Name</a>. All Rights Reserved. Designed by <a class="text-secondary fw-bold" href="https://freewebsitecode.com">Free Website Code</a></p>
+            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
         </div>
     </div>
     <!-- Footer End -->

@@ -1,13 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 
 body{
-    background-color: #eeeeee;
     font-family: 'Open Sans',serif;
     font-size: 14px
-}
-
-.container-fluid{
-    margin-top:70px
 }
 
 .card-body{
@@ -99,4 +94,18 @@ a{
     width: 100%
 }
 
-.btn-light{color: #ffffff;background-color: #F44336;border-color: #f8f9fa;font-size: 12px}.btn-light:hover{color: #ffffff;background-color: #F44336;border-color: #F44336}.btn-apply{font-size: 11px}
+.btn-light{
+    color: #ffffff;
+    background-color: #F44336;
+    border-color: #f8f9fa;
+    font-size: 12px
+}
+
+.btn-light:hover{
+    color: #ffffff;
+    background-color: #F44336;
+    border-color: #F44336
+}
+.btn-apply{
+    font-size: 11px
+}
