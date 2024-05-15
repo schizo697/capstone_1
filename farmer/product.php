@@ -62,15 +62,47 @@ include('includes/navbar.php');
 </head>
 
 <body>
+    <!-- archive modal -->
+    <div class="modal fade" id="archiveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Archive</h1>
+                </div>
+                <?php 
+                if(isset($_POST['btnUpdate'])){
+                    $arhiveid = $_POST['archiveid'];
+                    $archiveproduct = "UPDATE product SET status = 'Not Available' WHERE prodid = '$arhiveid'";
+                    $archiveresult = mysqli_query($conn, $archiveproduct);
+
+                    if($archiveresult){
+                        $url = "product.php?update_success=true";
+                        echo "<script>window.location.href='$url';</script>";
+                        exit();                        
+                    }
+                }
+                
+                ?>
+                <form action="" method="POST">
+                    <div class="modal-body">
+                        <label for="archiveid">Are you sure you want to archive this product?</label>
+                        <input type="hidden" id="archiveid" name="archiveid" value="">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" name="btnUpdate" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Add Product Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Products</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <?php
                 include '../conn.php';
@@ -144,9 +176,6 @@ include('includes/navbar.php');
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Product</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <?php
                 if (isset($_POST['editproductname']) && isset($_POST['editcategory']) && isset($_POST['editprice']) && isset($_POST['editquantity']) && isset($_POST['editprodid'])) {
@@ -239,22 +268,28 @@ include('includes/navbar.php');
                             <tbody>
                                 <?php
                                     $uid = $_SESSION['user_id'];
-                                    $query = "SELECT p.prodid, p.pname, c.category, p.price, p.quantity, p.status FROM product p JOIN pcategory c ON p.catid = c.catid WHERE p.uid = $uid";
+                                    $query = "SELECT p.prodid, p.pname, c.category, p.price, p.quantity, p.status FROM product p JOIN pcategory c ON p.catid = c.catid WHERE p.uid = $uid AND p.status = 'Available'";
                                     $result = mysqli_query($conn, $query);
 
                                     if (mysqli_num_rows($result) > 0) {
                                         while ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<tr>";
-                                            echo "<td>" . $row['pname'] . "</td>";
-                                            echo "<td>" . $row['category'] . "</td>";
-                                            echo "<td>" . $row['price'] . "</td>";
-                                            echo "<td>" . $row['quantity'] . "</td>";
-                                            echo "<td>" . $row['status'] . "</td>";
-                                            echo "<td>";
-                                            echo "<button class='btn btn-primary edit-button edit-btn' data-id='" . $row['prodid'] . "' data-name='" . $row['pname'] . "' data-category='" . $row['category'] . "' data-price='" . $row['price'] . "' data-quantity='" . $row['quantity'] . "'><i class='fas fa-edit'></i> Edit</button> ";
-                                            echo "<button class='btn btn-danger archive-btn'><i class='fas fa-archive'></i> Archive</button>";
-                                            echo "</td>";
-                                            echo "</tr>";
+                                            ?> 
+                                            <tr>
+                                                <td><?php echo $row['pname']; ?></td>
+                                                <td><?php echo $row['category']; ?></td>
+                                                <td><?php echo $row['price']; ?></td>
+                                                <td><?php echo $row['quantity']; ?></td>
+                                                <td><?php echo $row['status']; ?></td>
+                                                <td>
+                                                    <button class='btn btn-primary edit-button edit-btn' data-id='<?php echo $row['prodid']; ?>' data-name='<?php echo $row['pname']; ?>' data-category='<?php echo $row['category']; ?>' data-price='<?php echo $row['price']; ?>' data-quantity='<?php echo $row['quantity']; ?>'>
+                                                        <i class='fas fa-edit'></i> Edit
+                                                    </button>
+                                                    <button class='btn btn-danger archive-btn' data-id='<?php echo $row['prodid']; ?>'>
+                                                        <i class='fas fa-archive'></i> Archive
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <?php
                                         }
                                     } else {
                                         echo "<tr><td colspan='6' class='text-center'>No products found</td></tr>";
@@ -314,6 +349,7 @@ include('includes/navbar.php');
     <!-- Footer End -->
 
     <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../lib/easing/easing.min.js"></script>
@@ -323,7 +359,17 @@ include('includes/navbar.php');
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-
+    <script>
+    // archived
+        document.addEventListener('DOMContentLoaded', function() {
+            $('#example').on('click', '.archive-btn', function() {
+                var proid = $(this).data('id');
+                
+                $('#archiveid').val(proid); // Assuming there's an input with id 'archiveid'
+                $('#archiveModal').modal('show');
+            });
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             $('#example').on('click', '.edit-button', function() {

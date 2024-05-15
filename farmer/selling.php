@@ -40,6 +40,8 @@ include('../conn.php');
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
     <style>
         <?php 
             include '../main/css/style.css'; 
@@ -127,28 +129,29 @@ include('../conn.php');
                                                     <div class="form-group row">
                                                         <label class="col-lg-2 col-form-label"> Choose Product <span style = "color:red;">*</span></label>
     													<div class="col-lg-4">
-    														<select class="custom-select" id = "product" name="product" required>
-                                                            <option selected disabled>Choose...</option>
-                                                                <?php
-                                                                    include "../conn.php";
-                                                                    $uid = $_SESSION['user_id'];
-                                                                                        
-                                                                    $name_query = "SELECT * FROM product WHERE uid = '$uid'";
-                                                                    $r = mysqli_query($conn, $name_query);
-                                                                
-                                                                    while ($row = mysqli_fetch_array($r)) {
-                                                                    ?>
-                                                                        <option value="<?php echo $row['prodid']; ?>"> <?php echo $row['pname']; ?></option>
-                                                                    <?php
-                                                                    }
-                                                                ?>
-    														</select>
+                                                            <select id="select2-search" style="width: 300px;" name="product" data-placeholder="Choose product">
+                                                                <option>
+                                                                        <?php
+                                                                            include "../conn.php";
+                                                                            $uid = $_SESSION['user_id'];
+                                                                                                
+                                                                            $name_query = "SELECT * FROM product WHERE uid = '$uid'";
+                                                                            $r = mysqli_query($conn, $name_query);
+                                                                        
+                                                                            while ($row = mysqli_fetch_array($r)) {
+                                                                            ?>
+                                                                                <option value="<?php echo $row['prodid']; ?>"> <?php echo $row['pname']; ?></option>
+                                                                            <?php
+                                                                            }
+                                                                        ?>
+                                                                </option>
+                                                            </select>
     													</div>
     												</div>
     												<div class="form-group row">  
     													<label class="col-lg-2 col-form-label"> Visibility <span style = "color:red;">*</span></label>
     													<div class="col-lg-4">
-    														<select class="custom-select" required name="visibility">
+    														<select class="form-select" required name="visibility" style="width: 300px;">
                                                                 <option selected disabled value="">Choose...</option>
                                                                 <option value="Public">Public</option>
                                                                 <option value="Private">Private</option>
@@ -158,7 +161,8 @@ include('../conn.php');
                                                     <div class="form-group row">
                                                         <label class="col-lg-2 col-form-label">Image <span style = "color:red;">*</span></label>
                                                         <div class="col-lg-5">
-                                                            <input type = "file" name="image" id="image' style="border: solid gray 1px; padding: 6px; width: 80%; border-radius: 4px"/>
+                                                            <br>
+                                                            <input type = "file" name="image" id="image' style="border: solid gray 1px; padding: 6px; width: 80%; border-radius: 4px">
                                                         </div>
                                                     </div>
                                                     <br>
@@ -285,6 +289,17 @@ include('../conn.php');
     <!-- Template Javascript -->
     <script src="../js/main.js"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script>
+        $(document).ready(function() {
+        $('#select2-search').select2();
+        });
+    </script>
+    
     <script>
         function enableDropdown() {
             $('.dropdown-toggle').on('click', function() {
