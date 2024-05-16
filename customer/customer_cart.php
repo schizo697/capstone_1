@@ -77,12 +77,12 @@ include('../conn.php');
                                         $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, listing.imgid FROM cart 
                                         JOIN product ON cart.prodid = product.prodid
                                         JOIN listing ON cart.prodid = listing.prodid
-                                        WHERE user_id = '$user_id';";
+                                        WHERE user_id = '$user_id' AND cart.quantity >= 1;";
                                         $cartresult = mysqli_query($conn, $cart);
 
                                         if($cartresult && mysqli_num_rows($cartresult) > 0) {
                                             while($cartrow = mysqli_fetch_assoc($cartresult)){
-                                                
+
                                                 $imgPath = "../img/products/".$cartrow['imgid'];
                                                 if(file_exists($imgPath)) { 
                                                     ?>

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $row = mysqli_fetch_assoc($checkresult);
             $quantity = $row['quantity'];
 
-            if($quantity > 1) {
+            if($quantity) {
                 $update = "UPDATE cart SET quantity = $quantity - 1 WHERE user_id = '$user_id' AND prodid = '$prodid'";
                 $updateres = mysqli_query($conn, $update);
 
