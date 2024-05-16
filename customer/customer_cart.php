@@ -77,7 +77,7 @@ include('../conn.php');
                                         $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, listing.imgid FROM cart 
                                         JOIN product ON cart.prodid = product.prodid
                                         JOIN listing ON cart.prodid = listing.prodid
-                                        WHERE user_id = '$user_id' AND cart.quantity >= 1";
+                                        WHERE user_id = '$user_id' AND cart.quantity > 0";
                                         $cartresult = mysqli_query($conn, $cart);
 
                                         if($cartresult && mysqli_num_rows($cartresult) > 0) {
@@ -121,7 +121,7 @@ include('../conn.php');
                                                 }
                                             }
                                         }
-                                    }
+                                    } 
                                     ?>
                                     </tbody>
                                 </table>
@@ -131,32 +131,36 @@ include('../conn.php');
                     <aside class="col-lg-3">
                         <div class="card">
                             <div class="card-body">
-                            <?php 
+                            <?php
                             $checkout = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, listing.imgid FROM cart 
                             JOIN product ON cart.prodid = product.prodid
                             JOIN listing ON cart.prodid = listing.prodid
                             WHERE user_id = '$user_id' AND cart.quantity > 0";
                             $checkoutres = mysqli_query($conn, $checkout);
 
-                            $totalPrice = 0; 
-                            if($checkoutres && mysqli_num_rows($checkoutres) > 0){
-                                ?>
+                            $totalPrice = 0;
+                            if ($checkoutres && mysqli_num_rows($checkoutres) > 0) {
+                            ?>
                                 <dl class="dlist-align">
                                     <dt>Item</dt>
-                                    <dt class="text-right ml-5">Price</dt>
+                                    <dt class="ml-auto">Quantity</dt>
+                                    <dt class="text-right ml-auto">Price</dt>
                                 </dl>
                                 <?php
-                                while($checkoutrow = mysqli_fetch_assoc($checkoutres)) {
+                                while ($checkoutrow = mysqli_fetch_assoc($checkoutres)) {
+                                    $prodid = $checkoutrow['prodid'];
+                                    $pname = $checkoutrow['pname'];
                                     $price = $checkoutrow['price'];
                                     $quantity = $checkoutrow['quantity'];
-                                    $totalItemPrice = $price * $quantity; 
+                                    $totalItemPrice = $price * $quantity;
                                     $totalPrice += $totalItemPrice;
-                                    ?>
-                                    <dl class="dlist-align">
-                                        <dt><?php echo $checkoutrow['pname']; ?></dt>
-                                        <dd class="text-right ml-4">₱<?php echo $totalItemPrice; ?></dd>
-                                    </dl>
-                                    <?php
+                                ?>
+                                <dl class="dlist-align">
+                                    <dt><?php echo $pname; ?></dt>
+                                    <dt class="ml-auto"><?php echo $quantity ?></dt>
+                                    <dd class="text-right ml-auto">₱<?php echo $totalItemPrice; ?></dd>
+                                </dl>
+                                <?php
                                 }
                                 ?>
                                 <hr>
@@ -164,10 +168,61 @@ include('../conn.php');
                                     <dt>Total:</dt>
                                     <dd class="text-right text-dark b ml-3"><strong>₱<?php echo $totalPrice; ?></strong></dd>
                                 </dl>
-                                <hr> 
-                                <a href="#" class="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Place Order </a> 
-                                <a href="customer_dashboard.php" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Shop More</a>
+                                <hr>
+
+                                <!-- Payment Method Selection -->
                                 <?php
+                                if(isset($_POST['btnOrder'])){
+                                    $prodid = $_POST['prodid'];
+                                    $pname = $_POST['pname'];
+                                    $quantity = $_POST['quantity'];
+                                    $priceperprod = $_POST['priceperprod'];
+                                    $total_price = $_POST['total_price'];
+                                    $payment_method = $_POST['payment_method'];
+
+                                    $order = "INSERT INTO orders (prodid, user_id, pname, quantity, price_per_prod, total_price, payment_method) VALUES ('$prodid', '$user_id', '$pname', '$quantity', '$priceperprod', '$total_price', '$payment_method')";
+                                    $orderresult = mysqli_query($conn, $order);
+
+                                    if ($orderresult) {
+
+                                        $update = "UPDATE cart SET quantity = 0 WHERE user_id = '$user_id' AND prodid = '$prodid'";
+                                        $updateres = mysqli_query($conn, $update);
+
+                                        if($updateres){
+                                            $url = "customer_cart.php?success=true";
+                                            echo "<script>window.location.href='" . $url . "'</script>";
+                                            exit();
+                                        }else {
+                                            $url = "customer_cart.php?error=true";
+                                            echo "<script>window.location.href='" . $url . "'</script>";
+                                            exit();
+                                        }
+                                    } else {
+                                        $url = "customer_cart.php?error=true";
+                                        echo "<script>window.location.href='" . $url . "'</script>";
+                                        exit();
+                                    }                                    
+                                }
+                                ?>
+                                <form action="" method="POST">
+                                    <div>
+                                        <input type="radio" id="cod" name="payment_method" value="cod" checked>
+                                        <label for="cod">Cash on Delivery (COD)</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" id="gcash" name="payment_method" value="gcash">
+                                        <label for="gcash">GCash</label>
+                                    </div>
+                                    <input type="hidden" name="prodid" value="<?php echo $prodid; ?>">
+                                    <input type="hidden" name="pname" value="<?php echo $pname; ?>">
+                                    <input type="hidden" name="price" value="<?php echo $totalPpricerice; ?>">
+                                    <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
+                                    <input type="hidden" name="priceperprod" value="<?php echo $totalItemPrice; ?>">
+                                    <input type="hidden" name="total_price" value="<?php echo $totalPrice; ?>">
+                                    <button type="submit" name="btnOrder" class="btn btn-out btn-primary btn-square btn-main" data-abc="true">Place Order</button>
+                                    <a href="customer_dashboard.php" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Shop More</a>
+                                </form>
+                            <?php
                             }
                             ?>
                             </div>
@@ -184,12 +239,31 @@ include('../conn.php');
         </div>
     </div>
     <!-- Footer End -->
+<script>
+    function showAlert(type, message) {
+        Swal.fire({
+            icon: type,
+            text: message,
+        });
+    }
 
+    function checkURLParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success') && urlParams.get('success') === 'true') {
+            showAlert('success', 'Checkout successfully!');
+        } else if (urlParams.has('error') && urlParams.get('error') === 'true') {
+            showAlert('warning', 'An error occurred!');
+        } 
+    }
+
+    window.onload = checkURLParams;
+</script>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
 
     <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>

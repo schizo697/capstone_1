@@ -68,7 +68,7 @@ if(isset($_SESSION['user_id'])){
         </div>
         <div class="col-lg-6">
             <div class="d-flex align-items-center justify-content-center">
-                <a href="index.html" class="navbar-brand ms-lg-5">
+                <a href="customer_dashboard.php" class="navbar-brand ms-lg-5">
                     <h1 class="m-0 display-4 text-primary"><span class="text-secondary">Farmer's </span>Market</h1>
                 </a>
             </div>
@@ -86,7 +86,7 @@ if(isset($_SESSION['user_id'])){
 
 <!-- Navbar Start -->
 <nav class="navbar navbar-expand-lg bg-primary navbar-dark shadow-sm py-3 py-lg-0 px-3 px-lg-5">
-    <a href="index.html" class="navbar-brand d-flex d-lg-none">
+    <a href="customer_dashboard.php" class="navbar-brand d-flex d-lg-none">
         <h1 class="m-0 display-4 text-secondary"><span class="text-white">Farmer's </span>Market</h1>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
