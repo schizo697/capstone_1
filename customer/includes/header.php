@@ -24,9 +24,8 @@ if(isset($_SESSION['user_id'])){
             </div>
             <div class="col-lg-3">
                 <div class="d-flex align-items-center justify-content-end">
-                <a class="btn btn-primary rounded-circle" href="customer_dashboard.php"><i class="bi bi-user"></i></a>
-                    <a class="btn btn-primary rounded-circle" href="customer_cart.php"><i class="bi bi-cart"></i></a>
-                    <a class="btn btn-primary btn-square rounded-circle me-2" href="customer_profile.php"><i class="fab fa-twitter">Profile</i></a>
+                    <a class="btn btn-primary rounded-circle" href="customer_cart.php" style="margin-right: 10px;"><i class="bi bi-cart"></i></a>
+                    <a class="btn btn-primary rounded-circle" href="customer_profile.php"><i class="bi bi-person"></i></a>
                 </div>
             </div>
         </div>

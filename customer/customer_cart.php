@@ -29,6 +29,10 @@ include('../conn.php');
 
     <!-- sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <style>
         <?php 
@@ -64,25 +68,52 @@ include('../conn.php');
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <figure class="itemside align-items-center">
-                                                    <div class="aside"><img src="https://i.imgur.com/1eq5kmC.png" class="img-sm"></div>
-                                                    <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Tshirt with round nect</a>
-                                                        <p class="text-muted small">SIZE: L <br> Brand: MAXTRA</p>
-                                                    </figcaption>
-                                                </figure>
-                                            </td>
-                                            <td> 
-                                                <input class="form-control" name="quantity" value="">
-                                            </td>
-                                            <td>
-                                                <div class="price-wrap"> <var class="price">$10.00</var> <small class="text-muted"> $9.20 each </small> </div>
-                                            </td>
-                                            <td class="text-right d-none d-md-block">
-                                                <a href="" class="btn btn-light" data-abc="true"> Remove</a> 
-                                            </td>
-                                        </tr>
+                                    <?php
+                                    if(isset($_SESSION['user_id'])){
+                                        $user_id = $_SESSION['user_id'];
+                                        $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, listing.imgid FROM cart 
+                                        JOIN product ON cart.prodid = product.prodid
+                                        JOIN listing ON cart.prodid = listing.prodid
+                                        WHERE user_id = '$user_id';";
+                                        $cartresult = mysqli_query($conn, $cart);
+
+                                        if($cartresult && mysqli_num_rows($cartresult) > 0) {
+                                            while($cartrow = mysqli_fetch_assoc($cartresult)){
+                                                
+                                                $imgPath = "../img/products/".$cartrow['imgid'];
+                                                if(file_exists($imgPath)) { 
+                                                    ?>
+                                                    <tr>
+                                                        <td>
+                                                            <figure class="itemside align-items-center">
+                                                                <div class="aside"><img src="<?php echo $imgPath ?>" class="img-sm"></div>
+                                                                <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
+                                                                    <p class="text-muted small">SIZE: L <br> Brand: MAXTRA</p>
+                                                                </figcaption>
+                                                            </figure>
+                                                        </td>
+                                                        <td> 
+                                                            <div class="input-group">
+                                                                <button class="btn btn-outline-secondary quantity-minus" type="button" data-prodid="<?php echo $cartrow['prodid']; ?>" data-pname="<?php echo $cartrow['pname']; ?>">-</button>
+                                                                <label class="form-control quantity-label" name="quantity"><?php echo $cartrow['quantity']; ?></label>
+                                                                <button class="btn btn-outline-secondary quantity-add" type="button" data-prodid="<?php echo $cartrow['prodid']; ?>" data-pname="<?php echo $cartrow['pname']; ?>">+</button>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="price-wrap"> <var class="price">₱ <?php echo $cartrow['price']?></var> <small class="text-muted">Per kilo</small> </div>
+                                                        </td>
+                                                        <td class="text-right d-none d-md-block">
+                                                            <a href="" class="btn btn-light" data-abc="true"> Remove</a> 
+                                                        </td>
+                                                    </tr>
+                                                    <?php
+                                                } else {
+                                                    echo "Image file does not exist: ".$imgPath;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -120,6 +151,68 @@ include('../conn.php');
         </div>
     </div>
     <!-- Footer End -->
+
+    <script>
+        $(document).ready(function() {
+            $(".quantity-minus").click(function(event) {
+                event.preventDefault();
+                var prodid = $(this).data('prodid');
+                var pname = $(this).data('pname');
+                var $quantityInput = $(this).siblings('.quantity-label');
+
+                $.ajax({
+                    url: 'quantity_minus.php',
+                    type: 'POST',
+                    data: {
+                        prodid: prodid,
+                        pname: pname,
+                    },
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (data.newQuantity !== undefined) {
+                            $quantityInput.text(data.newQuantity);
+                        } else {
+                            alert(data.error || "An error occurred.");
+                        }
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        alert("An error occurred.");
+                    }
+                });
+            });
+
+            $(".quantity-add").click(function(event) {
+                event.preventDefault();
+                var prodid = $(this).data('prodid');
+                var pname = $(this).data('pname');
+                var $quantityInput = $(this).siblings('.quantity-label');
+
+                $.ajax({
+                    url: 'quantity_add.php',
+                    type: 'POST',
+                    data: {
+                        prodid: prodid,
+                        pname: pname,
+                    },
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (data.newQuantity !== undefined) {
+                            $quantityInput.text(data.newQuantity);
+                        } else {
+                            alert(data.error || "An error occurred.");
+                        }
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        alert("An error occurred.");
+                    }
+                });
+            });
+        });
+    </script>
+
+
 
 
     <!-- Back to Top -->
