@@ -3,12 +3,13 @@ session_start();
 include '../conn.php'; // Include your database connection file
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $prodid = $_POST['prodid'];
     $pname = $_POST['pname'];
 
     if(isset($_SESSION['user_id'])){
         $user_id = $_SESSION['user_id'];
         
-        $check = "SELECT * FROM cart WHERE user_id = '$user_id' AND pname = '$pname'";
+        $check = "SELECT * FROM cart WHERE user_id = '$user_id' AND prodid = '$prodid'";
         $checkresult = mysqli_query($conn, $check);
 
         if($checkresult && mysqli_num_rows($checkresult) > 0){
@@ -17,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $quantity = $row['quantity'];
             
             // Update quantity
-            $update = "UPDATE cart SET quantity = $quantity + 1 WHERE user_id = '$user_id' AND pname = '$pname'";
+            $update = "UPDATE cart SET quantity = $quantity + 1 WHERE user_id = '$user_id' AND prodid = '$prodid'";
             $updateResult = mysqli_query($conn, $update);
 
             if($updateResult){
@@ -26,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo 'Error updating quantity: ' . mysqli_error($conn);
             }
         } else {
-            $sql = "INSERT INTO cart (user_id, pname, quantity) VALUES ('$user_id', '$pname', 1)";
+            $sql = "INSERT INTO cart (prodid, user_id, pname, quantity) VALUES ('$prodid', '$user_id', '$pname', 1)";
         
             if (mysqli_query($conn, $sql)) {
                 echo "Product added to cart successfully!";

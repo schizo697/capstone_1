@@ -1,13 +1,6 @@
 <?php 
-session_start();
 include '../conn.php';
 include 'includes/header.php';
-
-if(isset($_SESSION['user_id'])){
-    $user_id = $_SESSION['user_id'];
-} else {
-    
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -113,27 +106,27 @@ if(isset($_SESSION['user_id'])){
             WHERE status = 'Available'";
             $productresult = mysqli_query($conn, $sqlproduct);
 
-            if($productresult && mysqli_num_rows($productresult)){
-                while($productrow = mysqli_fetch_assoc($productresult)){
-                    ?>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-item position-relative bg-white d-flex flex-column text-center">
-                        <img class="img-fluid mb-4" src="<?php echo "../img/products/".$productrow['imgid']; ?>" alt="<?php echo $productrow['pname']; ?>">
-                        <h6 class="mb-3"><?php echo $productrow['pname'];?></h6>
-                        <h5 class="text-primary mb-0">&#8369; <?php echo $productrow['price'];?>.00</h5>
-                        <h6 class="mb-3">Quantity: <?php echo $productrow['quantity'];?> Kilo</h6>
-                        <div class="btn-action d-flex justify-content-center">
-                        <button class="btn btn-primary py-2 px-3 add-to-cart" type="button" data-pname="<?php echo $productrow['pname'] ?>">
-                                    <i class="bi bi-cart text-white"></i>
-                                </button>
-                                <a class="btn bg-secondary py-2 px-3" href="view_products.php?pid=<?php echo $productrow['prodid']; ?>"><i class="bi bi-eye text-white"></i></a>
-
-                        </div>
+            if ($productresult && mysqli_num_rows($productresult)) {
+                while ($productrow = mysqli_fetch_assoc($productresult)) {
+            ?>
+            <div class="col-lg-4 col-md-6">
+                <div class="product-item position-relative bg-white d-flex flex-column text-center">
+                    <input type="hidden" name="prodid" value="<?php echo $productrow['prodid'] ?>">
+                    <img class="img-fluid mb-4" src="<?php echo "../img/products/".$productrow['imgid']; ?>" alt="<?php echo $productrow['pname']; ?>">
+                    <h6 class="mb-3"><?php echo $productrow['pname'];?></h6>
+                    <h5 class="text-primary mb-0">&#8369; <?php echo $productrow['price'];?>.00</h5>
+                    <h6 class="mb-3">Quantity: <?php echo $productrow['quantity'];?> Kilo</h6>
+                    <div class="btn-action d-flex justify-content-center">
+                        <button class="btn btn-primary py-2 px-3 add-to-cart" type="button" data-prodid="<?php echo $productrow['prodid']; ?>" data-pname="<?php echo $productrow['pname'] ?>">
+                            <i class="bi bi-cart text-white"></i>
+                        </button>
+                        <a class="btn bg-secondary py-2 px-3" href="view_products.php?pid=<?php echo $productrow['prodid']; ?>"><i class="bi bi-eye text-white"></i></a>
                     </div>
                 </div>
-                <?php 
-            } 
-        }
+            </div>
+            <?php 
+                } 
+            }
             ?>
             </div>
         </div>
@@ -153,12 +146,14 @@ if(isset($_SESSION['user_id'])){
     <script>
     $(document).ready(function(){
         $('.add-to-cart').click(function(){
+            var prodid = $(this).data('prodid');
             var pname = $(this).data('pname');
 
             $.ajax({
-                url: 'add_to_cart.php', // Make sure this path is correct
+                url: 'add_to_cart.php',
                 type: 'POST',
                 data: {
+                    prodid: prodid, // Include prodid here
                     pname: pname
                 },
                 success: function(response){

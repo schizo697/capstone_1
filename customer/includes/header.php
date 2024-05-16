@@ -1,3 +1,12 @@
+<?php
+session_start();
+include '../conn.php';
+if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'];
+} else {
+    echo 'Error: session';
+}
+?>
 <!-- Topbar Start -->
 <div class="container-fluid px-5 d-none d-lg-block">
         <div class="row gx-5 py-3 align-items-center">

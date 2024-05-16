@@ -1,12 +1,4 @@
 <?php 
-session_start();
-include '../conn.php';
-if(isset($_SESSION['user_id'])){
-    $user_id = $_SESSION['user_id'];
-} else {
-    echo 'Error: session';
-}
-
 include('includes/header.php');
 include('includes/footer.php');
 include('../conn.php');
