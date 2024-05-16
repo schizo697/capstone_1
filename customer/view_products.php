@@ -2,11 +2,12 @@
 include "../conn.php";
 if (isset($_GET['pid'])) {
     $prodid = intval($_GET['pid']);
-    $stmt = $conn->prepare("SELECT product.*, pcategory.category, listing.imgid, listing.details, user_info.firstname, user_info.lastname, user_info.contact, user_info.address 
+    $stmt = $conn->prepare("SELECT product.*, pcategory.category, listing.imgid, listing.details, listing.dateposted, user_info.contact, user_info.address, CONCAT(firstname,' ',lastname) AS fullname 
     FROM product 
     JOIN pcategory ON pcategory.catid = product.catid 
-    JOIN listing ON listing.prodid = product.prodid 
-    JOIN user_info ON user_info.info_id = product.prodid 
+    JOIN listing ON listing.prodid = product.prodid
+    JOIN user_account ON user_account.user_id = product.uid
+    JOIN user_info ON user_info.info_id = user_account.info_id 
     WHERE product.prodid = ?");
     
     $stmt->bind_param("i", $prodid);
@@ -138,12 +139,12 @@ if (isset($_GET['pid'])) {
                 <h1><?php echo $product['pname']; ?></h1>
                 <h2>&#8369; <?php echo $product['price']; ?>.00</h2>
                 <h5>Category: <?php echo $product['category']; ?></h5>
-                <h5>Kilo: <?php echo $product['quantity']; ?></h5>
-                <h5>Farmer Name: <?php echo $product['firstname']; ?></h5>
-                <h5>Address: <?php echo $product['firstname']; ?></h5>
-                <h5>Contact: <?php echo $product['firstname']; ?></h5>
+                <h5>Available: <?php echo $product['quantity']; ?> kilo</h5>
                 <p><?php echo $product['details']; ?></p>
-                <p>Date posted:<?php echo $product['details']; ?></p>
+                <p>Farmer Name: <?php echo $product['fullname']; ?></p>
+                <p>Address: <?php echo $product['address']; ?></p>
+                <p>Contact: <?php echo $product['contact']; ?></p>
+                <p>Date posted: <?php echo $product['dateposted']; ?></p>
                 <a href="customer_dashboard.php" class="btn btn-secondary btn-back">Back to Products</a>
                 <a href="add_to_cart.php?id=<?php echo $product['prodid']; ?>" class="btn btn-primary btn-add-to-cart"><i class="fas fa-cart-plus"></i> Add to Cart</a>
             </div>
