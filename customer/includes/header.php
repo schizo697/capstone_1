@@ -75,8 +75,9 @@ if(isset($_SESSION['user_id'])){
         </div>
         <div class="col-lg-3">
             <div class="d-flex align-items-center justify-content-end">
+            <a class="btn btn-primary btn-circle" href="customer_cart.php"><i class="fas fa-shopping-cart"></i></a>
                 <a class="btn btn-primary btn-circle" href="customer_profile.php"><i class="fas fa-user"></i></a>
-                <a class="btn btn-primary btn-circle" href="customer_cart.php"><i class="fas fa-shopping-cart"></i></a>
+                
             </div>
         </div>
     </div>
