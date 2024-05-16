@@ -37,15 +37,18 @@ include('../conn.php');
             include 'css/customer_cart.css';
         ?>
 
-        .logo {
-            max-height: 120px;
-            width: auto;
-            margin-right: 0.5rem;
-        }
+.bg-dark {
+    background-color: #263A4F !important;
+}
     </style>
 </head>
 
 <body>
+<div class="container-fluid bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0"><a class="text-secondary fw-bold" ></a></p>
+        </div>
+    </div>
     <!-- body -->
     <div class="container-fluid py-5">
         <div class="container">

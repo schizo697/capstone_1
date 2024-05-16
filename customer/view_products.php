@@ -17,6 +17,7 @@ if (isset($_GET['pid'])) {
 }
 
 include 'includes/header.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,15 +48,20 @@ include 'includes/header.php';
     <link href="../main/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-          .logo {
+        .logo {
             max-height: 120px;
             width: auto;
             margin-right: 0.5rem;
         }
 
+        .product-details {
+            padding: 30px 0;
+        }
+
         .product-details img {
             max-width: 100%;
-            height: 100%;
+            height: auto;
+            border-radius: 10px;
         }
 
         .product-details .row {
@@ -71,6 +77,22 @@ include 'includes/header.php';
             padding: 20px;
             background-color: #f9f9f9;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-details h1, 
+        .product-details h2, 
+        .product-details h5, 
+        .product-details p {
+            margin-bottom: 15px;
+        }
+
+        .product-details h2 {
+            color: #28a745;
+        }
+
+        .btn-back, .btn-add-to-cart {
+            margin: 5px;
         }
 
         .footer {
@@ -78,14 +100,24 @@ include 'includes/header.php';
             color: #ffffff;
             padding: 20px 0;
         }
-    </style>
 
+        .footer a {
+            color: #f8f9fa;
+        }
+        .bg-dark {
+    background-color: #263A4F !important;
+}
     </style>
 </head>
 
 <body>
-       <!-- Product Details Start -->
-       <div class="container product-details">
+<div class="container-fluid bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0"><a class="text-secondary fw-bold" ></a></p>
+        </div>
+    </div>
+    <!-- Product Details Start -->
+    <div class="container product-details">
         <div class="row">
             <div class="col-lg-6">
                 <img src="<?php echo "../img/products/" . $product['imgid']; ?>" alt="<?php echo $product['pname']; ?>">
@@ -107,8 +139,7 @@ include 'includes/header.php';
     </div>
     <!-- Product Details End -->
 
-    <br><br><br><br><br>
-        <!-- Footer -->
+    <!-- Footer -->
     <div class="container-fluid bg-dark text-white py-4">
         <div class="container text-center">
             <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>

@@ -37,6 +37,8 @@ include('includes/navbar.php');
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         <?php 
@@ -347,15 +349,105 @@ include('includes/navbar.php');
         </div>
     </div>
     <!-- Footer End -->
+    
+    <script>
+    // Wait for the DOM to be ready
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the button element
+        var openModalBtn = document.getElementById('openModalBtn');
+
+        // Get the modal element
+        var modal = document.querySelector('.modal');
+
+        // When the button is clicked, show the modal
+        openModalBtn.addEventListener('click', function() {
+            modal.style.display = 'block';
+        });
+
+        // When the close button inside the modal is clicked, hide the modal
+        modal.querySelector('.close').addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+    </script>
 
     <!-- JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../lib/easing/easing.min.js"></script>
     <script src="../lib/waypoints/waypoints.min.js"></script>
     <script src="../lib/counterup/counterup.min.js"></script>
     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="../js/main.js"></script>
+
+    <script>
+    function enableDropdown() {
+        $('.dropdown-toggle').on('click', function() {
+            $(this).siblings('.dropdown-menu').toggleClass('show');
+        });
+
+        $(document).on('click', function(e) {
+            if (!$('.dropdown-toggle').is(e.target) && $('.dropdown-toggle').has(e.target).length === 0 &&
+                $('.show').has(e.target).length === 0) {
+                $('.dropdown-menu').removeClass('show');
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        enableDropdown();
+    });
+    </script>
+
+    <script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    });
+
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    })
+    </script>
+
+    <script>
+    // Restore product functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.restore-button').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const prodId = this.getAttribute('data-id');
+
+                if (confirm('Are you sure you want to restore this product?')) {
+                    fetch(`restore_product.php?prodid=${prodId}`, {
+                        method: 'GET'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Product restored successfully!');
+                            location.reload();
+                        } else {
+                            alert('Error restoring product.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error restoring product.');
+                    });
+                }
+            });
+        });
+    });
+    </script>
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
@@ -409,6 +501,25 @@ include('includes/navbar.php');
         }
 
         window.onload = checkExistParam;
+    </script>
+    <script>
+    function showModal(){
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Product Added Successfully',
+            showConfirmButton: false
+        });
+    }
+
+    function checkExistParam() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success') && urlParams.get('success') === 'true') {
+            showModal();
+        }
+    }
+
+    window.onload = checkExistParam; 
     </script>
 </body>
 </html>
