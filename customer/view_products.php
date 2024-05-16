@@ -15,6 +15,8 @@ if (isset($_GET['pid'])) {
     $result = $stmt->get_result();
     $product = $result->fetch_assoc();
 }
+
+include 'includes/header.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -82,53 +84,6 @@ if (isset($_GET['pid'])) {
 </head>
 
 <body>
-    <!-- Topbar Start -->
-    <div class="container-fluid px-5 d-none d-lg-block">
-        <div class="row gx-5 py-3 align-items-center">
-            <div class="col-lg-3">
-                <div class="d-flex align-items-center justify-content-start">
-                    <img src="assets/dist/img/logo.png" alt="Your Logo" class="logo">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="d-flex align-items-center justify-content-center">
-                    <a href="index.html" class="navbar-brand ms-lg-5">
-                        <h1 class="m-0 display-4 text-primary"><span class="text-secondary">Farmer's </span>Market</h1>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="d-flex align-items-center justify-content-end">
-                    <a href="cart.php" class="btn btn-primary btn-square rounded-circle me-2"><i class="fas fa-cart-plus"></i></a>
-                </div>
-            </div>
-            <div class="container-fluid bg-dark text-white py-4">
-        <div class="container text-center">
-            <p class="mb-0"> <a class="text-secondary fw-bold" href="#"></a></p>
-        </div>
-    </div>
-        </div>
-    </div>
-    <!-- Topbar End -->
-
-    <!-- Navbar Start -->
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg bg-primary navbar-dark shadow-sm py-3 py-lg-0 px-3 px-lg-5 justify-content-center">
-            <a href="index.html" class="navbar-brand d-flex d-lg-none">
-                <h1 class="m-0 display-4 text-secondary"><span class="text-white">Farmer's </span>Market</h1>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav ms-auto py-0">
-                    <!-- Links removed -->
-                </div>
-            </div>
-        </nav>
-    </div>
-    <!-- Navbar End -->
-
        <!-- Product Details Start -->
        <div class="container product-details">
         <div class="row">
