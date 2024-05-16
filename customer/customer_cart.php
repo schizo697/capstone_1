@@ -77,7 +77,7 @@ include('../conn.php');
                                         $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, listing.imgid FROM cart 
                                         JOIN product ON cart.prodid = product.prodid
                                         JOIN listing ON cart.prodid = listing.prodid
-                                        WHERE user_id = '$user_id' AND cart.quantity >= 1;";
+                                        WHERE user_id = '$user_id' AND cart.quantity >= 1";
                                         $cartresult = mysqli_query($conn, $cart);
 
                                         if($cartresult && mysqli_num_rows($cartresult) > 0) {
@@ -97,16 +97,22 @@ include('../conn.php');
                                                         </td>
                                                         <td> 
                                                             <div class="input-group">
-                                                                <button class="btn btn-outline-secondary quantity-minus" type="button" data-prodid="<?php echo $cartrow['prodid']; ?>" data-pname="<?php echo $cartrow['pname']; ?>">-</button>
+                                                                <a href="quantity_minus.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
+                                                                    <button class="btn btn-outline-secondary quantity-minus" type="button">-</button>
+                                                                </a>
                                                                 <label class="form-control quantity-label" name="quantity"><?php echo $cartrow['quantity']; ?></label>
-                                                                <button class="btn btn-outline-secondary quantity-add" type="button" data-prodid="<?php echo $cartrow['prodid']; ?>" data-pname="<?php echo $cartrow['pname']; ?>">+</button>
+                                                                <a href="quantity_add.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
+                                                                    <button class="btn btn-outline-secondary quantity-minus" type="button">+</button>
+                                                                </a>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="price-wrap"> <var class="price">₱ <?php echo $cartrow['price']?></var> <small class="text-muted">Per kilo</small> </div>
                                                         </td>
                                                         <td class="text-right d-none d-md-block">
-                                                            <a href="" class="btn btn-light" data-abc="true"> Remove</a> 
+                                                            <a href="cart_remove.php?prodid=<?php echo $cartrow['prodid'] ?>">
+                                                                <button class="btn btn-outline-danger quantity-minus" type="button">Remove</button>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                     <?php
@@ -125,21 +131,45 @@ include('../conn.php');
                     <aside class="col-lg-3">
                         <div class="card">
                             <div class="card-body">
+                            <?php 
+                            $checkout = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, listing.imgid FROM cart 
+                            JOIN product ON cart.prodid = product.prodid
+                            JOIN listing ON cart.prodid = listing.prodid
+                            WHERE user_id = '$user_id' AND cart.quantity > 0";
+                            $checkoutres = mysqli_query($conn, $checkout);
+
+                            $totalPrice = 0; 
+                            if($checkoutres && mysqli_num_rows($checkoutres) > 0){
+                                ?>
                                 <dl class="dlist-align">
-                                    <dt>Total price:</dt>
-                                    <dd class="text-right ml-3">$69.97</dd>
+                                    <dt>Item</dt>
+                                    <dt class="text-right ml-5">Price</dt>
                                 </dl>
-                                <dl class="dlist-align">
-                                    <dt>Discount:</dt>
-                                    <dd class="text-right text-danger ml-3">- $10.00</dd>
-                                </dl>
+                                <?php
+                                while($checkoutrow = mysqli_fetch_assoc($checkoutres)) {
+                                    $price = $checkoutrow['price'];
+                                    $quantity = $checkoutrow['quantity'];
+                                    $totalItemPrice = $price * $quantity; 
+                                    $totalPrice += $totalItemPrice;
+                                    ?>
+                                    <dl class="dlist-align">
+                                        <dt><?php echo $checkoutrow['pname']; ?></dt>
+                                        <dd class="text-right ml-4">₱<?php echo $totalItemPrice; ?></dd>
+                                    </dl>
+                                    <?php
+                                }
+                                ?>
+                                <hr>
                                 <dl class="dlist-align">
                                     <dt>Total:</dt>
-                                    <dd class="text-right text-dark b ml-3"><strong>$59.97</strong></dd>
+                                    <dd class="text-right text-dark b ml-3"><strong>₱<?php echo $totalPrice; ?></strong></dd>
                                 </dl>
                                 <hr> 
                                 <a href="#" class="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Place Order </a> 
-                                <a href="#" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Shop More</a>
+                                <a href="customer_dashboard.php" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Shop More</a>
+                                <?php
+                            }
+                            ?>
                             </div>
                         </div>
                     </aside>
@@ -154,68 +184,6 @@ include('../conn.php');
         </div>
     </div>
     <!-- Footer End -->
-
-    <script>
-        $(document).ready(function() {
-            $(".quantity-minus").click(function(event) {
-                event.preventDefault();
-                var prodid = $(this).data('prodid');
-                var pname = $(this).data('pname');
-                var $quantityInput = $(this).siblings('.quantity-label');
-
-                $.ajax({
-                    url: 'quantity_minus.php',
-                    type: 'POST',
-                    data: {
-                        prodid: prodid,
-                        pname: pname,
-                    },
-                    success: function(response) {
-                        var data = JSON.parse(response);
-                        if (data.newQuantity !== undefined) {
-                            $quantityInput.text(data.newQuantity);
-                        } else {
-                            alert(data.error || "An error occurred.");
-                        }
-                    },
-                    error: function(error) {
-                        console.error(error);
-                        alert("An error occurred.");
-                    }
-                });
-            });
-
-            $(".quantity-add").click(function(event) {
-                event.preventDefault();
-                var prodid = $(this).data('prodid');
-                var pname = $(this).data('pname');
-                var $quantityInput = $(this).siblings('.quantity-label');
-
-                $.ajax({
-                    url: 'quantity_add.php',
-                    type: 'POST',
-                    data: {
-                        prodid: prodid,
-                        pname: pname,
-                    },
-                    success: function(response) {
-                        var data = JSON.parse(response);
-                        if (data.newQuantity !== undefined) {
-                            $quantityInput.text(data.newQuantity);
-                        } else {
-                            alert(data.error || "An error occurred.");
-                        }
-                    },
-                    error: function(error) {
-                        console.error(error);
-                        alert("An error occurred.");
-                    }
-                });
-            });
-        });
-    </script>
-
-
 
 
     <!-- Back to Top -->
