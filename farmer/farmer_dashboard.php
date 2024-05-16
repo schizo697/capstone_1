@@ -119,6 +119,9 @@ include('includes/navbar.php');
             enableDropdown();
         });
     </script>
+    <?php
+include('includes/footer.php');
+?>
 </body>
 
 </html>

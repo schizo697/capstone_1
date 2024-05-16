@@ -13,17 +13,19 @@ include('../conn.php');
             include '../main/css/bootstrap.min.css';
         ?>
 
-        .logo {
-            max-height: 120px;
-            width: auto;
-            margin-right: 0.5rem;
-        }
+.bg-green {
+    background-color: #34AD54!important;
+}
     </style>
 </head>
 
 <body>
 
-
+<div class="container-fluid bg-green text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0"><a class="text-secondary fw-bold" ></a></p>
+        </div>
+    </div>
     <div class="container-xl px-4 mt-4">
     <!-- Account page navigation-->
     <nav class="nav nav-borders">

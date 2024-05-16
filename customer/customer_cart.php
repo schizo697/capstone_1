@@ -41,14 +41,14 @@ include('../conn.php');
             include 'css/customer_cart.css';
         ?>
 
-.bg-dark {
-    background-color: #263A4F !important;
+.bg-green {
+    background-color: #34AD54!important;
 }
     </style>
 </head>
 
 <body>
-<div class="container-fluid bg-dark text-white py-4">
+<div class="container-fluid bg-green text-white py-4">
         <div class="container text-center">
             <p class="mb-0"><a class="text-secondary fw-bold" ></a></p>
         </div>

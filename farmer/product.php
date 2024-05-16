@@ -307,7 +307,16 @@ include('includes/navbar.php');
     <!-- Table End -->
 
     <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-light mt-5 py-5">
+    <div class="container-fluid bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+
+    <!-- <div class="container-fluid bg-dark text-light mt-5 py-5">
         <div class="container">
             <div class="row gx-5">
                 <div class="col-lg-4 col-md-6 mb-5">
@@ -347,9 +356,11 @@ include('includes/navbar.php');
         <div class="container border-top border-light pt-5">
             <p class="m-0 text-center text-light">&copy; <a href="#">Farmer's Market</a>. All Rights Reserved.</p>
         </div>
-    </div>
+    </div> -->
     <!-- Footer End -->
-    
+    <?php
+include('includes/footer.php');
+?>
     <script>
     // Wait for the DOM to be ready
     document.addEventListener("DOMContentLoaded", function() {
@@ -524,6 +535,4 @@ include('includes/navbar.php');
 </body>
 </html>
 
-<?php
-include('includes/footer.php');
-?>
+
