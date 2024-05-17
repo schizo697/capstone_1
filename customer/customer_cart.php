@@ -74,7 +74,7 @@ include('../conn.php');
                                     <?php
                                     if(isset($_SESSION['user_id'])){
                                         $user_id = $_SESSION['user_id'];
-                                        $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, listing.imgid FROM cart 
+                                        $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, product.status, listing.imgid FROM cart 
                                         JOIN product ON cart.prodid = product.prodid
                                         JOIN listing ON cart.prodid = listing.prodid
                                         WHERE user_id = '$user_id' AND cart.quantity > 0";
@@ -89,13 +89,17 @@ include('../conn.php');
                                                     <tr>
                                                         <td>
                                                             <figure class="itemside align-items-center">
-                                                                <div class="aside"><img src="<?php echo $imgPath ?>" class="img-sm"></div>
-                                                                <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
-                                                                    <p class="text-muted small">SIZE: L <br> Brand: MAXTRA</p>
+                                                                <div class="aside">
+                                                                    <input type="checkbox" name="select_item[]" value="<?php echo $cartrow['prodid']; ?>" class="mr-2" onclick="updateSelectedItems(this)">
+                                                                    <img src="<?php echo $imgPath ?>" class="img-sm">
+                                                                </div>
+                                                                <figcaption class="info">
+                                                                    <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
+                                                                    <p class="text-muted small"><?php echo $cartrow['status'] ?></p>
                                                                 </figcaption>
                                                             </figure>
                                                         </td>
-                                                        <td> 
+                                                        <td>
                                                             <div class="input-group">
                                                                 <a href="quantity_minus.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
                                                                     <button class="btn btn-outline-secondary quantity-minus" type="button">-</button>
@@ -107,7 +111,10 @@ include('../conn.php');
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <div class="price-wrap"> <var class="price">₱ <?php echo $cartrow['price']?></var> <small class="text-muted">Per kilo</small> </div>
+                                                            <div class="price-wrap">
+                                                                <var class="price">₱ <?php echo $cartrow['price']?></var>
+                                                                <small class="text-muted">Per kilo</small>
+                                                            </div>
                                                         </td>
                                                         <td class="text-right d-none d-md-block">
                                                             <a href="cart_remove.php?prodid=<?php echo $cartrow['prodid'] ?>">
@@ -173,37 +180,43 @@ include('../conn.php');
                                 <!-- Payment Method Selection -->
                                 <?php
                                 if(isset($_POST['btnOrder'])){
-                                    $prodid = $_POST['prodid'];
+                                    $selected_prodids = explode(',', $_POST['selected_prodid']);
                                     $pname = $_POST['pname'];
                                     $quantity = $_POST['quantity'];
                                     $priceperprod = $_POST['priceperprod'];
                                     $total_price = $_POST['total_price'];
                                     $payment_method = $_POST['payment_method'];
 
-                                    $order = "INSERT INTO orders (prodid, user_id, pname, quantity, price_per_prod, total_price, payment_method) VALUES ('$prodid', '$user_id', '$pname', '$quantity', '$priceperprod', '$total_price', '$payment_method')";
-                                    $orderresult = mysqli_query($conn, $order);
+                                    $success = true;
 
-                                    if ($orderresult) {
+                                    foreach($selected_prodids as $prodid){
+                                        $order = "INSERT INTO orders (prodid, user_id, pname, quantity, price_per_prod, total_price, payment_method) VALUES ('$prodid', '$user_id', '$pname', '$quantity', '$priceperprod', '$total_price', '$payment_method')";
+                                        $orderresult = mysqli_query($conn, $order);
 
-                                        $update = "UPDATE cart SET quantity = 0 WHERE user_id = '$user_id' AND prodid = '$prodid'";
-                                        $updateres = mysqli_query($conn, $update);
-
-                                        if($updateres){
-                                            $url = "customer_cart.php?success=true";
-                                            echo "<script>window.location.href='" . $url . "'</script>";
-                                            exit();
-                                        }else {
-                                            $url = "customer_cart.php?error=true";
-                                            echo "<script>window.location.href='" . $url . "'</script>";
-                                            exit();
+                                        if ($orderresult) {
+                                            $update = "UPDATE cart SET quantity = 0 WHERE user_id = '$user_id' AND prodid = '$prodid'";
+                                            $updateres = mysqli_query($conn, $update);
+                                            
+                                            if(!$updateres) {
+                                                $success = false;
+                                                break;
+                                            }
+                                        } else {
+                                            $success = false;
+                                            break;
                                         }
+                                    }
+
+                                    if ($success) {
+                                        $url = "customer_cart.php?success=true";
                                     } else {
                                         $url = "customer_cart.php?error=true";
-                                        echo "<script>window.location.href='" . $url . "'</script>";
-                                        exit();
-                                    }                                    
+                                    }
+                                    echo "<script>window.location.href='" . $url . "'</script>";
+                                    exit();
                                 }
                                 ?>
+
                                 <form action="" method="POST">
                                     <div>
                                         <input type="radio" id="cod" name="payment_method" value="cod" checked>
@@ -213,13 +226,14 @@ include('../conn.php');
                                         <input type="radio" id="gcash" name="payment_method" value="gcash">
                                         <label for="gcash">GCash</label>
                                     </div>
-                                    <input type="hidden" name="prodid" value="<?php echo $prodid; ?>">
+
+                                    <input type="hidden" name="selected_prodid" value="">
                                     <input type="hidden" name="pname" value="<?php echo $pname; ?>">
                                     <input type="hidden" name="price" value="<?php echo $totalPpricerice; ?>">
                                     <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
                                     <input type="hidden" name="priceperprod" value="<?php echo $totalItemPrice; ?>">
                                     <input type="hidden" name="total_price" value="<?php echo $totalPrice; ?>">
-                                    <button type="submit" name="btnOrder" class="btn btn-out btn-primary btn-square btn-main" data-abc="true">Place Order</button>
+                                    <button type="submit" name="btnOrder" class="btn btn-out btn-primary btn-square btn-main" data-abc="true">Check out</button>
                                     <a href="customer_dashboard.php" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Shop More</a>
                                 </form>
                             <?php
@@ -239,25 +253,42 @@ include('../conn.php');
         </div>
     </div>
     <!-- Footer End -->
-<script>
-    function showAlert(type, message) {
-        Swal.fire({
-            icon: type,
-            text: message,
-        });
-    }
 
-    function checkURLParams() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('success') && urlParams.get('success') === 'true') {
-            showAlert('success', 'Checkout successfully!');
-        } else if (urlParams.has('error') && urlParams.get('error') === 'true') {
-            showAlert('warning', 'An error occurred!');
-        } 
+    <script>
+    function updateSelectedItems(checkbox) {
+        const selectedInput = document.querySelector('input[name="selected_prodid"]');
+        let selectedItems = selectedInput.value ? selectedInput.value.split(',') : [];
+        
+        if (checkbox.checked) {
+            selectedItems.push(checkbox.value);
+        } else {
+            selectedItems = selectedItems.filter(item => item !== checkbox.value);
+        }
+        
+        selectedInput.value = selectedItems.join(',');
     }
+    </script>
 
-    window.onload = checkURLParams;
-</script>
+
+    <script>
+        function showAlert(type, message) {
+            Swal.fire({
+                icon: type,
+                text: message,
+            });
+        }
+
+        function checkURLParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success') && urlParams.get('success') === 'true') {
+                showAlert('success', 'Checkout successfully!');
+            } else if (urlParams.has('error') && urlParams.get('error') === 'true') {
+                showAlert('warning', 'An error occurred!');
+            } 
+        }
+
+        window.onload = checkURLParams;
+    </script>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
