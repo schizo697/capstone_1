@@ -1,8 +1,12 @@
 <?php
+ini_set('session.cache_limiter','public');
+session_cache_limiter(false);
+session_start();
 include('includes/chats.php');
 include('includes/header.php');
 include('includes/navbar.php');
 include('../conn.php');
+
 ?>
 <head>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -213,6 +217,8 @@ include('../conn.php');
 									}
 								}
 							}
+						} else {
+							echo 'error';
 						}
                         ?>
 						</ui>
