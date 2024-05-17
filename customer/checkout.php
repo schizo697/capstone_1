@@ -42,45 +42,61 @@ include 'includes/checkout.php';
                                     <h5 class="font-size-16 mb-1">Address Info</h5>
                                     <p class="text-muted text-truncate mb-4">Set your address</p>
                                     <div class="mb-3">
-                                        <form>
-                                            <div>
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="billing-name">Name</label>
-                                                            <input type="text" class="form-control" id="billing-name" placeholder="Enter name">
+                                        <?php 
+                                        if(isset($_SESSION['user_id'])){
+                                            $user_id = $_SESSION['user_id'];
+
+                                            if(isset($_GET['prodid'])){
+                                                $prodid = $_GET['prodid'];
+                                            } else {
+                                                echo 'bb';
+                                            }
+
+                                            $profile = "SELECT * FROM user_info WHERE info_id = '$user_id'";
+                                            $profileres = mysqli_query($conn, $profile);
+    
+                                            if($profileres && mysqli_num_rows($profileres) > 0){
+                                                $profilerow = mysqli_fetch_assoc($profileres);
+                                        }
+                                        
+                                            ?>
+                                            <form>
+                                                <div>
+                                                    <div class="row">
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="billing-name">Name</label>
+                                                                <input type="text" class="form-control" id="billing-name" value="<?php echo $profilerow['firstname'] . ' ' . $profilerow['lastname']; ?>">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="billing-phone">Phone</label>
+                                                                <input type="text" class="form-control" id="billing-phone" value="<?php echo $profilerow['contact']; ?>">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="billing-phone">Phone</label>
-                                                            <input type="text" class="form-control" id="billing-phone" placeholder="Enter Phone no.">
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="billing-address">Address</label>
+                                                        <input class="form-control" id="billing-address" rows="3" value="<?php echo $profilerow['address']; ?>">
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-0">
+                                                                <label class="form-label" for="zip-code">Zip / Postal code</label>
+                                                                <input type="text" class="form-control" id="zip-code" value="<?php echo $profilerow['postal_code']; ?>">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="billing-address">Address</label>
-                                                    <textarea class="form-control" id="billing-address" rows="3" placeholder="Enter full address"></textarea>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-4 mb-lg-0">
-                                                            <label class="form-label" for="billing-city">City</label>
-                                                            <input type="text" class="form-control" id="billing-city" placeholder="Enter City">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-0">
-                                                            <label class="form-label" for="zip-code">Zip / Postal code</label>
-                                                            <input type="text" class="form-control" id="zip-code" placeholder="Enter Postal code">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
+                                            </form>
+                                            <?php
+                                        }
+                                        ?>
+                                        <?php
+                                        ?>
                                     </div>
                                 </div>
                             </div>
