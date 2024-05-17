@@ -94,7 +94,7 @@ include('../conn.php');
   </div>
 </div>
 <!-- start -->
-        <div class="container-fluid h-100">
+<div class="container-fluid h-100">
 			<div class="row justify-content-center h-100">
 				<div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
 
@@ -131,7 +131,7 @@ include('../conn.php');
 									
 									?>
 									<li class="active">
-									<a href="chats.php?recipient_id=<?php echo $info_id ?>" style="text-decoration: none;">
+									<a href="chat_module.php?recipient_id=<?php echo $info_id ?>" style="text-decoration: none;">
 										<div class="d-flex bd-highlight">
 											<?php
 											if($isOnline == 1) {
@@ -183,7 +183,7 @@ include('../conn.php');
 										
 										?>
 										<li class="active">
-										<a href="chats.php?recipient_id=<?php echo $info_id ?>" style="text-decoration: none;">
+										<a href="chat_module.php?recipient_id=<?php echo $info_id ?>" style="text-decoration: none;">
 											<div class="d-flex bd-highlight">
 												<?php
 												if($isOnline == 1) {
@@ -409,7 +409,7 @@ include('../conn.php');
 											// Allow certain file formats
 											if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
 											&& $imageFileType != "gif" ) {
-												$url = "chats.php?recipient_id=$recipient_id&error=true"; // Changed ? to &
+												$url = "chat_module.php?recipient_id=$recipient_id&error=true"; // Changed ? to &
 												echo '<script>window.location.href="' . $url . '" </script>'; // Added missing closing bracket
 												$uploadOk = 0;
 											}
@@ -426,7 +426,7 @@ include('../conn.php');
 													$messageSql = "INSERT INTO chats (user_id, reciever_id, message, time) VALUES ('$sender_id', '$reciever_id', '$message', '$localDatetime')";
 													$messageSend = mysqli_query($conn, $messageSql);
 													if($messageSend){
-														$url = "chats.php?recipient_id=$reciever_id";
+														$url = "chat_module.php?recipient_id=$reciever_id";
 														echo '<script>window.location.href="' . $url . '"</script>';
 														exit();
 													} 
@@ -439,12 +439,12 @@ include('../conn.php');
 											$messageSql = "INSERT INTO chats (user_id, reciever_id, message, time) VALUES ('$sender_id', '$reciever_id', '$message', '$localDatetime')";
 											$messageSend = mysqli_query($conn, $messageSql);
 											if($messageSend){
-												$url = "chats.php?recipient_id=$reciever_id";
+												$url = "chat_module.php?recipient_id=$reciever_id";
 												echo '<script>window.location.href="' . $url . '"</script>';
 												exit();
 											} 
 										} else {
-											$url = "chats.php?recipient_id=$reciever_id";
+											$url = "chat_module.php?recipient_id=$reciever_id";
 											echo '<script>window.location.href="' . $url . '"</script>';
 											exit();
 										}
