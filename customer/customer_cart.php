@@ -181,25 +181,39 @@ include('../conn.php');
                                 <?php
                                 if(isset($_POST['btnOrder'])){
                                     $selected_prodids = explode(',', $_POST['selected_prodid']);
-                                    $pname = $_POST['pname'];
-                                    $quantity = $_POST['quantity'];
-                                    $priceperprod = $_POST['priceperprod'];
-                                    $total_price = $_POST['total_price'];
-                                    $payment_method = $_POST['payment_method'];
-
                                     $success = true;
 
                                     foreach($selected_prodids as $prodid){
-                                        $order = "INSERT INTO orders (prodid, user_id, pname, quantity, price_per_prod, total_price, payment_method) VALUES ('$prodid', '$user_id', '$pname', '$quantity', '$priceperprod', '$total_price', '$payment_method')";
-                                        $orderresult = mysqli_query($conn, $order);
+                                        $query = "SELECT cart.pname, product.price, cart.quantity FROM cart
+                                        JOIN product ON cart.prodid = product.prodid
+                                        WHERE user_id = '$user_id' AND cart.prodid = '$prodid'";        
+                                        $result = mysqli_query($conn, $query);
 
-                                        if ($orderresult) {
-                                            $update = "UPDATE cart SET quantity = 0 WHERE user_id = '$user_id' AND prodid = '$prodid'";
-                                            $updateres = mysqli_query($conn, $update);
-                                            
-                                            if(!$updateres) {
-                                                $success = false;
-                                                break;
+                                        if($result && mysqli_num_rows($result) > 0) {
+                                            $row = mysqli_fetch_assoc($result);
+                                            $pname = $row['pname'];
+                                            $price = $row['price'];
+                                            $quantity = $row['quantity'];
+
+                                            $existing_order_query = "SELECT * FROM orders WHERE user_id = '$user_id' AND prodid = '$prodid'";
+                                            $existing_order_result = mysqli_query($conn, $existing_order_query);
+
+                                            if(mysqli_num_rows($existing_order_result) > 0) {
+                                                $update_order_query = "UPDATE orders SET quantity = '$quantity' WHERE user_id = '$user_id' AND prodid = '$prodid'";
+                                                $update_order_result = mysqli_query($conn, $update_order_query);
+
+                                                if (!$update_order_result) {
+                                                    $success = false;
+                                                    break;
+                                                }
+                                            } else {
+                                                $order = "INSERT INTO orders (user_id, prodid, pname, price, quantity) VALUES ('$user_id', '$prodid', '$pname', '$price', '$quantity')";
+                                                $orderresult = mysqli_query($conn, $order);
+
+                                                if (!$orderresult) {
+                                                    $success = false;
+                                                    break;
+                                                }
                                             }
                                         } else {
                                             $success = false;
@@ -208,7 +222,7 @@ include('../conn.php');
                                     }
 
                                     if ($success) {
-                                        $url = "customer_cart.php?success=true";
+                                        $url = "checkout.php";
                                     } else {
                                         $url = "customer_cart.php?error=true";
                                     }
@@ -216,23 +230,11 @@ include('../conn.php');
                                     exit();
                                 }
                                 ?>
-
                                 <form action="" method="POST">
-                                    <div>
-                                        <input type="radio" id="cod" name="payment_method" value="cod" checked>
-                                        <label for="cod">Cash on Delivery (COD)</label>
-                                    </div>
-                                    <div>
-                                        <input type="radio" id="gcash" name="payment_method" value="gcash">
-                                        <label for="gcash">GCash</label>
-                                    </div>
-
                                     <input type="hidden" name="selected_prodid" value="">
-                                    <input type="hidden" name="pname" value="<?php echo $pname; ?>">
-                                    <input type="hidden" name="price" value="<?php echo $totalPpricerice; ?>">
-                                    <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
-                                    <input type="hidden" name="priceperprod" value="<?php echo $totalItemPrice; ?>">
-                                    <input type="hidden" name="total_price" value="<?php echo $totalPrice; ?>">
+                                    <input type="hidden" name="pname" value="">
+                                    <input type="hidden" name="price" value="">
+                                    <input type="hidden" name="quantity" value="">
                                     <button type="submit" name="btnOrder" class="btn btn-out btn-primary btn-square btn-main" data-abc="true">Check out</button>
                                     <a href="customer_dashboard.php" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Shop More</a>
                                 </form>
@@ -257,10 +259,23 @@ include('../conn.php');
     <script>
     function updateSelectedItems(checkbox) {
         const selectedInput = document.querySelector('input[name="selected_prodid"]');
+        const pnameInput = document.querySelector('input[name="pname"]');
+        const priceInput = document.querySelector('input[name="price"]');
+        const quantityInput = document.querySelector('input[name="quantity"]');
         let selectedItems = selectedInput.value ? selectedInput.value.split(',') : [];
         
         if (checkbox.checked) {
             selectedItems.push(checkbox.value);
+            // Fetch the corresponding product details
+            const parentRow = checkbox.closest('tr');
+            const pname = parentRow.querySelector('.title').innerText;
+            const price = parentRow.querySelector('.price').innerText;
+            const quantity = parentRow.querySelector('.quantity-label').innerText;
+            
+            // Update hidden inputs with product details
+            pnameInput.value = pname;
+            priceInput.value = price;
+            quantityInput.value = quantity;
         } else {
             selectedItems = selectedItems.filter(item => item !== checkbox.value);
         }
@@ -268,7 +283,6 @@ include('../conn.php');
         selectedInput.value = selectedItems.join(',');
     }
     </script>
-
 
     <script>
         function showAlert(type, message) {
