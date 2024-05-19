@@ -36,6 +36,7 @@ include 'conn.php'; // Include database connection
             $gender = $_POST['gender'];
             $contact = $_POST['contact'];
             $address = $_POST['address'];
+            $postal = $_POST['postal'];
             $username = $_POST['username'];
             $password = $_POST['password'];
             $encrypted = password_hash($password, PASSWORD_DEFAULT);
@@ -53,7 +54,7 @@ include 'conn.php'; // Include database connection
                   });
                 </script>";
             } else {
-                $sql = "INSERT INTO user_info (firstname, lastname, gender, contact, address) VALUES ('$first_name', '$last_name', '$gender', '$contact', '$address')";
+                $sql = "INSERT INTO user_info (firstname, lastname, gender, contact, address, postal_code) VALUES ('$first_name', '$last_name', '$gender', '$contact', '$address', '$postal')";
 
                 if ($conn->query($sql) === TRUE) {
                     $info_id = $conn->insert_id;
@@ -120,6 +121,11 @@ include 'conn.php'; // Include database connection
                     <div class="col-md-12">
                         <div class="input-group">
                             <input type="text" name="address" id="address" class="form-control form-control-lg bg-light fs-6" placeholder="Address" required>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" name="postal" id="postal" class="form-control form-control-lg bg-light fs-6" placeholder="Postal" required>
+                            </div>
                         </div>
                     </div>
                     <div class="row mb-3">
