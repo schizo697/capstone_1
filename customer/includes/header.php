@@ -53,6 +53,18 @@ if(isset($_SESSION['user_id'])){
 .logo {
     height: 150px;
 }
+/* Styling for the badge */
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+
 
     </style>
 </head>
@@ -75,9 +87,11 @@ if(isset($_SESSION['user_id'])){
         </div>
         <div class="col-lg-3">
             <div class="d-flex align-items-center justify-content-end">
-            <a class="btn btn-primary btn-circle" href="customer_cart.php"><i class="fas fa-shopping-cart"></i></a>
-                <a class="btn btn-primary btn-circle" href="customer_profile.php"><i class="fas fa-user"></i></a>
-                
+                <a class="btn btn-primary btn-circle" href="customer_cart.php">
+                    <span class="badge">3</span>
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+                <a class="btn btn-primary btn-circle" href="customer_profile.php"><i class="fas fa-user"></i></a> 
             </div>
         </div>
     </div>
