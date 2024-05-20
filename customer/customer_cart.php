@@ -177,67 +177,21 @@ include('../conn.php');
                                 </dl>
                                 <hr>
 
-                                <!-- Payment Method Selection -->
-                                <?php
-                                if(isset($_POST['btnOrder'])){
-                                    $selected_prodids = explode(',', $_POST['selected_prodid']);
-                                    $success = true;
-
-                                    foreach($selected_prodids as $prodid){
-                                        $query = "SELECT cart.pname, product.price, cart.quantity FROM cart
-                                        JOIN product ON cart.prodid = product.prodid
-                                        WHERE user_id = '$user_id' AND cart.prodid = '$prodid'";        
-                                        $result = mysqli_query($conn, $query);
-
-                                        if($result && mysqli_num_rows($result) > 0) {
-                                            $row = mysqli_fetch_assoc($result);
-                                            $pname = $row['pname'];
-                                            $price = $row['price'];
-                                            $quantity = $row['quantity'];
-
-                                            $existing_order_query = "SELECT * FROM orders WHERE user_id = '$user_id' AND prodid = '$prodid'";
-                                            $existing_order_result = mysqli_query($conn, $existing_order_query);
-
-                                            if(mysqli_num_rows($existing_order_result) > 0) {
-                                                $update_order_query = "UPDATE orders SET quantity = '$quantity' WHERE user_id = '$user_id' AND prodid = '$prodid'";
-                                                $update_order_result = mysqli_query($conn, $update_order_query);
-
-                                                if (!$update_order_result) {
-                                                    $success = false;
-                                                    break;
-                                                }
-                                            } else {
-                                                $order = "INSERT INTO orders (user_id, prodid, pname, price, quantity) VALUES ('$user_id', '$prodid', '$pname', '$price', '$quantity')";
-                                                $orderresult = mysqli_query($conn, $order);
-
-                                                if (!$orderresult) {
-                                                    $success = false;
-                                                    break;
-                                                }
-                                            }
-                                        } else {
-                                            $success = false;
-                                            break;
-                                        }
-                                    }
-
-                                    if ($success) {
-                                        $url = "checkout.php";
-                                    } else {
-                                        $url = "customer_cart.php?error=true";
-                                    }
-                                    echo "<script>window.location.href='" . $url . "'</script>";
-                                    exit();
-                                }
-                                ?>
-                                <form action="" method="POST">
-                                    <input type="hidden" name="selected_prodid" value="">
-                                    <input type="hidden" name="pname" value="">
-                                    <input type="hidden" name="price" value="">
-                                    <input type="hidden" name="quantity" value="">
-                                    <button type="submit" name="btnOrder" class="btn btn-out btn-primary btn-square btn-main" data-abc="true">Check out</button>
-                                    <a href="customer_dashboard.php" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Shop More</a>
-                                </form>
+                            <!-- Payment Method Selection -->
+                            <?php
+                            if (isset($_POST['btnOrder'])) {
+                                $selected_prodids = explode(',', $_POST['selected_prodid']);
+                                $selected_prodids_str = implode(',', $selected_prodids);
+                                $url = "checkout.php?selected_prodids=" . $selected_prodids_str;
+                                echo "<script>window.location.href='" . $url . "'</script>";
+                                exit();
+                            }
+                            ?>
+                            <form action="" method="POST">
+                                <input type="hidden" name="selected_prodid" value="">
+                                <button type="submit" name="btnOrder" class="btn btn-out btn-primary btn-square btn-main" data-abc="true">Check out</button>
+                                <a href="customer_dashboard.php" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Shop More</a>
+                            </form>
                             <?php
                             }
                             ?>
@@ -259,23 +213,10 @@ include('../conn.php');
     <script>
     function updateSelectedItems(checkbox) {
         const selectedInput = document.querySelector('input[name="selected_prodid"]');
-        const pnameInput = document.querySelector('input[name="pname"]');
-        const priceInput = document.querySelector('input[name="price"]');
-        const quantityInput = document.querySelector('input[name="quantity"]');
         let selectedItems = selectedInput.value ? selectedInput.value.split(',') : [];
-        
+
         if (checkbox.checked) {
             selectedItems.push(checkbox.value);
-            // Fetch the corresponding product details
-            const parentRow = checkbox.closest('tr');
-            const pname = parentRow.querySelector('.title').innerText;
-            const price = parentRow.querySelector('.price').innerText;
-            const quantity = parentRow.querySelector('.quantity-label').innerText;
-            
-            // Update hidden inputs with product details
-            pnameInput.value = pname;
-            priceInput.value = price;
-            quantityInput.value = quantity;
         } else {
             selectedItems = selectedItems.filter(item => item !== checkbox.value);
         }
