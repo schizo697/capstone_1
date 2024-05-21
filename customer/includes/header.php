@@ -55,14 +55,9 @@ if(isset($_SESSION['user_id'])){
 }
 /* Styling for the badge */
 .badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
     background-color: red;
     color: white;
     border-radius: 50%;
-    padding: 5px 8px;
-    font-size: 12px;
 }
 
 
@@ -85,15 +80,31 @@ if(isset($_SESSION['user_id'])){
                 </a>
             </div>
         </div>
-        <div class="col-lg-3">
-            <div class="d-flex align-items-center justify-content-end">
-                <a class="btn btn-primary btn-circle" href="customer_cart.php">
-                    <span class="badge">3</span>
-                    <i class="fas fa-shopping-cart"></i>
-                </a>
-                <a class="btn btn-primary btn-circle" href="customer_profile.php"><i class="fas fa-user"></i></a> 
+        <?php
+        $count = "SELECT COUNT(*) as count FROM cart WHERE user_id = '$user_id' AND quantity >= 1";
+        $result = mysqli_query($conn, $count);
+
+        if($result) {
+            $row = mysqli_fetch_assoc($result);
+            $counts = $row['count'];
+            ?>
+            <div class="col-lg-3">
+                <div class="d-flex align-items-center justify-content-end">
+                    <a class="btn btn-primary btn-circle" href="customer_cart.php">
+                        <i class="fas fa-shopping-cart">
+                            <span class="badge"><?php echo $counts; ?></span>
+                        </i>
+                    </a>
+                    <a class="btn btn-primary btn-circle" href="customer_profile.php">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
             </div>
-        </div>
+            <?php
+        } else {
+            echo "Error: " . mysqli_error($conn);
+        }
+        ?>
     </div>
 </div>
 <!-- Topbar End -->
