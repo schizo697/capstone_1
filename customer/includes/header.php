@@ -59,8 +59,6 @@ if(isset($_SESSION['user_id'])){
     color: white;
     border-radius: 50%;
 }
-
-
     </style>
 </head>
 <body>
