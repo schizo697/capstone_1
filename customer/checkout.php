@@ -258,10 +258,6 @@ include 'includes/checkout.php';
                                 <form action="" method="POST" id="order-summary">
                                     <input type="hidden" name="prodid" value="<?php echo $prodid; ?>">
                                     <input type="hidden" name="userid" value="<?php echo $user_id; ?>">
-                                    <input type="hidden" name="pname" value="<?php echo $pname; ?>">
-                                    <input type="hidden" name="price" value="<?php echo $price; ?>">
-                                    <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
-                                    <input type="hidden" name="shipping" value="100">
                                     <input type="hidden" name="total" value="<?php echo $total + 100; ?>">
                                 </form>
                             </tbody>
@@ -298,10 +294,6 @@ include 'includes/checkout.php';
         // Gather input values from the order-summary form
         var prodid = document.querySelector('input[name="prodid"]').value;
         var userid = document.querySelector('input[name="userid"]').value;
-        var pname = document.querySelector('input[name="pname"]').value;
-        var price = document.querySelector('input[name="price"]').value;
-        var quantity = document.querySelector('input[name="quantity"]').value;
-        var shipping = document.querySelector('input[name="shipping"]').value;
         var total = document.querySelector('input[name="total"]').value;
 
         // Create a new form to submit the data
@@ -319,10 +311,6 @@ include 'includes/checkout.php';
             { name: 'payMethod', value: payMethod },
             { name: 'prodid', value: prodid },
             { name: 'userid', value: userid },
-            { name: 'pname', value: pname },
-            { name: 'price', value: price },
-            { name: 'quantity', value: quantity },
-            { name: 'shipping', value: shipping },
             { name: 'total', value: total }
         ];
 
