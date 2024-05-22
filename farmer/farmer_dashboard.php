@@ -78,6 +78,129 @@ include('includes/navbar.php');
     </div>
     <!-- Services End -->
 
+    <section class="section">
+    <div class="row">
+    <!-- Top Selling Start -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <?php
+                    // Retrieve data from the "order" table
+                    $sql = "SELECT pname, prodid, SUM(quantity) AS total_quantity FROM `orders` GROUP BY prodid ASC LIMIT 10";
+                    $result = mysqli_query($conn, $sql);
+
+                    // Check if the query was successful
+                    if ($result) {
+                        $topSellingProductsData = array();
+                        $productNames = array();
+                            
+                        // Fetch the data and store it in an array
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $topSellingProductsData[] = $row['total_quantity'];
+                            $productNames[] = $row['pname'];
+                        }
+
+                        // Use the retrieved data in your JavaScript code
+                        echo "<h5 class='card-title'>Top Selling Products in the Market</h5>";
+                        echo "<div id='barChart'></div>";
+                        echo "<script>";
+                        echo "document.addEventListener('DOMContentLoaded', () => {";
+                        echo "new ApexCharts(document.querySelector('#barChart'), {";
+                        echo "series: [{";
+                        echo "data: " . json_encode($topSellingProductsData);
+                        echo "}],";
+                        echo "chart: {";
+                        echo "type: 'bar',";
+                        echo "height: 350";
+                        echo "},";
+                        echo "plotOptions: {";
+                        echo "bar: {";
+                        echo "borderRadius: 4,";
+                        echo "horizontal: true";
+                        echo "}";
+                        echo "},";
+                        echo "dataLabels: {";
+                        echo "enabled: false";
+                        echo "},";
+                        echo "xaxis: {";
+                        echo "categories: " . json_encode($productNames);
+                        echo "}";
+                        echo "}).render();";
+                        echo "});";
+                        echo "</script>";
+                    } else {
+                        echo "Error retrieving data: " . mysqli_error($conn);
+                    }
+                    ?>
+            </div>
+        </div>
+    </div>
+    <!-- Top Selling End -->
+
+    <!-- Top Supply -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <?php
+                    // Retrieve data from the "order" table
+                    $fetch = "SELECT product.pname, listing.prodid, SUM(product.quantity) AS total_quantity 
+                                FROM `listing` 
+                                JOIN product ON product.prodid = listing.prodid 
+                                GROUP BY listing.prodid 
+                                ASC LIMIT 10";
+                    $result1 = mysqli_query($conn, $fetch);
+
+                    // Check if the query was successful
+                    if ($result1) {
+                        $topSupplyProductsData = array();
+                        $productNames = array();
+                            
+                        // Fetch the data and store it in an array
+                        while ($row = mysqli_fetch_assoc($result1)) {
+                            $topSupplyProductsData[] = $row['total_quantity'];
+                            $productNames[] = $row['pname'];
+                        }
+
+                        // Use the retrieved data in your JavaScript code
+                        echo "<h5 class='card-title'>Products with High Supply in the Market</h5>";
+                        echo "<div id='barChartSupply'></div>";
+                        echo "<script>";
+                        echo "document.addEventListener('DOMContentLoaded', () => {";
+                        echo "new ApexCharts(document.querySelector('#barChartSupply'), {";
+                        echo "series: [{";
+                        echo "data: " . json_encode($topSupplyProductsData);
+                        echo "}],";
+                        echo "chart: {";
+                        echo "type: 'bar',";
+                        echo "height: 350";
+                        echo "},";
+                        echo "plotOptions: {";
+                        echo "bar: {";
+                        echo "borderRadius: 4,";
+                        echo "horizontal: true";
+                        echo "}";
+                        echo "},";
+                        echo "dataLabels: {";
+                        echo "enabled: false";
+                        echo "},";
+                        echo "xaxis: {";
+                        echo "categories: " . json_encode($productNames);
+                        echo "}";
+                        echo "}).render();";
+                        echo "});";
+                        echo "</script>";
+                    } else {
+                        echo "Error retrieving data: " . mysqli_error($conn);
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Top Supply End -->
+    </div>
+    </section>
+
     <div class="container-fluid bg-dark text-white py-4">
         <div class="container text-center">
             <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
@@ -97,6 +220,7 @@ include('includes/navbar.php');
     <script src="../lib/waypoints/waypoints.min.js"></script>
     <script src="../lib/counterup/counterup.min.js"></script>
     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="assets/js/apexcharts.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="../js/main.js"></script>
