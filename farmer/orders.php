@@ -71,19 +71,20 @@ include('includes/navbar.php');
                 <div class="card">
                     <h1> Customer Orders </h1>
                     <div class="card-header">
-                        <p>- query to be change-</p>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="example" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Product Name</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Kilo</th>
+                                    <th>Customer Name</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th>Mode of Payment</th>
+                                    <th>Date of Order</th>
                                     <th>Status</th>
-                                    <th>Date Added</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -91,18 +92,31 @@ include('includes/navbar.php');
                                 include "../conn.php";
                                 $uid = $_SESSION['user_id'];
 
-                                $sql = "SELECT * FROM product JOIN pcategory ON pcategory.catid = product.catid WHERE product.status = 'Not Available'";
+                                $sql = "SELECT *, orders.quantity, CONCAT(firstname, ' ', lastname) AS fullName FROM orders 
+                                            JOIN user_account ON user_account.user_id = orders.user_id 
+                                            JOIN user_info ON user_info.info_id = user_account.info_id
+                                            JOIN product ON product.prodid = orders.prodid
+                                            WHERE product.uid = '$uid'";
                                 $result = mysqli_query($conn, $sql);
 
                                 while ($row = mysqli_fetch_assoc($result)) {
                                 ?>
                                     <tr class="data-row">
+                                        <td><?php echo $row['fullName']; ?></td>
                                         <td><?php echo $row['pname']; ?></td>
-                                        <td><?php echo $row['category']; ?></td>
-                                        <td><?php echo $row['price']; ?></td>
                                         <td><?php echo $row['quantity']; ?></td>
-                                        <td><?php echo $row['status']; ?></td>
-                                        <td><?php echo date('F d, Y', strtotime($row['dateadded'])); ?></td>
+                                        <td><?php echo $row['price']; ?></td>
+                                        <td> .. </td>
+                                        <td><?php echo date('F d, Y', strtotime($row['date_of_order'])); ?></td>
+                                        <td>To Pay</td>
+                                        <td>
+                                            <button class='btn btn-primary confirm-button edit-btn' data-id='<?php echo $row['prodid']; ?>' data-name='<?php echo $row['pname']; ?>' data-category='<?php echo $row['category']; ?>' data-price='<?php echo $row['price']; ?>' data-quantity='<?php echo $row['quantity']; ?>'>
+                                                <i class='fas fa-check-circle'></i> Confirm
+                                            </button>
+                                            <button class='btn btn-danger cancel-btn' data-id='<?php echo $row['prodid']; ?>'>
+                                                <i class='fas fa-times-circle'></i> Cancel
+                                            </button>
+                                        </td>
                                     </tr>
                                 <?php
                                 }

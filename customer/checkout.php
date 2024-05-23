@@ -48,45 +48,44 @@ include 'includes/checkout.php';
 
                                             if(isset($_GET['prodid'])){
                                                 $prodid = $_GET['prodid'];
-                                            } else {
-                                                echo 'bb';
-                                            }
+                                            } 
 
                                             $profile = "SELECT * FROM user_info WHERE info_id = '$user_id'";
                                             $profileres = mysqli_query($conn, $profile);
     
                                             if($profileres && mysqli_num_rows($profileres) > 0){
                                                 $profilerow = mysqli_fetch_assoc($profileres);
-                                        }
-                                        
+                                            }
                                             ?>
-                                            <form>
+                                            <form action="" method="POST" id="address-info">
                                                 <div>
                                                     <div class="row">
                                                         <div class="col-lg-4">
                                                             <div class="mb-3">
                                                                 <label class="form-label" for="billing-name">Name</label>
-                                                                <input type="text" class="form-control" id="billing-name" value="<?php echo $profilerow['firstname'] . ' ' . $profilerow['lastname']; ?>">
+                                                                <input type="hidden" class="form-control" id="firstname" name="firstname" value="<?php echo $profilerow['firstname']?>">
+                                                                <input type="hidden" class="form-control" id="lastname" name="lastname" value="<?php echo $profilerow['lastname']?>">
+                                                                <input type="text" class="form-control" id="fullname" name="fullname" value="<?php echo $profilerow['firstname'] . ' ' . $profilerow['lastname']; ?>">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-4">
                                                             <div class="mb-3">
                                                                 <label class="form-label" for="billing-phone">Phone</label>
-                                                                <input type="text" class="form-control" id="billing-phone" value="<?php echo $profilerow['contact']; ?>">
+                                                                <input type="text" class="form-control" id="billing-phone" name="phone" value="<?php echo $profilerow['contact']; ?>">
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="mb-3">
                                                         <label class="form-label" for="billing-address">Address</label>
-                                                        <input class="form-control" id="billing-address" rows="3" value="<?php echo $profilerow['address']; ?>">
+                                                        <input class="form-control" id="billing-address" name="address" rows="3" value="<?php echo $profilerow['address']; ?>">
                                                     </div>
 
                                                     <div class="row">
                                                         <div class="col-lg-4">
                                                             <div class="mb-0">
-                                                                <label class="form-label" for="zip-code">Zip / Postal code</label>
-                                                                <input type="text" class="form-control" id="zip-code" value="<?php echo $profilerow['postal_code']; ?>">
+                                                                <label class="form-label" for="zip-code">Postal code</label>
+                                                                <input type="text" class="form-control" id="postal-code" name="postal" value="<?php echo $profilerow['postal_code']; ?>">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -119,31 +118,32 @@ include 'includes/checkout.php';
                                 </div>
                                 <div>
                                     <h5 class="font-size-14 mb-3">Payment method :</h5>
-                                    <div class="row">
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div data-bs-toggle="collapse">
-                                                <label class="card-radio-label">
-                                                    <input type="radio" name="pay-method" id="pay-methodoption1" class="card-radio-input">
-                                                    <span class="card-radio py-3 text-center text-truncate">
-                                                    <i class="bx bx-wallet d-block h2 mb-3"></i>
-                                                        Gcash
-                                                    </span>
-                                                </label>
+                                    <form action="" method="POST" id="payment-method">
+                                        <div class="row">
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div data-bs-toggle="collapse">
+                                                    <label class="card-radio-label">
+                                                        <input type="radio" name="pay-method" id="pay-methodoption1" class="card-radio-input">
+                                                        <span class="card-radio py-3 text-center text-truncate">
+                                                        <i class="bx bx-wallet d-block h2 mb-3"></i>
+                                                            Gcash
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div>
+                                                    <label class="card-radio-label">
+                                                        <input type="radio" name="pay-method" id="pay-methodoption3" class="card-radio-input" checked="">
+                                                        <span class="card-radio py-3 text-center text-truncate">
+                                                            <i class="bx bx-money d-block h2 mb-3"></i>
+                                                            <span>Cash on Delivery</span>
+                                                        </span>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div>
-                                                <label class="card-radio-label">
-                                                    <input type="radio" name="pay-method" id="pay-methodoption3" class="card-radio-input" checked="">
-
-                                                    <span class="card-radio py-3 text-center text-truncate">
-                                                        <i class="bx bx-money d-block h2 mb-3"></i>
-                                                        <span>Cash on Delivery</span>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </li>
@@ -157,21 +157,26 @@ include 'includes/checkout.php';
                         <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping </a>
                 </div> <!-- end col -->
                 <div class="col">
-                    <div class="text-end mt-2 mt-sm-0">
-                        <a href="#" class="btn btn-success">
-                            <i class="mdi mdi-cart-outline me-1"></i> Procced </a>
-                    </div>
+                    <?php 
+                    
+                    ?>
+                    <form action="" methos="POST">
+                        <div class="text-end mt-2 mt-sm-0">
+                            <button  type="submit" id="placeorder" name="placeorder" class="btn btn-success">
+                                <i class="mdi mdi-cart-outline me-1"></i> Place Order </button>
+                        </div>
+                    </form>
                 </div> <!-- end col -->
             </div> <!-- end row-->
         </div>
         <div class="col-xl-4">
-    <div class="card checkout-order-summary">
+    <div class="card checkout-order-summary" style="width: 500px;">
         <div class="card-body">
             <div class="p-3 bg-light mb-3">
-                <h5 class="font-size-16 mb-0">Order Summary <span class="float-end ms-2">#MN0124</span></h5>
+                <h5 class="font-size-16 mb-0">Order Summary</h5>
             </div>
-            <div class="table-responsive">
-                <table class="table table-centered mb-0 table-nowrap">
+                <div class="table-responsive">
+                    <table class="table table-centered mb-0 table-nowrap">
                             <thead>
                                 <tr>
                                     <th class="border-top-0" style="width: 110px;" scope="col">Product</th>
@@ -180,80 +185,83 @@ include 'includes/checkout.php';
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row"><img src="https://www.bootdey.com/image/280x280/FF00FF/000000" alt="product-img" title="product-img" class="avatar-lg rounded"></th>
-                                    <td>
-                                        <h5 class="font-size-16 text-truncate"><a href="#" class="text-dark">Waterproof Mobile Phone</a></h5>
-                                        <p class="text-muted mb-0">
-                                            <i class="bx bxs-star text-warning"></i>
-                                            <i class="bx bxs-star text-warning"></i>
-                                            <i class="bx bxs-star text-warning"></i>
-                                            <i class="bx bxs-star text-warning"></i>
-                                            <i class="bx bxs-star-half text-warning"></i>
-                                        </p>
-                                        <p class="text-muted mb-0 mt-1">$ 260 x 2</p>
-                                    </td>
-                                    <td>$ 520</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><img src="https://www.bootdey.com/image/280x280/FF00FF/000000" alt="product-img" title="product-img" class="avatar-lg rounded"></th>
-                                    <td>
-                                        <h5 class="font-size-16 text-truncate"><a href="#" class="text-dark">Smartphone Dual Camera</a></h5>
-                                        <p class="text-muted mb-0">
-                                            <i class="bx bxs-star text-warning"></i>
-                                            <i class="bx bxs-star text-warning"></i>
-                                            <i class="bx bxs-star text-warning"></i>
-                                            <i class="bx bxs-star text-warning"></i>
-                                        </p>
-                                        <p class="text-muted mb-0 mt-1">$ 260 x 1</p>
-                                    </td>
-                                    <td>$ 260</td>
-                                </tr>
+                                <?php
+                                if(isset($_SESSION['user_id'])){
+                                    $user_id = $_SESSION['user_id'];
+
+                                    if(isset($_GET['selected_prodids'])){
+                                        $prodid = $_GET['selected_prodids'];
+
+                                        if(empty($prodid)){
+                                            $url = "customer_cart.php";
+                                            echo "<script>window.location.href= ' $url '</script>";
+                                            exit();
+                                        }
+
+                                        $cart = "SELECT cart.pname, cart.quantity, product.price, listing.imgid FROM cart 
+                                        JOIN product ON cart.prodid = product.prodid
+                                        JOIN listing ON cart.prodid = listing.prodid
+                                        WHERE user_id = '$user_id' AND cart.prodid IN ($prodid)";
+                                        $cartres = mysqli_query($conn, $cart);
+
+                                        // Initialize total outside the loop
+                                        $total = 0;
+
+                                        if($cartres && mysqli_num_rows($cartres) > 0){
+                                            while($cartrow = mysqli_fetch_assoc($cartres)){
+                                                $pname = $cartrow['pname'];
+                                                $quantity = $cartrow['quantity'];
+                                                $price = $cartrow['price'];
+                                                $img = $cartrow['imgid'];
+                                                $subtotal = $price * $quantity; // Calculate subtotal for each item
+                                                $total += $subtotal; // Add subtotal to total
+
+                                                ?>
+                                                <tr>
+                                                    <th scope="row"><img src="../img/products/<?php echo $img; ?>" alt="product-img" title="product-img" class="avatar-lg rounded"></th>
+                                                    <td>
+                                                        <h5 class="font-size-16 text-truncate"><a href="#" class="text-dark"><?php echo $pname; ?></a></h5>
+                                                        <p class="text-muted mb-0 mt-1">₱ <?php echo $price; ?> x <?php echo $quantity; ?></p>
+                                                    </td>
+                                                    <td>$ <?php echo $subtotal; ?></td> <!-- Display subtotal for each item -->
+                                                </tr>
+                                                <?php
+                                            }
+                                        }
+                                    }
+                                }
+                                ?>
                                 <tr>
                                     <td colspan="2">
                                         <h5 class="font-size-14 m-0">Sub Total :</h5>
                                     </td>
                                     <td>
-                                        $ 780
+                                        <?php echo '₱' . $total; ?>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <h5 class="font-size-14 m-0">Discount :</h5>
-                                    </td>
-                                    <td>
-                                        - $ 78
-                                    </td>
-                                </tr>
-
                                 <tr>
                                     <td colspan="2">
                                         <h5 class="font-size-14 m-0">Shipping Charge :</h5>
                                     </td>
                                     <td>
-                                        $ 25
+                                        ₱100
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <h5 class="font-size-14 m-0">Estimated Tax :</h5>
-                                    </td>
-                                    <td>
-                                        $ 18.20
-                                    </td>
-                                </tr>                              
-                                    
+                                </tr>                           
                                 <tr class="bg-light">
                                     <td colspan="2">
                                         <h5 class="font-size-14 m-0">Total:</h5>
                                     </td>
                                     <td>
-                                        $ 745.2
+                                        <?php echo '₱' . $total + 100; ?>
                                     </td>
                                 </tr>
+                                <form action="" method="POST" id="order-summary">
+                                    <input type="hidden" name="prodid" value="<?php echo $prodid; ?>">
+                                    <input type="hidden" name="userid" value="<?php echo $user_id; ?>">
+                                    <input type="hidden" name="total" value="<?php echo $total + 100; ?>">
+                                </form>
                             </tbody>
                         </table>
-                        
                     </div>
                 </div>
             </div>
@@ -269,6 +277,63 @@ include 'includes/checkout.php';
         </div>
     </div>
     <!-- Footer End -->
+    <script>
+    document.getElementById('placeorder').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Gather input values from the address-info form
+        var firstname = document.getElementById('firstname').value;
+        var lastname = document.getElementById('lastname').value;
+        var phone = document.getElementById('billing-phone').value;
+        var address = document.getElementById('billing-address').value;
+        var postal = document.getElementById('postal-code').value;
+
+        // Gather input values from the payment-method form
+        var payMethod = document.querySelector('input[name="pay-method"]:checked').value;
+
+        // Gather input values from the order-summary form
+        var prodid = document.querySelector('input[name="prodid"]').value;
+        var userid = document.querySelector('input[name="userid"]').value;
+        var total = document.querySelector('input[name="total"]').value;
+
+        // Create a new form to submit the data
+        var formData = document.createElement('form');
+        formData.method = 'POST';
+        formData.action = 'placeorder.php'; // Replace with your PHP script URL
+
+        // Create hidden input fields and set their values
+        var inputs = [
+            { name: 'firstname', value: firstname },
+            { name: 'lastname', value: lastname },
+            { name: 'phone', value: phone },
+            { name: 'address', value: address },
+            { name: 'postal', value: postal },
+            { name: 'payMethod', value: payMethod },
+            { name: 'prodid', value: prodid },
+            { name: 'userid', value: userid },
+            { name: 'total', value: total }
+        ];
+
+        // Append hidden input fields to the form
+        inputs.forEach(function(input) {
+            var inputField = document.createElement('input');
+            inputField.type = 'hidden';
+            inputField.name = input.name;
+            inputField.value = input.value;
+            formData.appendChild(inputField);
+        });
+
+        // Append the form to the document body and submit it
+        document.body.appendChild(formData);
+        formData.submit();
+    });
+</script>
+
+
+
+
+
+
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

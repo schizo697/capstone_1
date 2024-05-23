@@ -104,8 +104,10 @@ include('../conn.php');
                         <h5 class="text-primary mb-0">&#8369; <?php echo $row['price'];?>.00</h5>
                         <h6 class="mb-3">Quantity: <?php echo $row['quantity'];?> available</h6>
                         <div class="btn-action d-flex justify-content-center">
-                            <a class="btn bg-primary py-2 px-3" href=""><i class="bi bi-cart text-white"></i></a>
-                            <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-eye text-white"></i></a>
+                        <button class='btn bg-primary py-2 px-3 edit-button edit-btn' data-id='<?php echo $row['prodid']; ?>' data-name='<?php echo $row['pname']; ?>' data-category='<?php echo $row['category']; ?>' data-price='<?php echo $row['price']; ?>' data-quantity='<?php echo $row['quantity']; ?>'>
+                            <i class="bi bi-pencil-square text-white"></i>
+                        </button>
+                            <a class="btn bg-secondary py-2 px-3" href=""><i class="bi bi-trash text-white"></i></a>
                         </div>
                     </div>
                 </div>

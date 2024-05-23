@@ -112,9 +112,7 @@ function displayFileName(input) {
     function checkURLParams() {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('success') && urlParams.get('success') === 'true') {
-            showAlert('success', 'Account added successfully!');
-        } else if (urlParams.has('error') && urlParams.get('error') === 'true') {
-            showAlert('warning', 'Password do not match!');
+            showAlert('success', 'Thank you for your purchase!');
         }
     }
 
