@@ -8,18 +8,18 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav mx-auto py-0">
                 <a href="farmer_dashboard.php" class="nav-item nav-link">Dashboard</a>
+                <a href="forecast.php" class="nav-item nav-link">Forecast</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-controls="sidebarproduct">Manage Products</a>
                     <div class="dropdown-menu m-0">
                         <a href="product.php" class="dropdown-item dropdown-toggle" id="sidebarproduct">Products</a>
                         <a href="orders.php" class="dropdown-item">Orders</a>
-                        <a href="#" class="dropdown-item">Inventory</a>
                     </div>
                 </div>
-                <a href="selling.php" class="nav-item nav-link">Sell</a>
+                <a href="selling.php" class="nav-item nav-link">Selling</a>
                 <a href="sales.php" class="nav-item nav-link">Sales</a>
-                <a href="#" class="nav-item nav-link">Trends</a>
-                <a href="report.php" class="nav-item nav-link">Reports</a>
+                <a href="#" class="nav-item nav-link">Reports</a>
+                <a href="report.php" class="nav-item nav-link">Archive</a>
             </div>
         </div>
     </nav>

@@ -148,7 +148,7 @@ include('includes/navbar.php');
             <div class="row gx-9">
                 <div class="card">
                     <div class="card-header">
-                        <p>Report</p>
+                        <p>Archive</p>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">

@@ -64,57 +64,73 @@ include('includes/navbar.php');
 </head>
 
 <body>
-    <!-- Table Start -->
+    <!-- Analytics Start -->
     <div class="container-fluid about pt-5">
-        <div class="container">
-            <div class="row gx-9">
+        <div class="container" style="display: flex;">
+            <div class="col-lg-7">
                 <div class="card">
-                    <h1> Sales Order </h1>
-                    <div class="card-header">
-                        <p>- query to be change-</p>
+                     <div class="card-body">
+                        <h5 class="card-title">Sales Reports</h5>
+                        <div id="lineChart"></div>
+                        <script>document.addEventListener("DOMContentLoaded", () => {
+                           new ApexCharts(document.querySelector("#lineChart"), {
+                             series: [{
+                               name: "Desktops",
+                               data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+                             }],
+                             chart: {
+                               height: 350,
+                               type: 'line',
+                               zoom: {
+                                 enabled: false
+                               }
+                             },
+                             dataLabels: {
+                               enabled: false
+                             },
+                             stroke: {
+                               curve: 'straight'
+                             },
+                             grid: {
+                               row: {
+                                 colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                                 opacity: 0.5
+                               },
+                             },
+                             xaxis: {
+                               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                             }
+                           }).render();
+                           });
+                        </script> 
                     </div>
-                    <!-- /.card-header -->
+                </div>   
+            </div>
+            <div class="col-lg-5">
+                <div class="card">
                     <div class="card-body">
-                        <table id="example" class="table table-striped" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Product Name</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Kilo</th>
-                                    <th>Status</th>
-                                    <th>Date Added</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                include "../conn.php";
-                                $uid = $_SESSION['user_id'];
-
-                                $sql = "SELECT * FROM product JOIN pcategory ON pcategory.catid = product.catid WHERE product.status = 'Not Available'";
-                                $result = mysqli_query($conn, $sql);
-
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                ?>
-                                    <tr class="data-row">
-                                        <td><?php echo $row['pname']; ?></td>
-                                        <td><?php echo $row['category']; ?></td>
-                                        <td><?php echo $row['price']; ?></td>
-                                        <td><?php echo $row['quantity']; ?></td>
-                                        <td><?php echo $row['status']; ?></td>
-                                        <td><?php echo date('F d, Y', strtotime($row['dateadded'])); ?></td>
-                                    </tr>
-                                <?php
-                                }
-                                ?>
-                            </tbody>
-                        </table>
+                        <h5 class="card-title">Best Selling Products</h5>
+                        <div id="pieChart"></div>
+                        <script>document.addEventListener("DOMContentLoaded", () => {
+                           new ApexCharts(document.querySelector("#pieChart"), {
+                             series: [44, 55, 13, 43, 22],
+                             chart: {
+                               height: 350,
+                               type: 'pie',
+                               toolbar: {
+                                 show: true
+                               }
+                             },
+                             labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E']
+                           }).render();
+                           });
+                        </script> 
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Table End -->
+    <!-- Analytics End -->
 
     <br>
     <br>
@@ -184,6 +200,7 @@ include('includes/navbar.php');
     <script src="../lib/waypoints/waypoints.min.js"></script>
     <script src="../lib/counterup/counterup.min.js"></script>
     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="assets/js/apexcharts.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="../js/main.js"></script>
