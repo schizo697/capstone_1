@@ -125,9 +125,9 @@ include('../conn.php');
                                             if(isset($_SESSION['user_id'])){
                                                 $user_id = $_SESSION['user_id'];
                                                 $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, product.status, listing.imgid FROM cart 
-                                                        JOIN product ON cart.prodid = product.prodid
-                                                        JOIN listing ON cart.prodid = listing.prodid
-                                                        WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = 'To Pay'";
+                                                JOIN product ON cart.prodid = product.prodid
+                                                JOIN listing ON cart.prodid = listing.prodid
+                                                WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = '1'";
                                                 $cartresult = mysqli_query($conn, $cart);
 
                                                 if($cartresult && mysqli_num_rows($cartresult) > 0) {
@@ -213,9 +213,9 @@ include('../conn.php');
                                             if(isset($_SESSION['user_id'])){
                                                 $user_id = $_SESSION['user_id'];
                                                 $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, product.status, listing.imgid FROM cart 
-                                                        JOIN product ON cart.prodid = product.prodid
-                                                        JOIN listing ON cart.prodid = listing.prodid
-                                                        WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = 'To Ship'";
+                                                JOIN product ON cart.prodid = product.prodid
+                                                JOIN listing ON cart.prodid = listing.prodid
+                                                WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = '2'";
                                                 $cartresult = mysqli_query($conn, $cart);
 
                                                 if($cartresult && mysqli_num_rows($cartresult) > 0) {

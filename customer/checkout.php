@@ -100,11 +100,7 @@ include 'includes/checkout.php';
                                 </div>
                             </div>
                         </li>
-                        <li class="checkout-item">
-                            <div class="avatar checkout-icon p-1">
-                                
-                            </div>
-                           
+                        <!-- Other checkout steps here -->
                         <li class="checkout-item">
                             <div class="avatar checkout-icon p-1">
                                 <div class="avatar-title rounded-circle bg-primary">
@@ -118,14 +114,14 @@ include 'includes/checkout.php';
                                 </div>
                                 <div>
                                     <h5 class="font-size-14 mb-3">Payment method :</h5>
-                                    <form action="" method="POST" id="payment-method">
+                                    <form action="" method="POST" id="payment-method" enctype="multipart/form-data">
                                         <div class="row">
                                             <div class="col-lg-3 col-sm-6">
                                                 <div data-bs-toggle="collapse">
                                                     <label class="card-radio-label">
-                                                        <input type="radio" name="pay-method" id="pay-methodoption1" class="card-radio-input">
+                                                        <input type="radio" name="pay-method" id="pay-methodoption1" class="card-radio-input" value="gcash">
                                                         <span class="card-radio py-3 text-center text-truncate">
-                                                        <i class="bx bx-wallet d-block h2 mb-3"></i>
+                                                            <i class="bx bx-wallet d-block h2 mb-3"></i>
                                                             Gcash
                                                         </span>
                                                     </label>
@@ -134,7 +130,7 @@ include 'includes/checkout.php';
                                             <div class="col-lg-3 col-sm-6">
                                                 <div>
                                                     <label class="card-radio-label">
-                                                        <input type="radio" name="pay-method" id="pay-methodoption3" class="card-radio-input" checked="">
+                                                        <input type="radio" name="pay-method" id="pay-methodoption3" class="card-radio-input" value="cod" checked="">
                                                         <span class="card-radio py-3 text-center text-truncate">
                                                             <i class="bx bx-money d-block h2 mb-3"></i>
                                                             <span>Cash on Delivery</span>
@@ -142,6 +138,10 @@ include 'includes/checkout.php';
                                                     </label>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div id="gcash-upload" style="display:none;">
+                                            <label class="form-label" for="gcash-receipt">Send to this number and Upload Gcash Receipt</label>
+                                            <input type="file" class="form-control" id="gcash-receipt" name="gcash-receipt">
                                         </div>
                                     </form>
                                 </div>
@@ -231,6 +231,7 @@ include 'includes/checkout.php';
                                     }
                                 }
                                 ?>
+                                
                                 <tr>
                                     <td colspan="2">
                                         <h5 class="font-size-14 m-0">Sub Total :</h5>
@@ -342,31 +343,81 @@ include 'includes/checkout.php';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function () {
-      'use strict'
+document.addEventListener('DOMContentLoaded', function() {
+    const gcashOption = document.getElementById('pay-methodoption1');
+    const codOption = document.getElementById('pay-methodoption3');
+    const gcashUpload = document.getElementById('gcash-upload');
 
-      window.addEventListener('load', function () {
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.getElementsByClassName('needs-validation')
+    gcashOption.addEventListener('change', function() {
+        if (gcashOption.checked) {
+            gcashUpload.style.display = 'block';
+        }
+    });
 
-        // Loop over them and prevent submission
-        Array.prototype.filter.call(forms, function (form) {
-          form.addEventListener('submit', function (event) {
-            if (form.checkValidity() === false) {
-              event.preventDefault()
-              event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-          }, false)
-        })
-      }, false)
-    }())
+    codOption.addEventListener('change', function() {
+        if (codOption.checked) {
+            gcashUpload.style.display = 'none';
+        }
+    });
+});
+
+document.getElementById('placeorder').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Gather input values from the address-info form
+    var firstname = document.getElementById('firstname').value;
+    var lastname = document.getElementById('lastname').value;
+    var phone = document.getElementById('billing-phone').value;
+    var address = document.getElementById('billing-address').value;
+    var postal = document.getElementById('postal-code').value;
+
+    // Gather input values from the payment-method form
+    var payMethod = document.querySelector('input[name="pay-method"]:checked').value;
+
+    // Gather input values from the order-summary form
+    var prodid = document.querySelector('input[name="prodid"]').value;
+    var userid = document.querySelector('input[name="userid"]').value;
+    var total = document.querySelector('input[name="total"]').value;
+
+    // Create a new form to submit the data
+    var formData = document.createElement('form');
+    formData.method = 'POST';
+    formData.action = 'placeorder.php'; // Replace with your PHP script URL
+
+    // Create hidden input fields and set their values
+    var inputs = [
+        { name: 'firstname', value: firstname },
+        { name: 'lastname', value: lastname },
+        { name: 'phone', value: phone },
+        { name: 'address', value: address },
+        { name: 'postal', value: postal },
+        { name: 'payMethod', value: payMethod },
+        { name: 'prodid', value: prodid },
+        { name: 'userid', value: userid },
+        { name: 'total', value: total }
+    ];
+
+    // Append hidden input fields to the form
+    inputs.forEach(function(input) {
+        var inputField = document.createElement('input');
+        inputField.type = 'hidden';
+        inputField.name = input.name;
+        inputField.value = input.value;
+        formData.appendChild(inputField);
+    });
+
+    // Add file input if Gcash is selected
+    if (payMethod === 'gcash') {
+        var gcashReceipt = document.getElementById('gcash-receipt');
+        formData.appendChild(gcashReceipt.cloneNode(true));
+    }
+
+    // Append the form to the document body and submit it
+    document.body.appendChild(formData);
+    formData.submit();
+});
 </script>
- <!-- Back to Top -->
- <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
 
-<!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../lib/easing/easing.min.js"></script>
