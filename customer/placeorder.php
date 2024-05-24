@@ -9,6 +9,7 @@ $postal = $_POST['postal'];
 $payMethod = $_POST['payMethod'];
 $user_id = $_POST['userid'];
 $date_of_order = date('Y-m-d');
+$order_quantity = $_POST['quantity'];
 $total = $_POST['total'];
 
 // Splitting $prodid into individual values
@@ -47,7 +48,15 @@ foreach ($prodid_array as $prod_id) {
 
                     $orders = "INSERT INTO orders (order_id, user_id, prodid, pname, price, quantity, date_of_order, total) VALUES ('$orderid', '$user_id', '$prod_id', '$prodname', '$prodprice', '$prodquantity', '$date_of_order', '$total')";
                     $ordersres = mysqli_query($conn, $orders);
-                    if (!$ordersres) {
+                    if ($ordersres) {
+                        $oder_update = "UPDATE product SET quantity = quantity - $order_quantity WHERE prodid = '$prod_id'";
+                        $oder_updateres = mysqli_query($conn, $oder_update);
+                
+                        if(!$oder_updateres){
+                            echo 'Error updating order';
+                            exit();
+                        }
+                    } else {
                         echo 'Error inserting order';
                         exit();
                     }

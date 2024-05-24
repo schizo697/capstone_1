@@ -259,6 +259,7 @@ include 'includes/checkout.php';
                                     <input type="hidden" name="prodid" value="<?php echo $prodid; ?>">
                                     <input type="hidden" name="userid" value="<?php echo $user_id; ?>">
                                     <input type="hidden" name="total" value="<?php echo $total + 100; ?>">
+                                    <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
                                 </form>
                             </tbody>
                         </table>
@@ -294,6 +295,7 @@ include 'includes/checkout.php';
         // Gather input values from the order-summary form
         var prodid = document.querySelector('input[name="prodid"]').value;
         var userid = document.querySelector('input[name="userid"]').value;
+        var quantity = document.querySelector('input[name="quantity"]').value;
         var total = document.querySelector('input[name="total"]').value;
 
         // Create a new form to submit the data
@@ -311,6 +313,7 @@ include 'includes/checkout.php';
             { name: 'payMethod', value: payMethod },
             { name: 'prodid', value: prodid },
             { name: 'userid', value: userid },
+            { name: 'quantity', value: quantity },
             { name: 'total', value: total }
         ];
 

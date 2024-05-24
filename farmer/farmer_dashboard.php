@@ -52,24 +52,28 @@ include('includes/navbar.php');
     <div class="container-fluid py-5">
         <div class="container">
             <div class="row g-5">
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-item bg-light text-center p-5">
-                        <i class="fa fa-carrot display-1 text-primary mb-3"></i>
+                <div class="col-lg-3 col-md-3">
+                    <div class="bg-light text-center p-3">
+                        <!-- <i class="fa fa-carrot display-1 text-primary mb-3"></i> -->
                         <h4>Total Listing</h4>
                         <h1> 5 </h1>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-item bg-light text-center p-5">
-                        <i class="fa fa-apple-alt display-1 text-primary mb-3"></i>
-                        <h4>Total Products</h4>
-                        <h1> 8 </h1>
+                <div class="col-lg-3 col-md-3">
+                    <div class="bg-light text-center p-3">
+                        <h4>Products</h4>
+                        <h1> 5 </h1>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-item bg-light text-center p-5">
-                        <i class="fa fa-dog display-1 text-primary mb-3"></i>
+                <div class="col-lg-3 col-md-3">
+                    <div class="bg-light text-center p-3">
                         <h4>Orders</h4>
+                        <h1> 2 </h1>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="bg-light text-center p-3">
+                        <h4>Customers</h4>
                         <h1> 2 </h1>
                     </div>
                 </div>
@@ -80,6 +84,7 @@ include('includes/navbar.php');
 
     <section class="section">
     <div class="row">
+    <h5 class="display-5">Market Trends </h5>
     <!-- Top Selling Start -->
     <div class="col-lg-6">
         <div class="card">
