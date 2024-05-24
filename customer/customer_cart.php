@@ -41,9 +41,16 @@ include('../conn.php');
             include 'css/customer_cart.css';
         ?>
 
-.bg-green {
-    background-color: #34AD54!important;
-}
+        .bg-green {
+            background-color: #34AD54!important;
+        }
+        .table-shopping-cart {
+            border: 1px solid #dee2e6;
+        }
+        .table-shopping-cart th,
+        .table-shopping-cart td {
+            border: 1px solid #dee2e6;
+        }
     </style>
 </head>
 
@@ -64,10 +71,10 @@ include('../conn.php');
                                 <table class="table table-borderless table-shopping-cart">
                                     <thead class="text-muted">
                                         <tr class="small text-uppercase">
-                                            <th scope="col">Product</th>
-                                            <th scope="col" width="120">Quantity</th>
+                                            <th scope="col" width="150">Product</th>
+                                            <th scope="col" width="100">Quantity</th>
                                             <th scope="col" width="120">Price</th>
-                                            <th scope="col" class="text-right d-none d-md-block" width="200"></th>
+                                            <th scope="col" width="120">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -116,7 +123,7 @@ include('../conn.php');
                                                                 <small class="text-muted">Per kilo</small>
                                                             </div>
                                                         </td>
-                                                        <td class="text-right d-none d-md-block">
+                                                        <td class="text-right">
                                                             <a href="cart_remove.php?prodid=<?php echo $cartrow['prodid'] ?>">
                                                                 <button class="btn btn-outline-danger quantity-minus" type="button">Remove</button>
                                                             </a>
@@ -202,13 +209,7 @@ include('../conn.php');
             </div>
         </div>
     </div>
-    <!-- body -->
-    <div class="container-fluid bg-dark text-white py-4">
-        <div class="container text-center">
-            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
-        </div>
-    </div>
-    <!-- Footer End -->
+ 
 
     <script>
     function updateSelectedItems(checkbox) {
@@ -244,7 +245,13 @@ include('../conn.php');
 
         window.onload = checkURLParams;
     </script>
-
+   <!-- Footer start -->
+   <div class="container-fluid bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
+        </div>
+    </div>
+    <!-- Footer End -->
     <!-- Back to Top -->
     <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
 

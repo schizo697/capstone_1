@@ -223,7 +223,7 @@ include 'includes/checkout.php';
                                                         <h5 class="font-size-16 text-truncate"><a href="#" class="text-dark"><?php echo $pname; ?></a></h5>
                                                         <p class="text-muted mb-0 mt-1">₱ <?php echo $price; ?> x <?php echo $quantity; ?></p>
                                                     </td>
-                                                    <td>$ <?php echo $subtotal; ?></td> <!-- Display subtotal for each item -->
+                                                    <td>₱ <?php echo $subtotal; ?></td> <!-- Display subtotal for each item -->
                                                 </tr>
                                                 <?php
                                             }

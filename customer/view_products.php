@@ -133,7 +133,10 @@ include 'includes/header.php';
                 <p>Contact: <?php echo $product['contact']; ?></p>
                 <p>Date posted: <?php echo $product['dateposted']; ?></p>
                 <a href="customer_dashboard.php" class="btn btn-secondary btn-back">Back to Products</a>
-                <a href="add_to_cart.php?id=<?php echo $product['prodid']; ?>" class="btn btn-primary btn-add-to-cart"><i class="fas fa-cart-plus"></i> Add to Cart</a>
+                <!-- <a type="button" data-prodid="<?php echo $productrow['prodid']; ?>" data-pname="<?php echo $productrow['pname'] ?>"></i> Add to Cart</a> -->
+                <button class="btn btn-primary py-2 px-3 add-to-cart" type="button" data-prodid="<?php echo $productrow['prodid']; ?>" data-pname="<?php echo $productrow['pname'] ?>">
+                            <i class="bi bi-cart text-white"></i>
+                        </button>
             </div>
         </div>
     </div>
@@ -146,7 +149,35 @@ include 'includes/header.php';
         </div>
     </div>
     <!-- Footer End -->
+    <script>
+    $(document).ready(function(){
+        $('.add-to-cart').click(function(){
+            var prodid = $(this).data('prodid');
+            var pname = $(this).data('pname');
 
+            $.ajax({
+                url: 'add_to_cart.php',
+                type: 'POST',
+                data: {
+                    prodid: prodid, // Include prodid here
+                    pname: pname
+                },
+                success: function(response){
+                    Swal.fire({
+                        icon: 'success',
+                        text: response,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                },
+                error: function(xhr, status, error){
+                    console.error('AJAX Error: ' + status + error);
+                    console.error(xhr);
+                }
+            });
+        });
+    });
+    </script>
     <!-- Back to Top -->
     <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
 
