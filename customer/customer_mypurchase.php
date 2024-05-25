@@ -64,6 +64,69 @@ include('../conn.php');
        .bg-green {
            background-color: #34AD54 !important;
        }
+       <style>
+        /* Modal styling */
+        .modal-content {
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 1rem 1.5rem;
+        }
+
+        .modal-header .modal-title {
+            font-weight: bold;
+        }
+
+        .modal-header .close {
+            margin-top: -10px;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            background-color: #fff;
+        }
+
+        .modal-footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            padding: 1rem 1.5rem;
+        }
+
+        .product-modal-content {
+            text-align: center;
+        }
+
+        .product-modal-content h5 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .product-details {
+            font-size: 1rem;
+            color: #555;
+        }
+    </style>
     </style>
 </head>
 
@@ -204,7 +267,8 @@ include('../conn.php');
                                             <tr>
                                                 <th class="text-center py-3 px-4" style="width: 30px;">Product Name &amp; Details</th>
                                                 <th class="text-right py-3 px-4" style="width: 100px;">Price</th>
-                                                <th class="text-center py-3 px-4" style="width: 120px;">Quantity</th>
+                                                <th class="text-right py-3 px-4" style="width: 100px;">Quantity</th>
+                                                <th class="text-center py-3 px-4" style="width: 120px;">Total</th>
                                                 <th class="text-right py-3 px-4" style="width: 100px;">Action</th>
                                             </tr>
                                         </thead>
@@ -250,13 +314,18 @@ include('../conn.php');
                                                                 </td>
                                                                 <td>
                                                                     <div class="price-wrap">
-                                                                        <var class="price">₱ <?php echo $cartrow['price']?></var>
-                                                                        <small class="text-muted">Per kilo</small>
+                                                                        <var class="price"><?php echo $cartrow['price']?></var>                                            
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="price-wrap">
+                                                                        <var class="total">₱ <?php echo $cartrow['total']?></var>                                            
                                                                     </div>
                                                                 </td>
                                                                 <td class="text-right d-none d-md-block">
                                                                     <a href="#">
-                                                                        <button class="btn btn-outline-success" type="button">View</button>
+                                                                    <button class="btn btn-outline-success view-btn" type="button" data-toggle="modal" data-target="#productModal" data-product-id="<?php echo $cartrow['prodid']; ?>">View</button>
+                                                                    <button class="btn btn-outline-success complete-btn" type="button" data-order-id="<?php echo $cartrow['order_id']; ?>">Completed</button>
                                                                     </a>
                                                                 </td>
                                                             </tr>
@@ -384,10 +453,11 @@ include('../conn.php');
                                             <?php
                                             if(isset($_SESSION['user_id'])){
                                                 $user_id = $_SESSION['user_id'];
-                                                $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, product.status, listing.imgid FROM cart 
-                                                        JOIN product ON cart.prodid = product.prodid
-                                                        JOIN listing ON cart.prodid = listing.prodid
-                                                        WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = 'Completed'";
+                                                $cart = "SELECT orders.order_id, orders.user_id, orders.prodid, orders.pname, orders.price, orders.quantity, orders.total, product.pname AS product_name, listing.details, listing.imgid
+                                                FROM orders
+                                                JOIN product ON orders.prodid = product.prodid
+                                                JOIN listing ON listing.prodid = product.prodid
+                                                WHERE orders.status = 3";
                                                 $cartresult = mysqli_query($conn, $cart);
 
                                                 if($cartresult && mysqli_num_rows($cartresult) > 0) {
@@ -451,6 +521,61 @@ include('../conn.php');
         </div>
     </div>
 
+  <!-- Modal for product details -->
+  <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Product Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Product details will be loaded here via AJAX -->
+                    <div class="product-modal-content">
+                        <h5>Sample Product Name</h5>
+                        <img src="path/to/image.jpg" alt="Product Image" class="img-fluid product-image">
+                        <p class="product-price">Price: ₱ 1000</p>
+                        <p class="product-details">Details: Sample product details go here.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    // Handle View button click event
+    $('.view-btn').click(function() {
+        var productId = $(this).data('product-id');
+        $.ajax({
+            url: 'product_details.php', // Replace with the actual URL to fetch product details
+            method: 'GET',
+            data: { productId: productId },
+            success: function(response) {
+                $('#productModal .modal-body').html(response);
+            }
+        });
+    });
+
+    // Handle Completed button click event
+    $('.complete-btn').click(function() {
+        var orderId = $(this).data('order-id');
+        $.ajax({
+            url: 'update_status.php', // Replace with the actual URL to update order status
+            method: 'POST',
+            data: { orderId: orderId, status: 3 },
+            success: function(response) {
+                // Optionally, you can handle the response if needed
+                console.log('Order status updated successfully.');
+                // Reload the page or update UI as required
+            }
+        });
+    });
+</script>
+
     <script>
         $('#myTab a').on('click', function (e) {
             e.preventDefault();
@@ -475,6 +600,13 @@ include('../conn.php');
             }
         });
     </script>
+      <!-- Footer start -->
+   <div class="container-fluid bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
+        </div>
+    </div>
+    <!-- Footer End -->
 </body>
 </html>
 <?php 
