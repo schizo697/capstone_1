@@ -314,50 +314,6 @@ include('includes/navbar.php');
     </div>
     <!-- Footer End -->
 
-
-
-    <!-- <div class="container-fluid bg-dark text-light mt-5 py-5">
-        <div class="container">
-            <div class="row gx-5">
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <h4 class="text-uppercase text-primary">Get In Touch</h4>
-                    <p class="mb-4">Contact us for any inquiries.</p>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>123 Street, City, Country</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt text-primary me-3"></i>+123 456 7890</p>
-                    <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>watapampam@example.com</p>
-                    <div class="d-flex pt-2">
-                        <a class="btn btn-outline-primary btn-social" href=""><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-outline-primary btn-social" href=""><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-outline-primary btn-social" href=""><i class="fab fa-youtube"></i></a>
-                        <a class="btn btn-outline-primary btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <h4 class="text-uppercase text-primary">Quick Links</h4>
-                    <div class="d-flex flex-column justify-content-start">
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Home</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>About Us</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Services</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Contact</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <h4 class="text-uppercase text-primary">Newsletter</h4>
-                    <p class="mb-4">Subscribe to our newsletter for the latest updates.</p>
-                    <form action="">
-                        <div class="input-group">
-                            <input type="email" class="form-control border-0 p-3" placeholder="Your Email">
-                            <button class="btn btn-primary">Subscribe</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="container border-top border-light pt-5">
-            <p class="m-0 text-center text-light">&copy; <a href="#">Farmer's Market</a>. All Rights Reserved.</p>
-        </div>
-    </div> -->
-    <!-- Footer End -->
     <?php
 include('includes/footer.php');
 ?>

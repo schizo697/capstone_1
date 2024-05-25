@@ -121,68 +121,69 @@ include('../conn.php');
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php
-                                            if(isset($_SESSION['user_id'])){
-                                                $user_id = $_SESSION['user_id'];
-                                                $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, product.status, listing.imgid FROM cart 
-                                                JOIN product ON cart.prodid = product.prodid
-                                                JOIN listing ON cart.prodid = listing.prodid
-                                                WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = '1'";
-                                                $cartresult = mysqli_query($conn, $cart);
+    <?php
+    if(isset($_SESSION['user_id'])){
+        $user_id = $_SESSION['user_id'];
+        $cart = "SELECT orders.order_id, orders.user_id, orders.prodid, orders.pname, orders.price, orders.quantity, orders.total, product.pname AS product_name, listing.details, listing.imgid
+        FROM orders
+        JOIN product ON orders.prodid = product.prodid
+        JOIN listing ON listing.prodid = product.prodid
+        WHERE orders.status = 1";
+        $cartresult = mysqli_query($conn, $cart);
 
-                                                if($cartresult && mysqli_num_rows($cartresult) > 0) {
-                                                    while($cartrow = mysqli_fetch_assoc($cartresult)){
-                                                        $imgPath = "../img/products/".$cartrow['imgid'];
-                                                        if(file_exists($imgPath)) { 
-                                                            ?>
-                                                            <tr>
-                                                                <td>
-                                                                    <figure class="itemside align-items-center">
-                                                                        <div class="aside">
-                                                                            <input type="checkbox" name="select_item[]" value="<?php echo $cartrow['prodid']; ?>" class="mr-2" onclick="updateSelectedItems(this)">
-                                                                            <img src="<?php echo $imgPath ?>" class="img-sm">
-                                                                        </div>
-                                                                        <figcaption class="info">
-                                                                            <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
-                                                                            <p class="text-muted small"><?php echo $cartrow['status'] ?></p>
-                                                                        </figcaption>
-                                                                    </figure>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="input-group">
-                                                                        <a href="quantity_minus.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
-                                                                            <!-- Add minus button content if needed -->
-                                                                        </a>
-                                                                        <label class="form-control quantity-label" name="quantity"><?php echo $cartrow['quantity']; ?></label>
-                                                                        <a href="quantity_add.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
-                                                                            <!-- Add plus button content if needed -->
-                                                                        </a>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="price-wrap">
-                                                                        <var class="price">₱ <?php echo $cartrow['price']?></var>
-                                                                        <small class="text-muted">Per kilo</small>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-right d-none d-md-block">
-                                                                    <a href="#">
-                                                                        <button class="btn btn-outline-success" type="button">View</button>
-                                                                    </a>
-                                                                    <a href="cart_remove.php?prodid=<?php echo $cartrow['prodid'] ?>" class="cancel-button">
-                                                                        <button class="btn btn-outline-danger" type="button">Cancel</button>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <?php
-                                                        } else {
-                                                            echo "Image file does not exist: ".$imgPath;
-                                                        }
-                                                    }
-                                                }
-                                            } 
-                                            ?>
-                                        </tbody>
+        if($cartresult && mysqli_num_rows($cartresult) > 0) {
+            while($cartrow = mysqli_fetch_assoc($cartresult)){
+                $imgPath = "../img/products/".$cartrow['imgid'];
+                if(file_exists($imgPath)) { 
+                    ?>
+                    <tr>
+                        <td>
+                            <figure class="itemside align-items-center">
+                                <div class="aside">
+                                    <input type="checkbox" name="select_item[]" value="<?php echo $cartrow['prodid']; ?>" class="mr-2" onclick="updateSelectedItems(this)">
+                                    <img src="<?php echo $imgPath ?>" class="img-sm">
+                                </div>
+                                <figcaption class="info">
+                                    <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
+                                    <p class="text-muted small"><?php echo $cartrow['details'] ?></p>
+                                </figcaption>
+                            </figure>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <a href="quantity_minus.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
+                                    <!-- Add minus button content if needed -->
+                                </a>
+                                <label class="form-control quantity-label" name="quantity"><?php echo $cartrow['quantity']; ?></label>
+                                <a href="quantity_add.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
+                                    <!-- Add plus button content if needed -->
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="price-wrap">
+                                <var class="price">₱ <?php echo $cartrow['price']?></var>
+                                <small class="text-muted">Per kilo</small>
+                            </div>
+                        </td>
+                        <td class="text-right d-none d-md-block">
+                            <a href="#">
+                                <button class="btn btn-outline-success" type="button">View</button>
+                            </a>
+                            <a href="cart_remove.php?prodid=<?php echo $cartrow['prodid'] ?>" class="cancel-button">
+                                <button class="btn btn-outline-danger" type="button">Cancel</button>
+                            </a>
+                        </td>
+                    </tr>
+                    <?php
+                } else {
+                    echo "Image file does not exist: ".$imgPath;
+                }
+            }
+        }
+    } 
+    ?>
+</tbody>
                                     </table>
                                 </div>
                                 <!-- / Shopping cart table -->
@@ -212,10 +213,11 @@ include('../conn.php');
                                             <?php
                                             if(isset($_SESSION['user_id'])){
                                                 $user_id = $_SESSION['user_id'];
-                                                $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, product.status, listing.imgid FROM cart 
-                                                JOIN product ON cart.prodid = product.prodid
-                                                JOIN listing ON cart.prodid = listing.prodid
-                                                WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = '2'";
+                                                $cart = "SELECT orders.order_id, orders.user_id, orders.prodid, orders.pname, orders.price, orders.quantity, orders.total, product.pname AS product_name, listing.details, listing.imgid
+                                                        FROM orders
+                                                        JOIN product ON orders.prodid = product.prodid
+                                                        JOIN listing ON listing.prodid = product.prodid
+                                                        WHERE orders.status = 2";
                                                 $cartresult = mysqli_query($conn, $cart);
 
                                                 if($cartresult && mysqli_num_rows($cartresult) > 0) {
@@ -232,7 +234,7 @@ include('../conn.php');
                                                                         </div>
                                                                         <figcaption class="info">
                                                                             <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
-                                                                            <p class="text-muted small"><?php echo $cartrow['status'] ?></p>
+                                                                            <p class="text-muted small"><?php echo $cartrow['details'] ?></p>
                                                                         </figcaption>
                                                                     </figure>
                                                                 </td>
@@ -297,10 +299,11 @@ include('../conn.php');
                                             <?php
                                             if(isset($_SESSION['user_id'])){
                                                 $user_id = $_SESSION['user_id'];
-                                                $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, product.status, listing.imgid FROM cart 
-                                                        JOIN product ON cart.prodid = product.prodid
-                                                        JOIN listing ON cart.prodid = listing.prodid
-                                                        WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = 'To Receive'";
+                                                $cart = "SELECT orders.order_id, orders.user_id, orders.prodid, orders.pname, orders.price, orders.quantity, orders.total, product.pname AS product_name, listing.details, listing.imgid
+                                                FROM orders
+                                                JOIN product ON orders.prodid = product.prodid
+                                                JOIN listing ON listing.prodid = product.prodid
+                                                WHERE orders.status = 3";
                                                 $cartresult = mysqli_query($conn, $cart);
 
                                                 if($cartresult && mysqli_num_rows($cartresult) > 0) {
@@ -317,7 +320,7 @@ include('../conn.php');
                                                                         </div>
                                                                         <figcaption class="info">
                                                                             <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
-                                                                            <p class="text-muted small"><?php echo $cartrow['status'] ?></p>
+                                                                            <p class="text-muted small"><?php echo $cartrow['details'] ?></p>
                                                                         </figcaption>
                                                                     </figure>
                                                                 </td>
@@ -382,10 +385,11 @@ include('../conn.php');
                                             <?php
                                             if(isset($_SESSION['user_id'])){
                                                 $user_id = $_SESSION['user_id'];
-                                                $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, product.status, listing.imgid FROM cart 
-                                                        JOIN product ON cart.prodid = product.prodid
-                                                        JOIN listing ON cart.prodid = listing.prodid
-                                                        WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = 'Cancelled'";
+                                                $cart = "SELECT orders.order_id, orders.user_id, orders.prodid, orders.pname, orders.price, orders.quantity, orders.total, product.pname AS product_name, listing.details, listing.imgid
+                                                FROM orders
+                                                JOIN product ON orders.prodid = product.prodid
+                                                JOIN listing ON listing.prodid = product.prodid
+                                                WHERE orders.status = 0";
                                                 $cartresult = mysqli_query($conn, $cart);
 
                                                 if($cartresult && mysqli_num_rows($cartresult) > 0) {
@@ -402,7 +406,7 @@ include('../conn.php');
                                                                         </div>
                                                                         <figcaption class="info">
                                                                             <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
-                                                                            <p class="text-muted small"><?php echo $cartrow['status'] ?></p>
+                                                                            <p class="text-muted small"><?php echo $cartrow['details'] ?></p>
                                                                         </figcaption>
                                                                     </figure>
                                                                 </td>

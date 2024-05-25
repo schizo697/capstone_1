@@ -4,8 +4,7 @@ session_cache_limiter(false);
 session_start();
 include("../conn.php");
 
-if(!isset($_SESSION['user_id']))
-{
+if(!isset($_SESSION['user_id'])) {
     header("location:../index.php");
 }
 
@@ -232,33 +231,45 @@ include('includes/navbar.php');
     </script>
 
     <script>
-    // Restore product functionality
+    // Update order status functionality
     document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.restore-button').forEach(function(button) {
+        document.querySelectorAll('.confirm-button').forEach(function(button) {
             button.addEventListener('click', function() {
                 const prodId = this.getAttribute('data-id');
+                updateOrderStatus(prodid, 2);
+            });
+        });
 
-                if (confirm('Are you sure you want to restore this product?')) {
-                    fetch(`restore_product.php?prodid=${prodId}`, {
-                        method: 'GET'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Product restored successfully!');
-                            location.reload();
-                        } else {
-                            alert('Error restoring product.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error restoring product.');
-                    });
-                }
+        document.querySelectorAll('.cancel-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const prodId = this.getAttribute('data-id');
+                updateOrderStatus(prodid, 0);
             });
         });
     });
+
+    function updateOrderStatus(prodid, status) {
+        fetch('update_order_status.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ prodid: prodid, status: status })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Order status updated successfully!');
+                location.reload();
+            } else {
+                alert('Error updating order status.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating order status.');
+        });
+    }
     </script>
 </body>
 <?php
