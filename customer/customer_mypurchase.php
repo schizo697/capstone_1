@@ -88,9 +88,7 @@ include('../conn.php');
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" id="to-pay-tab" data-toggle="tab" href="#to-pay" role="tab" aria-controls="to-pay" aria-selected="true">To Pay</a>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="to-ship-tab" data-toggle="tab" href="#to-ship" role="tab" aria-controls="to-ship" aria-selected="false">To Ship</a>
-                </li>
+               
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="to-receive-tab" data-toggle="tab" href="#to-receive" role="tab" aria-controls="to-receive" aria-selected="false">To Receive</a>
                 </li>
@@ -191,92 +189,7 @@ include('../conn.php');
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="to-ship" role="tabpanel" aria-labelledby="to-ship-tab">
-                    <div class="container px-3 my-5 clearfix">
-                        <!-- Shopping cart table for To Ship -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h2>Shopping Cart - To Ship</h2>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered m-0">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center py-3 px-4" style="width: 30px;">Product Name &amp; Details</th>
-                                                <th class="text-right py-3 px-4" style="width: 100px;">Price</th>
-                                                <th class="text-center py-3 px-4" style="width: 120px;">Quantity</th>
-                                                <th class="text-right py-3 px-4" style="width: 100px;">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            if(isset($_SESSION['user_id'])){
-                                                $user_id = $_SESSION['user_id'];
-                                                $cart = "SELECT orders.order_id, orders.user_id, orders.prodid, orders.pname, orders.price, orders.quantity, orders.total, product.pname AS product_name, listing.details, listing.imgid
-                                                        FROM orders
-                                                        JOIN product ON orders.prodid = product.prodid
-                                                        JOIN listing ON listing.prodid = product.prodid
-                                                        WHERE orders.status = 2";
-                                                $cartresult = mysqli_query($conn, $cart);
-
-                                                if($cartresult && mysqli_num_rows($cartresult) > 0) {
-                                                    while($cartrow = mysqli_fetch_assoc($cartresult)){
-                                                        $imgPath = "../img/products/".$cartrow['imgid'];
-                                                        if(file_exists($imgPath)) { 
-                                                            ?>
-                                                            <tr>
-                                                                <td>
-                                                                    <figure class="itemside align-items-center">
-                                                                        <div class="aside">
-                                                                            <input type="checkbox" name="select_item[]" value="<?php echo $cartrow['prodid']; ?>" class="mr-2" onclick="updateSelectedItems(this)">
-                                                                            <img src="<?php echo $imgPath ?>" class="img-sm">
-                                                                        </div>
-                                                                        <figcaption class="info">
-                                                                            <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
-                                                                            <p class="text-muted small"><?php echo $cartrow['details'] ?></p>
-                                                                        </figcaption>
-                                                                    </figure>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="input-group">
-                                                                        <a href="quantity_minus.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
-                                                                            <!-- Add minus button content if needed -->
-                                                                        </a>
-                                                                        <label class="form-control quantity-label" name="quantity"><?php echo $cartrow['quantity']; ?></label>
-                                                                        <a href="quantity_add.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
-                                                                            <!-- Add plus button content if needed -->
-                                                                        </a>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="price-wrap">
-                                                                        <var class="price">₱ <?php echo $cartrow['price']?></var>
-                                                                        <small class="text-muted">Per kilo</small>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-right d-none d-md-block">
-                                                                    <a href="#">
-                                                                        <button class="btn btn-outline-success" type="button">View</button>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <?php
-                                                        } else {
-                                                            echo "Image file does not exist: ".$imgPath;
-                                                        }
-                                                    }
-                                                }
-                                            } 
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- / Shopping cart table -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              
                 <div class="tab-pane fade" id="to-receive" role="tabpanel" aria-labelledby="to-receive-tab">
                     <div class="container px-3 my-5 clearfix">
                         <!-- Shopping cart table for To Receive -->
