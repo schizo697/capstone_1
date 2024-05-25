@@ -216,7 +216,7 @@ include('../conn.php');
                                                 FROM orders
                                                 JOIN product ON orders.prodid = product.prodid
                                                 JOIN listing ON listing.prodid = product.prodid
-                                                WHERE orders.status = 3";
+                                                WHERE orders.status = 2";
                                                 $cartresult = mysqli_query($conn, $cart);
 
                                                 if($cartresult && mysqli_num_rows($cartresult) > 0) {
