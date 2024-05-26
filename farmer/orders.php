@@ -92,11 +92,12 @@ include('includes/navbar.php');
                                 include "../conn.php";
                                 $uid = $_SESSION['user_id'];
 
-                                $sql = "SELECT *, orders.quantity, CONCAT(firstname, ' ', lastname) AS fullName FROM orders 
-                                            JOIN user_account ON user_account.user_id = orders.user_id 
-                                            JOIN user_info ON user_info.info_id = user_account.info_id
-                                            JOIN product ON product.prodid = orders.prodid
-                                            WHERE product.uid = '$uid'";
+                                $sql = "SELECT orders.order_id, orders.quantity, CONCAT(firstname, ' ', lastname) AS fullName, orders.*, product.*
+                                FROM orders 
+                                JOIN user_account ON user_account.user_id = orders.user_id 
+                                JOIN user_info ON user_info.info_id = user_account.info_id
+                                JOIN product ON product.prodid = orders.prodid
+                                WHERE product.uid = '$uid' AND orders.status = 1";
                                 $result = mysqli_query($conn, $sql);
 
                                 while ($row = mysqli_fetch_assoc($result)) {
@@ -108,15 +109,16 @@ include('includes/navbar.php');
                                         <td><?php echo $row['price']; ?></td>
                                         <td> .. </td>
                                         <td><?php echo date('F d, Y', strtotime($row['date_of_order'])); ?></td>
-                                        <td>To Pay</td>
+                                        <td id="status-<?php echo $row['order_id']; ?>">To Pay</td>
                                         <td>
-                                            <button class='btn btn-primary confirm-button edit-btn' data-id='<?php echo $row['prodid']; ?>' data-name='<?php echo $row['pname']; ?>' data-category='<?php echo $row['category']; ?>' data-price='<?php echo $row['price']; ?>' data-quantity='<?php echo $row['quantity']; ?>'>
+                                            <button id='confirm-btn-<?php echo $row['order_id']; ?>' class='btn btn-primary confirm-btn' data-id='<?php echo $row['order_id']; ?>'>
                                                 <i class='fas fa-check-circle'></i> Confirm
                                             </button>
-                                            <button class='btn btn-danger cancel-btn' data-id='<?php echo $row['prodid']; ?>'>
+                                            <button id='cancel-btn-<?php echo $row['order_id']; ?>' class='btn btn-danger cancel-btn' data-id='<?php echo $row['order_id']; ?>'>
                                                 <i class='fas fa-times-circle'></i> Cancel
                                             </button>
                                         </td>
+
                                     </tr>
                                 <?php
                                 }
@@ -142,65 +144,6 @@ include('includes/navbar.php');
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
-
-    <script>
-    function showModal(){
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Product Added Successfully',
-            showConfirmButton: false
-        });
-    }
-
-    function checkExistParam() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('success') && urlParams.get('success') === 'true') {
-            showModal();
-        }
-    }
-
-    window.onload = checkExistParam; 
-    </script>
-
-    <script>
-    // Wait for the DOM to be ready
-    document.addEventListener("DOMContentLoaded", function() {
-        // Get the button element
-        var openModalBtn = document.getElementById('openModalBtn');
-
-        // Get the modal element
-        var modal = document.querySelector('.modal');
-
-        // When the button is clicked, show the modal
-        openModalBtn.addEventListener('click', function() {
-            modal.style.display = 'block';
-        });
-
-        // When the close button inside the modal is clicked, hide the modal
-        modal.querySelector('.close').addEventListener('click', function() {
-            modal.style.display = 'none';
-        });
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.addEventListener('click', function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        });
-    });
-    </script>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../lib/easing/easing.min.js"></script>
-    <script src="../lib/waypoints/waypoints.min.js"></script>
-    <script src="../lib/counterup/counterup.min.js"></script>
-    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="../js/main.js"></script>
 
     <script>
     function enableDropdown() {
@@ -231,35 +174,53 @@ include('includes/navbar.php');
     })
     </script>
 
-    <script>
-    // Restore product functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.restore-button').forEach(function(button) {
-            button.addEventListener('click', function() {
-                const prodId = this.getAttribute('data-id');
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/counterup/counterup.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
 
-                if (confirm('Are you sure you want to restore this product?')) {
-                    fetch(`restore_product.php?prodid=${prodId}`, {
-                        method: 'GET'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Product restored successfully!');
-                            location.reload();
-                        } else {
-                            alert('Error restoring product.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error restoring product.');
-                    });
-                }
-            });
-        });
+    <!-- Template Javascript -->
+    <script src="../js/main.js"></script>
+
+    <script>
+$(document).ready(function() {
+    $('.confirm-btn').click(function() {
+        var orderId = $(this).data('id');
+        var button = $(this);
+        updateStatus(orderId, 2, button); // 2 for confirmed status
     });
-    </script>
+
+    $('.cancel-btn').click(function() {
+        var orderId = $(this).data('id');
+        var button = $(this);
+        updateStatus(orderId, 0, button); // 0 for cancelled status
+    });
+
+    function updateStatus(orderId, status, button) {
+        $.ajax({
+            type: 'POST',
+            url: 'update_status.php', // Create a PHP file to handle this request
+            data: {
+                orderId: orderId,
+                status: status
+            },
+            success: function(response) {
+                if (response == 'success') {
+                    $('#status-' + orderId).text(status == 2 ? 'Confirmed' : 'Cancelled');
+                    button.prop('disabled', true); // Disable the button that was clicked
+                    button.siblings('button').prop('disabled', true); // Disable the sibling button
+                } else {
+                    alert('Failed to update status.');
+                }
+            }
+        });
+    }
+});
+</script>
+
 </body>
 <?php
 include('includes/footer.php');
