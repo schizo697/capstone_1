@@ -159,7 +159,7 @@ if (isset($_POST['editproductname']) && isset($_POST['editcategory']) && isset($
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="price">Price per Kilo:</label>
+                            <label for="price">Price:</label>
                             <input type="text" class="form-control" id="price" name="price" required>
                         </div>
                         <div class="form-group">
@@ -215,7 +215,7 @@ if (isset($_POST['editproductname']) && isset($_POST['editcategory']) && isset($
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="editprice">Price per Kilo:</label>
+                            <label for="editprice">Price:</label>
                             <input type="text" class="form-control" id="editprice" name="editprice" required>
                         </div>
                         <div class="form-group">
@@ -261,7 +261,7 @@ if (isset($_POST['editproductname']) && isset($_POST['editcategory']) && isset($
                                 <tr>
                                     <th scope="col">Product Name</th>
                                     <th scope="col">Category</th>
-                                    <th scope="col">Price per Kilo</th>
+                                    <th scope="col">Price</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Kilo or Sack</th>
                                     <th scope="col">Status</th>
@@ -269,37 +269,44 @@ if (isset($_POST['editproductname']) && isset($_POST['editcategory']) && isset($
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                    $uid = $_SESSION['user_id'];
-                                    $query = "SELECT p.prodid, p.pname, c.category, p.price, p.quantity, p.status w.measurement FROM product p JOIN pcategory c ON p.catid = c.catid WHERE p.uid = ? AND p.status = 'Available'";
-                                    $stmt = $conn->prepare($query);
-                                    $stmt->bind_param("i", $uid);
-                                    $stmt->execute();
-                                    $result = $stmt->get_result();
+                            <?php
+                            $uid = $_SESSION['user_id'];
+                            $query = "SELECT product.prodid, product.pname, pcategory.category, product.price, product.quantity, product.status, weight.measurement
+                            FROM product
+                            JOIN weight ON product.weight_id = weight.weight_id
+                            JOIN pcategory ON product.catid = pcategory.catid                          
+                            WHERE product.uid = $uid AND product.status = 'Available'";
+                            $result = $conn->query($query);
 
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo "<tr>
-                                                <td>{$row['pname']}</td>
-                                                <td>{$row['category']}</td>
-                                                <td>{$row['price']}</td>
-                                                <td>{$row['quantity']}</td>
-                                                <td>{$row['quantity']}</td>
-                                                <td>{$row['status']}</td>
-                                                <td>
-                                                    <button class='btn btn-primary edit-button edit-btn' data-id='{$row['prodid']}' data-name='{$row['pname']}' data-category='{$row['category']}' data-price='{$row['price']}' data-quantity='{$row['quantity']}'>
-                                                        <i class='fas fa-edit'></i> Edit
-                                                    </button>
-                                                    <button class='btn btn-danger archive-btn' data-id='{$row['prodid']}'>
-                                                        <i class='fas fa-archive'></i> Archive
-                                                    </button>
-                                                </td>
-                                            </tr>";
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='6' class='text-center'>No products found</td></tr>";
-                                    }
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $row['pname']; ?></td>
+                                        <td><?php echo $row['category']; ?></td>
+                                        <td><?php echo $row['price']; ?></td>
+                                        <td><?php echo $row['quantity']; ?></td>
+                                        <td><?php echo $row['measurement']; ?></td>
+                                        <td><?php echo $row['status']; ?></td>
+                                        <td>
+                                            <button class='btn btn-primary edit-button edit-btn' data-id='<?php echo $row['prodid']; ?>' data-name='<?php echo $row['pname']; ?>' data-category='<?php echo $row['category']; ?>' data-price='<?php echo $row['price']; ?>' data-quantity='<?php echo $row['quantity']; ?>'>
+                                                <i class='fas fa-edit'></i> Edit
+                                            </button>
+                                            <button class='btn btn-danger archive-btn' data-id='<?php echo $row['prodid']; ?>'>
+                                                <i class='fas fa-archive'></i> Archive
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                            } else {
                                 ?>
+                                <tr>
+                                    <td colspan='6' class='text-center'>No products found</td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
                             </tbody>
                         </table>
                     </div>

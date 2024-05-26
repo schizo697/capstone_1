@@ -152,10 +152,7 @@ if(isset($_SESSION['user_id'])){
             <!-- Add Tabs Here -->
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="to-pay-tab" data-toggle="tab" href="#to-pay" role="tab" aria-controls="to-pay" aria-selected="true">To Pay</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="to-ship-tab" data-toggle="tab" href="#to-ship" role="tab" aria-controls="to-ship" aria-selected="false">To Ship</a>
+                    <a class="nav-link active" id="to-pay-tab" data-toggle="tab" href="#to-pay" role="tab" aria-controls="to-pay" aria-selected="true">Pending Order</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="to-receive-tab" data-toggle="tab" href="#to-receive" role="tab" aria-controls="to-receive" aria-selected="false">To Receive</a>
@@ -173,7 +170,7 @@ if(isset($_SESSION['user_id'])){
                         <!-- Shopping cart table for To Pay -->
                         <div class="card">
                             <div class="card-header">
-                                <h2>Shopping Cart - To Pay</h2>
+                                <h2>Shopping Cart - Pending Order</h2>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -188,152 +185,37 @@ if(isset($_SESSION['user_id'])){
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php
-                                            if(isset($_SESSION['user_id'])){
-                                                $user_id = $_SESSION['user_id'];
-                                                $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, product.status, listing.imgid FROM cart 
-                                                        JOIN product ON cart.prodid = product.prodid
-                                                        JOIN listing ON cart.prodid = listing.prodid
-                                                        WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = 'To Pay'";
-                                                $cartresult = mysqli_query($conn, $cart);
+                                        <?php 
+                                        $order_pay = "SELECT order_code, GROUP_CONCAT(DISTINCT pname SEPARATOR ', ') as product_names, SUM(price) as total_price, SUM(quantity) as total_quantity 
+                                                    FROM orders 
+                                                    WHERE user_id = '$user_id' AND status = 1
+                                                    GROUP BY order_code";
 
-                                                if($cartresult && mysqli_num_rows($cartresult) > 0) {
-                                                    while($cartrow = mysqli_fetch_assoc($cartresult)){
-                                                        $imgPath = "../img/products/".$cartrow['imgid'];
-                                                        if(file_exists($imgPath)) { 
-                                                            ?>
-                                                            <tr>
-                                                                <td>
-                                                                    <figure class="itemside align-items-center">
-                                                                        <div class="aside">
-                                                                            <input type="checkbox" name="select_item[]" value="<?php echo $cartrow['prodid']; ?>" class="mr-2" onclick="updateSelectedItems(this)">
-                                                                            <img src="<?php echo $imgPath ?>" class="img-sm">
-                                                                        </div>
-                                                                        <figcaption class="info">
-                                                                            <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
-                                                                            <p class="text-muted small"><?php echo $cartrow['status'] ?></p>
-                                                                        </figcaption>
-                                                                    </figure>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="input-group">
-                                                                        <a href="quantity_minus.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
-                                                                            <!-- Add minus button content if needed -->
-                                                                        </a>
-                                                                        <label class="form-control quantity-label" name="quantity"><?php echo $cartrow['quantity']; ?></label>
-                                                                        <a href="quantity_add.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
-                                                                            <!-- Add plus button content if needed -->
-                                                                        </a>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="price-wrap">
-                                                                        <var class="price">₱ <?php echo $cartrow['price']?></var>
-                                                                        <small class="text-muted">Per kilo</small>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-right d-none d-md-block">
-                                                                    <a href="#">
-                                                                        <button class="btn btn-outline-success" type="button">View</button>
-                                                                    </a>
-                                                                    <a href="cart_remove.php?prodid=<?php echo $cartrow['prodid'] ?>" class="cancel-button">
-                                                                        <button class="btn btn-outline-danger" type="button">Cancel</button>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <?php
-                                                        } else {
-                                                            echo "Image file does not exist: ".$imgPath;
-                                                        }
-                                                    }
-                                                }
-                                            } 
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- / Shopping cart table -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="to-ship" role="tabpanel" aria-labelledby="to-ship-tab">
-                    <div class="container px-3 my-5 clearfix">
-                        <!-- Shopping cart table for To Ship -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h2>Shopping Cart - To Ship</h2>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered m-0">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center py-3 px-4" style="width: 30px;">Product Name &amp; Details</th>
-                                                <th class="text-right py-3 px-4" style="width: 100px;">Price</th>
-                                                <th class="text-center py-3 px-4" style="width: 120px;">Quantity</th>
-                                                <th class="text-right py-3 px-4" style="width: 100px;">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            if(isset($_SESSION['user_id'])){
-                                                $user_id = $_SESSION['user_id'];
-                                                $cart = "SELECT cart.prodid, cart.user_id, cart.pname, cart.quantity, product.price, product.status, listing.imgid FROM cart 
-                                                        JOIN product ON cart.prodid = product.prodid
-                                                        JOIN listing ON cart.prodid = listing.prodid
-                                                        WHERE user_id = '$user_id' AND cart.quantity > 0 AND product.status = 'To Ship'";
-                                                $cartresult = mysqli_query($conn, $cart);
+                                        $order_res = mysqli_query($conn, $order_pay);
 
-                                                if($cartresult && mysqli_num_rows($cartresult) > 0) {
-                                                    while($cartrow = mysqli_fetch_assoc($cartresult)){
-                                                        $imgPath = "../img/products/".$cartrow['imgid'];
-                                                        if(file_exists($imgPath)) { 
-                                                            ?>
-                                                            <tr>
-                                                                <td>
-                                                                    <figure class="itemside align-items-center">
-                                                                        <div class="aside">
-                                                                            <input type="checkbox" name="select_item[]" value="<?php echo $cartrow['prodid']; ?>" class="mr-2" onclick="updateSelectedItems(this)">
-                                                                            <img src="<?php echo $imgPath ?>" class="img-sm">
-                                                                        </div>
-                                                                        <figcaption class="info">
-                                                                            <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
-                                                                            <p class="text-muted small"><?php echo $cartrow['status'] ?></p>
-                                                                        </figcaption>
-                                                                    </figure>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="input-group">
-                                                                        <a href="quantity_minus.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
-                                                                            <!-- Add minus button content if needed -->
-                                                                        </a>
-                                                                        <label class="form-control quantity-label" name="quantity"><?php echo $cartrow['quantity']; ?></label>
-                                                                        <a href="quantity_add.php?prodid=<?php echo $cartrow['prodid'] ?>&pname=<?php echo $cartrow['pname'] ?>">
-                                                                            <!-- Add plus button content if needed -->
-                                                                        </a>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="price-wrap">
-                                                                        <var class="price">₱ <?php echo $cartrow['price']?></var>
-                                                                        <small class="text-muted">Per kilo</small>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-right d-none d-md-block">
-                                                                    <a href="#">
-                                                                        <button class="btn btn-outline-success" type="button">View</button>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <?php
-                                                        } else {
-                                                            echo "Image file does not exist: ".$imgPath;
-                                                        }
-                                                    }
-                                                }
-                                            } 
-                                            ?>
+                                        if($order_res && mysqli_num_rows($order_res) > 0){
+                                            while($order_row = mysqli_fetch_assoc($order_res)){
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $order_row['order_code']; ?></td>
+                                                    <td><?php echo $order_row['product_names']; ?></td>
+                                                    <td><?php echo $order_row['total_price']; ?></td>
+                                                    <td><?php echo $order_row['total_quantity']; ?></td>
+                                                    <td>
+                                                    <button class="btn btn-success btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                                                        <span style="font-size: smaller;">View</span> 
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                                                        <span style="font-size: smaller;">Cancel</span> 
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -615,6 +497,24 @@ if(isset($_SESSION['user_id'])){
             </div>
         </div>
     </div>
+
+    <script>
+    function showAlert(type, message) {
+        Swal.fire({
+            icon: type,
+            text: message,
+        });
+    }
+
+    function checkURLParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success') && urlParams.get('success') === 'true') {
+            showAlert('success', 'Ordered Successfully!');
+        } 
+    }
+
+    window.onload = checkURLParams;
+    </script>                    
 
     <script>
         $('#myTab a').on('click', function (e) {

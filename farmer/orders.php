@@ -77,6 +77,7 @@ include('includes/navbar.php');
                         <table id="example" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
+                                    <th>Order Code</th>
                                     <th>Customer Name</th>
                                     <th>Product</th>
                                     <th>Quantity</th>
@@ -92,33 +93,36 @@ include('includes/navbar.php');
                                 include "../conn.php";
                                 $uid = $_SESSION['user_id'];
 
-                                $sql = "SELECT orders.order_id, orders.quantity, CONCAT(firstname, ' ', lastname) AS fullName, orders.*, product.*
-                                FROM orders 
-                                JOIN user_account ON user_account.user_id = orders.user_id 
-                                JOIN user_info ON user_info.info_id = user_account.info_id
-                                JOIN product ON product.prodid = orders.prodid
+                                $sql = "SELECT orders.order_code, orders.user_id, orders.prodid, orders.pname, 
+                                orders.price, orders.quantity, orders.date_of_order, orders.total, orders.status, 
+                                CONCAT(user_info.firstname, ' ', user_info.lastname) AS user_fullname, 
+                                product.uid, CONCAT(farmer.firstname, ' ', farmer.lastname) AS farmer_fullname
+                                FROM orders
+                                JOIN user_info ON orders.user_id = user_info.info_id
+                                JOIN product ON orders.prodid = product.prodid
+                                JOIN user_info AS farmer ON product.uid = farmer.info_id
                                 WHERE product.uid = '$uid' AND orders.status = 1";
                                 $result = mysqli_query($conn, $sql);
 
                                 while ($row = mysqli_fetch_assoc($result)) {
                                 ?>
                                     <tr class="data-row">
-                                        <td><?php echo $row['fullName']; ?></td>
+                                    <td><?php echo $row['order_code']; ?></td>
+                                        <td><?php echo $row['user_fullname']; ?></td>
                                         <td><?php echo $row['pname']; ?></td>
                                         <td><?php echo $row['quantity']; ?></td>
                                         <td><?php echo $row['price']; ?></td>
                                         <td> .. </td>
                                         <td><?php echo date('F d, Y', strtotime($row['date_of_order'])); ?></td>
-                                        <td id="status-<?php echo $row['order_id']; ?>">To Pay</td>
+                                        <td id="status-<?php echo $row['order_code']; ?>">To Pay</td>
                                         <td>
-                                            <button id='confirm-btn-<?php echo $row['order_id']; ?>' class='btn btn-primary confirm-btn' data-id='<?php echo $row['order_id']; ?>'>
+                                            <button id='confirm-btn-<?php echo $row['order_code']; ?>' class='btn btn-primary confirm-btn' data-id='<?php echo $row['order_code']; ?>'>
                                                 <i class='fas fa-check-circle'></i> Confirm
                                             </button>
-                                            <button id='cancel-btn-<?php echo $row['order_id']; ?>' class='btn btn-danger cancel-btn' data-id='<?php echo $row['order_id']; ?>'>
+                                            <button id='cancel-btn-<?php echo $row['order_code']; ?>' class='btn btn-danger cancel-btn' data-id='<?php echo $row['order_code']; ?>'>
                                                 <i class='fas fa-times-circle'></i> Cancel
                                             </button>
                                         </td>
-
                                     </tr>
                                 <?php
                                 }
