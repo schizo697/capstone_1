@@ -46,7 +46,7 @@ foreach ($prodid_array as $prod_id) {
                 while($quantityrow = mysqli_fetch_assoc($quantityres)){
                     $prodquantity = $quantityrow['quantity'];
 
-                    $orders = "INSERT INTO orders (order_id, user_id, prodid, pname, price, quantity, date_of_order, total) VALUES ('$orderid', '$user_id', '$prod_id', '$prodname', '$prodprice', '$prodquantity', '$date_of_order', '$total')";
+                    $orders = "INSERT INTO orders (order_id, user_id, prodid, pname, price, quantity, date_of_order, total, status) VALUES ('$orderid', '$user_id', '$prod_id', '$prodname', '$prodprice', '$prodquantity', '$date_of_order', '$total', 1)";
                     $ordersres = mysqli_query($conn, $orders);
                     if ($ordersres) {
                         $oder_update = "UPDATE product SET quantity = quantity - $order_quantity WHERE prodid = '$prod_id'";
@@ -66,12 +66,12 @@ foreach ($prodid_array as $prod_id) {
     }
 }
 
-// Update quantities in cart
+// Delete items from cart
 foreach ($prodid_array as $prod_id) {
-    $quantityupdate = "UPDATE cart SET quantity = 0 WHERE prodid = '$prod_id' AND user_id = '$user_id'";
-    $quantityupdateres = mysqli_query($conn, $quantityupdate);
-    if (!$quantityupdateres) {
-        echo 'Error updating quantity in cart';
+    $quantitydelete = "DELETE FROM cart WHERE prodid = '$prod_id' AND user_id = '$user_id'";
+    $quantitydeleteres = mysqli_query($conn, $quantitydelete);
+    if (!$quantitydeleteres) {
+        echo 'Error deleting item from cart';
         exit();
     }
 }
