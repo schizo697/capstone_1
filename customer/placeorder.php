@@ -15,7 +15,7 @@ $postal = mysqli_real_escape_string($conn, $_POST['postal']);
 $payMethod = mysqli_real_escape_string($conn, $_POST['payMethod']);
 $user_id = mysqli_real_escape_string($conn, $_POST['userid']);
 $date_of_order = date('Y-m-d');
-$order_quantity = mysqli_real_escape_string($conn, $_POST['quantity']);
+$quantity = mysqli_real_escape_string($conn, $_POST['quantity']);
 $total = mysqli_real_escape_string($conn, $_POST['total']);
 
 // Split $prodid into individual values
@@ -58,7 +58,7 @@ foreach ($prodid_array as $prod_id) {
             }
 
             // Update product quantity
-            $update_query = "UPDATE product SET quantity = quantity - $order_quantity WHERE prodid = '$prod_id'";
+            $update_query = "UPDATE product SET quantity = quantity - $quantity WHERE prodid = '$prod_id'";
             $update_result = mysqli_query($conn, $update_query);
             if (!$update_result) {
                 echo 'Error updating product quantity';

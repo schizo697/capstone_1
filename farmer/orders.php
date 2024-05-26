@@ -97,7 +97,7 @@ include('includes/navbar.php');
                                 JOIN user_account ON user_account.user_id = orders.user_id 
                                 JOIN user_info ON user_info.info_id = user_account.info_id
                                 JOIN product ON product.prodid = orders.prodid
-                                WHERE product.uid = '$uid'";
+                                WHERE product.uid = '$uid' AND orders.status = 1";
                                 $result = mysqli_query($conn, $sql);
 
                                 while ($row = mysqli_fetch_assoc($result)) {
