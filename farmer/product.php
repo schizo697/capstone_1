@@ -1,52 +1,100 @@
 <?php
+// Initialize session and set cache limiter
 ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
 session_start();
+
+// Start output buffering
+ob_start();
+
+// Include database connection
 include("../conn.php");
+
+// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("location:../index.php");
+    exit();
 }
 
+// Include header and navbar
 include('includes/header.php');
 include('includes/navbar.php');
+
+// Handle product archiving
+if (isset($_POST['btnUpdate'])) {
+    $archiveid = $_POST['archiveid'];
+    $archiveproduct = "UPDATE product SET status = 'Not Available' WHERE prodid = ?";
+    $stmt = $conn->prepare($archiveproduct);
+    $stmt->bind_param("i", $archiveid);
+    if ($stmt->execute()) {
+        header("location: product.php?update_success=true");
+        exit();
+    }
+}
+
+// Handle adding a new product
+if (isset($_POST['productname']) && isset($_POST['category']) && isset($_POST['price']) && isset($_POST['quantity']) && isset($_POST['weight_id'])) {
+    $productname = $_POST['productname'];
+    $category = $_POST['category'];
+    $price = $_POST['price'];
+    $quantity = $_POST['quantity'];
+    $weight_id = $_POST['weight_id'];
+    $uid = $_SESSION['user_id'];
+
+    $sql = "INSERT INTO product (pname, catid, price, quantity, weight_id, uid, status) VALUES (?, ?, ?, ?, ?, ?, 'Available')";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssssi", $productname, $category, $price, $quantity, $weight_id, $uid);
+    if ($stmt->execute()) {
+        header("location: product.php?success=true");
+        exit();
+    } else {
+        echo "<script>Swal.fire({ icon: 'error', text: 'Something went wrong!' });</script>";
+    }
+}
+
+// Handle editing a product
+if (isset($_POST['editproductname']) && isset($_POST['editcategory']) && isset($_POST['editprice']) && isset($_POST['editquantity']) && isset($_POST['editweight']) && isset($_POST['editprodid'])) {
+    $productname = $_POST['editproductname'];
+    $category = $_POST['editcategory'];
+    $price = $_POST['editprice'];
+    $quantity = $_POST['editquantity'];
+    $weight_id = $_POST['editweight'];
+    $prodid = $_POST['editprodid'];
+
+    $sql = "UPDATE product SET pname = ?, catid = ?, price = ?, weight_id = ?, quantity = ? WHERE prodid = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssii", $productname, $category, $price, $weight_id, $quantity, $prodid);
+    if ($stmt->execute()) {
+        header("location: product.php?update_success=true");
+        exit();
+    } else {
+        echo "<script>Swal.fire({ icon: 'error', text: 'Something went wrong!' });</script>";
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <title>Farmer's Market</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
-
-    <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
-
-    <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
-
-    <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!-- sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <style>
         <?php 
             include '../main/css/style.css'; 
             include '../main/css/bootstrap.min.css';
         ?>
-        .edit-btn,
-        .archive-btn {
+        .edit-btn, .archive-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -56,35 +104,20 @@ include('includes/navbar.php');
             border-radius: 0.2rem;
         }
 
-        .edit-btn i,
-        .archive-btn i {
+        .edit-btn i, .archive-btn i {
             margin-right: 0.25rem;
         }
     </style>
 </head>
 
 <body>
-    <!-- archive modal -->
+    <!-- Archive Modal -->
     <div class="modal fade" id="archiveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Archive</h1>
                 </div>
-                <?php 
-                if(isset($_POST['btnUpdate'])){
-                    $arhiveid = $_POST['archiveid'];
-                    $archiveproduct = "UPDATE product SET status = 'Not Available' WHERE prodid = '$arhiveid'";
-                    $archiveresult = mysqli_query($conn, $archiveproduct);
-
-                    if($archiveresult){
-                        $url = "product.php?update_success=true";
-                        echo "<script>window.location.href='$url';</script>";
-                        exit();                        
-                    }
-                }
-                
-                ?>
                 <form action="" method="POST">
                     <div class="modal-body">
                         <label for="archiveid">Are you sure you want to archive this product?</label>
@@ -106,31 +139,6 @@ include('includes/navbar.php');
                 <div class="modal-header">
                     <h5 class="modal-title">Add Products</h5>
                 </div>
-                <?php
-                include '../conn.php';
-
-                if (isset($_POST['productname']) && isset($_POST['category']) && isset($_POST['price']) && isset($_POST['quantity'])) {
-                    $productname = $_POST['productname'];
-                    $category = $_POST['category'];
-                    $price = $_POST['price'];
-                    $quantity = $_POST['quantity'];
-                    $uid = $_SESSION['user_id'];
-
-                    $sql = "INSERT INTO product (pname, catid, price, quantity, uid, status) VALUES (?, ?, ?, ?, ?, 'Available')";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("sssss", $productname, $category, $price, $quantity, $uid);
-                    if ($stmt->execute()) {
-                        $url = "product.php?success=true";
-                        echo '<script>window.location.href= "' . $url . '";</script>';
-                    } else {
-                        echo "<script>Swal.fire({
-                            icon: 'error',
-                            text: 'Something went wrong!',
-                        });
-                        </script>";
-                    }
-                }
-                ?>
                 <form action="" method="POST" id="addproduct">
                     <div class="modal-body">
                         <div class="form-group">
@@ -142,14 +150,10 @@ include('includes/navbar.php');
                             <select name="category" class="form-select" aria-label="Category" required>
                                 <option selected disabled>Select...</option>
                                 <?php
-                                    include "../conn.php";
                                     $name_query = "SELECT * FROM pcategory";
                                     $r = mysqli_query($conn, $name_query);
-                                
                                     while ($row = mysqli_fetch_array($r)) {
-                                    ?>
-                                        <option value="<?php echo $row['catid']; ?>"> <?php echo $row['category']; ?></option>
-                                    <?php
+                                        echo "<option value='{$row['catid']}'>{$row['category']}</option>";
                                     }
                                 ?>
                             </select>
@@ -159,8 +163,20 @@ include('includes/navbar.php');
                             <input type="text" class="form-control" id="price" name="price" required>
                         </div>
                         <div class="form-group">
-                            <label for="quantity">Kilo:</label>
-                            <input type="quantity" class="form-control" id="quantity" name="quantity" required>
+                            <label for="weight_id">Measurement:</label>
+                            <select name="weight_id" class="form-select" aria-label="Measurement" required>
+                                <?php
+                                    $name_query = "SELECT * FROM weight";
+                                    $r = mysqli_query($conn, $name_query);
+                                    while ($row = mysqli_fetch_array($r)) {
+                                        echo "<option value='{$row['weight_id']}'>{$row['measurement']}</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity:</label>
+                            <input type="text" class="form-control" id="quantity" name="quantity" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -179,30 +195,6 @@ include('includes/navbar.php');
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Product</h5>
                 </div>
-                <?php
-                if (isset($_POST['editproductname']) && isset($_POST['editcategory']) && isset($_POST['editprice']) && isset($_POST['editquantity']) && isset($_POST['editprodid'])) {
-                    $productname = $_POST['editproductname'];
-                    $category = $_POST['editcategory'];
-                    $price = $_POST['editprice'];
-                    $quantity = $_POST['editquantity'];
-                    $prodid = $_POST['editprodid'];
-
-                    $sql = "UPDATE product SET pname = ?, catid = ?, price = ?, quantity = ? WHERE prodid = ?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("sssss", $productname, $category, $price, $quantity, $prodid);
-
-                    if ($stmt->execute()) {
-                        $url = "product.php?update_success=true";
-                        echo '<script>window.location.href= "' . $url . '";</script>';
-                    } else {
-                        echo "<script>Swal.fire({
-                            icon: 'error',
-                            text: 'Something went wrong!',
-                        });
-                        </script>";
-                    }
-                }
-                ?>
                 <form action="" method="POST" id="editproduct">
                     <div class="modal-body">
                         <div class="form-group">
@@ -214,14 +206,10 @@ include('includes/navbar.php');
                             <select name="editcategory" id="editcategory" class="form-select" required>
                                 <option selected disabled>Select...</option>
                                 <?php
-                                    include "../conn.php";
                                     $name_query = "SELECT * FROM pcategory";
                                     $r = mysqli_query($conn, $name_query);
-                                
                                     while ($row = mysqli_fetch_array($r)) {
-                                    ?>
-                                        <option value="<?php echo $row['catid']; ?>"> <?php echo $row['category']; ?></option>
-                                    <?php
+                                        echo "<option value='{$row['catid']}'>{$row['category']}</option>";
                                     }
                                 ?>
                             </select>
@@ -231,8 +219,20 @@ include('includes/navbar.php');
                             <input type="text" class="form-control" id="editprice" name="editprice" required>
                         </div>
                         <div class="form-group">
-                            <label for="editquantity">Kilo:</label>
-                            <input type="quantity" class="form-control" id="editquantity" name="editquantity" required>
+                            <label for="editweight">Measurement:</label>
+                            <select name="editweight" id="editweight" class="form-select" required>
+                                <?php
+                                    $name_query = "SELECT * FROM weight";
+                                    $r = mysqli_query($conn, $name_query);
+                                    while ($row = mysqli_fetch_array($r)) {
+                                        echo "<option value='{$row['weight_id']}'>{$row['measurement']}</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editquantity">Quantity:</label>
+                            <input type="text" class="form-control" id="editquantity" name="editquantity" required>
                         </div>
                         <input type="hidden" id="editprodid" name="editprodid">
                     </div>
@@ -245,7 +245,7 @@ include('includes/navbar.php');
         </div>
     </div>
 
-    <!-- Table Start -->
+    <!-- Product Table -->
     <div class="container-fluid about pt-5">
         <div class="container">
             <div class="row gx-9">
@@ -262,7 +262,8 @@ include('includes/navbar.php');
                                     <th scope="col">Product Name</th>
                                     <th scope="col">Category</th>
                                     <th scope="col">Price per Kilo</th>
-                                    <th scope="col">Kilo</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Kilo or Sack</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -270,28 +271,34 @@ include('includes/navbar.php');
                             <tbody>
                                 <?php
                                     $uid = $_SESSION['user_id'];
-                                    $query = "SELECT p.prodid, p.pname, c.category, p.price, p.quantity, p.status FROM product p JOIN pcategory c ON p.catid = c.catid WHERE p.uid = $uid AND p.status = 'Available'";
-                                    $result = mysqli_query($conn, $query);
+                                    $query = "SELECT p.prodid, p.pname, c.category, p.price, p.quantity, p.status, w.measurement 
+                                    FROM product p 
+                                    JOIN pcategory c ON p.catid = c.catid 
+                                    JOIN weight w ON p.weight_id = w.weight_id 
+                                    WHERE p.uid = ? AND p.status = 'Available'";
+                                    $stmt = $conn->prepare($query);
+                                    $stmt->bind_param("i", $uid);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
 
-                                    if (mysqli_num_rows($result) > 0) {
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            ?> 
-                                            <tr>
-                                                <td><?php echo $row['pname']; ?></td>
-                                                <td><?php echo $row['category']; ?></td>
-                                                <td><?php echo $row['price']; ?></td>
-                                                <td><?php echo $row['quantity']; ?></td>
-                                                <td><?php echo $row['status']; ?></td>
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo "<tr>
+                                                <td>{$row['pname']}</td>
+                                                <td>{$row['category']}</td>
+                                                <td>{$row['price']}</td>
+                                                <td>{$row['quantity']}</td>
+                                                <td>{$row['measurement']}</td>
+                                                <td>{$row['status']}</td>
                                                 <td>
-                                                    <button class='btn btn-primary edit-button edit-btn' data-id='<?php echo $row['prodid']; ?>' data-name='<?php echo $row['pname']; ?>' data-category='<?php echo $row['category']; ?>' data-price='<?php echo $row['price']; ?>' data-quantity='<?php echo $row['quantity']; ?>'>
+                                                    <button class='btn btn-primary edit-button edit-btn' data-id='{$row['prodid']}' data-name='{$row['pname']}' data-category='{$row['category']}' data-price='{$row['price']}' data-quantity='{$row['quantity']}'>
                                                         <i class='fas fa-edit'></i> Edit
                                                     </button>
-                                                    <button class='btn btn-danger archive-btn' data-id='<?php echo $row['prodid']; ?>'>
+                                                    <button class='btn btn-danger archive-btn' data-id='{$row['prodid']}'>
                                                         <i class='fas fa-archive'></i> Archive
                                                     </button>
                                                 </td>
-                                            </tr>
-                                            <?php
+                                            </tr>";
                                         }
                                     } else {
                                         echo "<tr><td colspan='6' class='text-center'>No products found</td></tr>";
@@ -304,19 +311,37 @@ include('includes/navbar.php');
             </div>
         </div>
     </div>
-    <!-- Table End -->
 
-    <!-- Footer Start -->
+    <!-- Footer -->
     <div class="container-fluid bg-dark text-white py-4">
         <div class="container text-center">
             <p class="mb-0">&copy; <a class="text-secondary fw-bold" href="#">Farmer's Market 2024</a></p>
         </div>
     </div>
-    <!-- Footer End -->
 
-    <?php
-include('includes/footer.php');
-?>
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-secondary py-3 fs-4 back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <script>
+    function showModal(){
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Product Added Successfully',
+            showConfirmButton: false
+        });
+    }
+
+    function checkExistParam() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success') && urlParams.get('success') === 'true') {
+            showModal();
+        }
+    }
+
+    window.onload = checkExistParam; 
+    </script>
+
     <script>
     // Wait for the DOM to be ready
     document.addEventListener("DOMContentLoaded", function() {
@@ -346,18 +371,21 @@ include('includes/footer.php');
     </script>
 
     <!-- JavaScript Libraries -->
-        
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../lib/easing/easing.min.js"></script>
     <script src="../lib/waypoints/waypoints.min.js"></script>
     <script src="../lib/counterup/counterup.min.js"></script>
     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
 
     <!-- Template Javascript -->
     <script src="../js/main.js"></script>
 
     <script>
+
+        
     function enableDropdown() {
         $('.dropdown-toggle').on('click', function() {
             $(this).siblings('.dropdown-menu').toggleClass('show');
@@ -386,51 +414,17 @@ include('includes/footer.php');
     })
     </script>
 
+    <!-- Custom Scripts -->
     <script>
-    // Restore product functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.restore-button').forEach(function(button) {
-            button.addEventListener('click', function() {
-                const prodId = this.getAttribute('data-id');
-
-                if (confirm('Are you sure you want to restore this product?')) {
-                    fetch(`restore_product.php?prodid=${prodId}`, {
-                        method: 'GET'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Product restored successfully!');
-                            location.reload();
-                        } else {
-                            alert('Error restoring product.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error restoring product.');
-                    });
-                }
-            });
-        });
-    });
-    </script>
-
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
-    <script>
-    // archived
         document.addEventListener('DOMContentLoaded', function() {
+            // Handle archiving products
             $('#example').on('click', '.archive-btn', function() {
                 var proid = $(this).data('id');
-                
-                $('#archiveid').val(proid); // Assuming there's an input with id 'archiveid'
+                $('#archiveid').val(proid);
                 $('#archiveModal').modal('show');
             });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+
+            // Handle editing products
             $('#example').on('click', '.edit-button', function() {
                 var prodid = $(this).data('id');
                 var pname = $(this).data('name');
@@ -446,49 +440,32 @@ include('includes/footer.php');
 
                 $('#editModal').modal('show');
             });
-        });
 
-        function showModal(message, type = 'success') {
-            Swal.fire({
-                position: 'center',
-                icon: type,
-                title: message,
-                showConfirmButton: false,
-                timer: 1500
-            });
-        }
-
-        function checkExistParam() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('success') && urlParams.get('success') === 'true') {
-                showModal('Product Added Successfully');
-            } else if (urlParams.has('update_success') && urlParams.get('update_success') === 'true') {
-                showModal('Product Archived Successfully');
+            // Show success messages
+            function showModal(message, type = 'success') {
+                Swal.fire({
+                    position: 'center',
+                    icon: type,
+                    title: message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             }
-        }
 
-        window.onload = checkExistParam;
-    </script>
-    <script>
-    function showModal(){
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Product Added Successfully',
-            showConfirmButton: false
+            function checkExistParam() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('success') && urlParams.get('success') === 'true') {
+                    showModal('Product Added Successfully');
+                } else if (urlParams.has('update_success') && urlParams.get('update_success') === 'true') {
+                    showModal('Product Archived Successfully');
+                }
+            }
+
+            window.onload = checkExistParam;
+
+            // Initialize DataTable
+            $('#example').DataTable();
         });
-    }
-
-    function checkExistParam() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('success') && urlParams.get('success') === 'true') {
-            showModal();
-        }
-    }
-
-    window.onload = checkExistParam; 
     </script>
 </body>
 </html>
-
-

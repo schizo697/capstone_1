@@ -445,12 +445,13 @@ include('../conn.php');
                                             <tr>
                                                 <th class="text-center py-3 px-4" style="width: 30px;">Product Name &amp; Details</th>
                                                 <th class="text-right py-3 px-4" style="width: 100px;">Price</th>
-                                                <th class="text-center py-3 px-4" style="width: 120px;">Quantity</th>
+                                                <th class="text-right py-3 px-4" style="width: 100px;">Quantity</th>
+                                                <th class="text-center py-3 px-4" style="width: 120px;">Total</th>
                                                 <th class="text-right py-3 px-4" style="width: 100px;">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php
+                                        <?php
                                             if(isset($_SESSION['user_id'])){
                                                 $user_id = $_SESSION['user_id'];
                                                 $cart = "SELECT orders.order_id, orders.user_id, orders.prodid, orders.pname, orders.price, orders.quantity, orders.total, product.pname AS product_name, listing.details, listing.imgid
@@ -474,7 +475,7 @@ include('../conn.php');
                                                                         </div>
                                                                         <figcaption class="info">
                                                                             <a href="#" class="title text-dark" data-abc="true"><?php echo $cartrow['pname']; ?></a>
-                                                                            <p class="text-muted small"><?php echo $cartrow['status'] ?></p>
+                                                                            <p class="text-muted small"><?php echo $cartrow['details'] ?></p>
                                                                         </figcaption>
                                                                     </figure>
                                                                 </td>
@@ -491,13 +492,18 @@ include('../conn.php');
                                                                 </td>
                                                                 <td>
                                                                     <div class="price-wrap">
-                                                                        <var class="price">₱ <?php echo $cartrow['price']?></var>
-                                                                        <small class="text-muted">Per kilo</small>
+                                                                        <var class="price"><?php echo $cartrow['price']?></var>                                            
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="price-wrap">
+                                                                        <var class="total">₱ <?php echo $cartrow['total']?></var>                                            
                                                                     </div>
                                                                 </td>
                                                                 <td class="text-right d-none d-md-block">
                                                                     <a href="#">
-                                                                        <button class="btn btn-outline-success" type="button">View</button>
+                                                                    <button class="btn btn-outline-success view-btn" type="button" data-toggle="modal" data-target="#productModal" data-product-id="<?php echo $cartrow['prodid']; ?>">View</button>
+                                                                   
                                                                     </a>
                                                                 </td>
                                                             </tr>
@@ -560,20 +566,32 @@ include('../conn.php');
         });
     });
 
-    // Handle Completed button click event
-    $('.complete-btn').click(function() {
-        var orderId = $(this).data('order-id');
-        $.ajax({
-            url: 'update_status.php', // Replace with the actual URL to update order status
-            method: 'POST',
-            data: { orderId: orderId, status: 3 },
-            success: function(response) {
-                // Optionally, you can handle the response if needed
+// Handle Completed button click event
+$('.complete-btn').click(function() {
+    var orderId = $(this).data('order-id');
+    $.ajax({
+        url: 'update_status.php', // URL to update order status
+        method: 'POST',
+        data: { orderId: orderId, status: 3 },
+        success: function(response) {
+            // Parse the JSON response
+            var result = JSON.parse(response);
+            
+            // Check if the response indicates success
+            if (result.success) {
                 console.log('Order status updated successfully.');
-                // Reload the page or update UI as required
+                // Reload the page to reflect the status change
+                location.reload();
+            } else {
+                console.log('Failed to update order status.');
             }
-        });
+        },
+        error: function() {
+            console.log('An error occurred while updating the order status.');
+        }
     });
+});
+
 </script>
 
     <script>

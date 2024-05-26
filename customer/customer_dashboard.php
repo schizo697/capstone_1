@@ -100,9 +100,11 @@ include 'includes/header.php';
             </div>
             <div class="row g-5">
             <?php 
-            $sqlproduct = "SELECT * FROM listing 
-            JOIN product ON listing.prodid = product.prodid 
+            $sqlproduct = "SELECT listing.*, product.*, pcategory.category, weight.measurement
+            FROM listing
+            JOIN product ON listing.prodid = product.prodid
             JOIN pcategory ON pcategory.catid = product.catid
+            JOIN weight ON product.weight_id = weight.weight_id
             WHERE status = 'Available'";
             $productresult = mysqli_query($conn, $sqlproduct);
 
@@ -114,8 +116,8 @@ include 'includes/header.php';
                     <input type="hidden" name="prodid" value="<?php echo $productrow['prodid'] ?>">
                     <img class="img-fluid mb-4" src="<?php echo "../img/products/".$productrow['imgid']; ?>" alt="<?php echo $productrow['pname']; ?>">
                     <h6 class="mb-3"><?php echo $productrow['pname'];?></h6>
-                    <h5 class="text-primary mb-0">&#8369; <?php echo $productrow['price'];?>.00</h5>
-                    <h6 class="mb-3">Quantity: <?php echo $productrow['quantity'];?> Kilo</h6>
+                    <h5 class="text-primary mb-0">&#8369; <?php echo $productrow['price'];?>.00</h5>                   
+                    <h6 class="mb-3">Quantity: <?php echo $productrow['quantity'];?> <?php echo $productrow['measurement'];?> </h6>
                     <div class="btn-action d-flex justify-content-center">
                         <button class="btn btn-primary py-2 px-3 add-to-cart" type="button" data-prodid="<?php echo $productrow['prodid']; ?>" data-pname="<?php echo $productrow['pname'] ?>">
                             <i class="bi bi-cart text-white"></i>

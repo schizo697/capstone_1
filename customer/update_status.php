@@ -1,29 +1,22 @@
 <?php
-// Update status logic
+include('../conn.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['orderId']) && isset($_POST['status'])) {
-    include "../conn.php";
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $orderId = $_POST['orderId'];
+    $status = $_POST['status'];
 
-    // Sanitize input to prevent SQL injection
-    $orderId = mysqli_real_escape_string($conn, $_POST['orderId']);
-    $status = mysqli_real_escape_string($conn, $_POST['status']);
-
-    // Prepare and bind parameters to prevent SQL injection
-    $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE order_id = ?");
+    // Update the order status in the database
+    $updateQuery = "UPDATE orders SET status = ? WHERE order_id = ?";
+    $stmt = $conn->prepare($updateQuery);
     $stmt->bind_param("ii", $status, $orderId);
 
-    // Execute the statement
     if ($stmt->execute()) {
-        echo 'success';
+        echo json_encode(['success' => true]);
     } else {
-        echo 'error';
+        echo json_encode(['success' => false, 'error' => $stmt->error]);
     }
 
-    // Close statement and connection
     $stmt->close();
-    mysqli_close($conn);
-} else {
-    // If orderId or status is not set or request method is not POST
-    echo 'error';
+    $conn->close();
 }
 ?>
