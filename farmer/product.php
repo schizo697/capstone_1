@@ -271,11 +271,7 @@ if (isset($_POST['editproductname']) && isset($_POST['editcategory']) && isset($
                             <tbody>
                                 <?php
                                     $uid = $_SESSION['user_id'];
-                                    $query = "SELECT p.prodid, p.pname, c.category, p.price, p.quantity, p.status, w.measurement 
-                                    FROM product p 
-                                    JOIN pcategory c ON p.catid = c.catid 
-                                    JOIN weight w ON p.weight_id = w.weight_id 
-                                    WHERE p.uid = ? AND p.status = 'Available'";
+                                    $query = "SELECT p.prodid, p.pname, c.category, p.price, p.quantity, p.status w.measurement FROM product p JOIN pcategory c ON p.catid = c.catid WHERE p.uid = ? AND p.status = 'Available'";
                                     $stmt = $conn->prepare($query);
                                     $stmt->bind_param("i", $uid);
                                     $stmt->execute();
@@ -288,7 +284,7 @@ if (isset($_POST['editproductname']) && isset($_POST['editcategory']) && isset($
                                                 <td>{$row['category']}</td>
                                                 <td>{$row['price']}</td>
                                                 <td>{$row['quantity']}</td>
-                                                <td>{$row['measurement']}</td>
+                                                <td>{$row['quantity']}</td>
                                                 <td>{$row['status']}</td>
                                                 <td>
                                                     <button class='btn btn-primary edit-button edit-btn' data-id='{$row['prodid']}' data-name='{$row['pname']}' data-category='{$row['category']}' data-price='{$row['price']}' data-quantity='{$row['quantity']}'>
